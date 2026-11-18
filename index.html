@@ -619,5 +619,180 @@
                         </button>
                     </div>
                 </div>
+                                <!-- التبويب 3: إحصائيات الغرف الصوتية والبلاغات والحظر -->
+                <div id="adminTabVoiceStats" class="hidden space-y-5">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
+                            <span class="text-xs text-neutral-400 block">الغرف النشطة</span>
+                            <strong id="statActiveRooms" class="text-2xl font-black gold-text">0</strong>
+                        </div>
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
+                            <span class="text-xs text-neutral-400 block">المتصلون بالصوت</span>
+                            <strong id="statOnlineUsers" class="text-2xl font-black text-emerald-400">0</strong>
+                        </div>
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center col-span-2 sm:col-span-1">
+                            <span class="text-xs text-neutral-400 block">البلاغات المعلقة</span>
+                            <strong id="statPendingReports" class="text-2xl font-black text-red-400">0</strong>
+                        </div>
+                    </div>
 
-                <!-- الت
+                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-3">
+                        <h4 class="text-xs font-bold text-amber-300">البلاغات الواردة من الغرف الصوتية</h4>
+                        <div id="adminReportsList" class="space-y-2 text-xs text-neutral-400">لا توجد بلاغات حالياً.</div>
+                    </div>
+
+                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2.5">
+                        <h4 class="text-xs font-bold text-red-400">حظر مستخدم أو جلسة من الغرف الصوتية</h4>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="banIdentifierInput" placeholder="معرّف المستخدم..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <input type="text" id="banReasonInput" placeholder="سبب الحظر..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <button type="button" onclick="banVoiceUser()" class="px-4 py-2 rounded-xl bg-red-600 text-white font-bold text-xs cursor-pointer">تنفيذ الحظر</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
+        let sb = null;
+        try {
+            if (window.supabase) {
+                sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (err) { console.error(err); }
+
+        let currentUser = null;
+        let isVerifiedSuperAdmin = false;
+        let siteFeaturesMap = {};
+        const guestSessionId = localStorage.getItem('pp_guest_id') || ('guest_' + Math.random().toString(36).substring(2, 10));
+        localStorage.setItem('pp_guest_id', guestSessionId);
+
+        (function initParticles() {
+            const canvas = document.getElementById('luxuryCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 1.8 + 0.6
+                });
+            }
+            function loop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
+                    ctx.fill();
+                });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+
+        function toggleMoreMenu(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('moreDropdownMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+        function closeMoreMenu() {
+            const menu = document.getElementById('moreDropdownMenu');
+            if (menu) menu.classList.add('hidden');
+        }
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('moreDropdownMenu');
+            const btn = document.getElementById('moreMenuBtn');
+            if (menu && !menu.classList.contains('hidden') && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        async function checkSuperAdminStatus() {
+            if (!sb) return false;
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                currentUser = session ? session.user : null;
+                if (!currentUser) { isVerifiedSuperAdmin = false; return false; }
+                const { data } = await sb.from('super_admins').select('user_id').eq('user_id', currentUser.id).maybeSingle();
+                isVerifiedSuperAdmin = !!data;
+                return isVerifiedSuperAdmin;
+            } catch (e) { return false; }
+        }
+
+        function canUserAccessFeature(feat) {
+            if (!feat || !feat.is_enabled || feat.visibility_status === 'hidden') return false;
+            if (isVerifiedSuperAdmin) return true;
+            if (feat.allowed_audience === 'all') return true;
+            if (feat.allowed_audience === 'authenticated' && currentUser) return true;
+            return false;
+        }
+
+        async function loadSiteFeatures() {
+            if (!sb) return;
+            try {
+                await checkSuperAdminStatus();
+                const { data, error } = await sb.from('site_features').select('*');
+                if (!error && data) { data.forEach(f => { siteFeaturesMap[f.feature_key] = f; }); }
+                applyFeaturesToUI();
+                if (isVerifiedSuperAdmin) renderAdminFeaturesList();
+            } catch (e) {}
+        }
+
+        function applyFeaturesToUI() {
+            const fPortfolio = siteFeaturesMap['portfolio_gallery'];
+            if (fPortfolio) {
+                const visible = canUserAccessFeature(fPortfolio);
+                document.getElementById('portfolio').classList.toggle('hidden', !visible);
+                document.getElementById('heroPortfolioBtn').classList.toggle('hidden', !visible);
+                if (fPortfolio.display_name) document.getElementById('portfolioSectionTitle').innerText = fPortfolio.display_name;
+            }
+            const fStudio = siteFeaturesMap['design_studio'];
+            if (fStudio) {
+                const visible = canUserAccessFeature(fStudio);
+                document.getElementById('design-studio').classList.toggle('hidden', !visible);
+                document.getElementById('heroStudioBtn').classList.toggle('hidden', !visible);
+                document.getElementById('navStudioLink').classList.toggle('hidden', !visible);
+                if (fStudio.display_name) {
+                    document.getElementById('navStudioText').innerText = fStudio.display_name;
+                    document.getElementById('studioSectionTitle').innerText = fStudio.display_name;
+                }
+                if (fStudio.icon_class) document.getElementById('studioSectionIcon').className = `${fStudio.icon_class} text-amber-400`;
+            }
+            const fVoice = siteFeaturesMap['pixelperfect_voice'];
+            ['voiceNavSlot', 'voiceMoreSlot', 'voiceSidebarSlot', 'voiceHeroSlot', 'voiceSectionSlot'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.classList.add('hidden'); el.classList.remove('flex', 'inline-flex'); }
+            });
+            if (fVoice && canUserAccessFeature(fVoice)) {
+                const name = fVoice.display_name || 'PixelPerfect Voice';
+                const icon = fVoice.icon_class || 'fa-solid fa-microphone-lines';
+                document.getElementById('voiceModalHeaderTitle').innerText = name;
+                if (fVoice.placement === 'navbar') {
+                    const el = document.getElementById('voiceNavSlot'); el.classList.remove('hidden'); el.classList.add('inline-flex');
+                    document.getElementById('voiceNavLabel').innerText = name; document.getElementById('voiceNavIcon').className = `${icon} text-amber-400`;
+                } else if (fVoice.placement === 'more_menu') {
+                    const el = document.getElementById('voiceMoreSlot'); el.classList.remove('hidden'); el.classList.add('flex');
+                    document.getElementById('voiceMoreLabel').innerText = name; document.getElementById('voiceMoreIcon').className = `${icon} text-amber-400 w-4`;
+                } else if (fVoice.placement === 'sidebar') {
+                    const el = document.getElementById('voiceSidebarSlot'); el.classList.remove('hidden'); el.classList.add('flex');
+                    document.getElementById('voiceSidebarLabel').innerText = name; document.getElementById('voiceSidebarIcon').className = `${icon} text-lg text-amber-400`;
+                } else if (fVoice.placement === 'user_area') {
+                    const el = document.getElementById('voiceHeroSlot'); el.classList.remove('hidden'); el.classList.add('flex');
+                    document.getElementById('voiceHeroLabel').innerText = name; document.getElementById('voiceHeroIcon').className = `${icon} text-amber-400`;
+                } else if (fVoice.placement === 'section') {
+                    const el = document.getElementById('voiceSectionSlot'); el.classList.remove('hidden');
+                    document.getElementById('voiceSectionTitle').innerText = name; document.getElementById('voiceSectionIcon').className = icon;
+                }
+            }
+        }
