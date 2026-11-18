@@ -1,3 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOHAMED EMAD | PixelPerfect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #050505;
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        .font-en { font-family: 'Montserrat', sans-serif; }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        .gold-text {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 75%, #FBF5B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-btn {
+            background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
+        }
+        .glass-panel {
+            background: rgba(14, 14, 14, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(212, 175, 55, 0.75);
+            box-shadow: 0 22px 50px -15px rgba(212, 175, 55, 0.22);
+        }
+        .project-card:hover {
+            transform: translateY(-6px);
+        }
+        .portrait-fade {
+            -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
+        }
+        .smooth-asset {
+            opacity: 0;
+            transition: opacity 0.45s ease-in-out;
+        }
+        .smooth-asset.loaded {
+            opacity: 1;
+        }
+        #luxuryCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; pointer-events: none;
+        }
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            z-index: -1;
+            pointer-events: none;
+            animation: driftOrb 16s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 340px; height: 340px; background: rgba(212, 175, 55, 0.14); top: 10%; right: -60px; }
+        .orb-2 { width: 300px; height: 300px; background: rgba(191, 149, 63, 0.11); bottom: 12%; left: -60px; animation-delay: -6s; }
+        @keyframes driftOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-35px, 40px) scale(1.12); }
+            100% { transform: translate(25px, -30px) scale(0.95); }
+        }
+    </style>
+</head>
+<body class="selection:bg-amber-500/30 selection:text-amber-200">
+
+    <!-- الخلفية المتحركة الفاخرة -->
+    <canvas id="luxuryCanvas"></canvas>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <!-- الشريط العلوي -->
+    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-amber-500/20">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
+                    <span id="defaultLogoLetter" class="font-luxury smooth-asset">P</span>
+                    <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover smooth-asset">
+                </div>
+                <div dir="ltr" class="text-left">
+                    <span class="font-en font-black text-base sm:text-lg tracking-wider gold-text block leading-none">PIXELPERFECT</span>
+                    <span class="font-en text-[10px] text-neutral-400 tracking-widest uppercase">MOHAMED EMAD</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-2.5">
+                <a href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>استوديو التصميم</span>
+                </a>
+                <a href="https://wa.me/201006102339" target="_blank" class="px-4 py-2 rounded-full text-xs font-bold gold-btn text-black hover:opacity-90 transition shadow-md flex items-center gap-1.5">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>تواصل الآن</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- الواجهة الرئيسية -->
+    <section class="relative pt-28 pb-16 px-5">
+        <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
+            <div class="relative w-56 sm:w-64 h-64 sm:h-72 mb-4 flex items-end justify-center">
+                <div class="absolute inset-4 rounded-full bg-amber-500/25 blur-2xl animate-pulse"></div>
+                <img id="heroPortraitImg" src="" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl smooth-asset">
+            </div>
+
+            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>Founder of PixelPerfect Studio</span>
+            </div>
+
+            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3">
+                MOHAMED EMAD
+            </h1>
+
+            <p dir="ltr" class="font-en text-sm sm:text-lg font-semibold text-neutral-200 tracking-wide mb-4">
+                Creative Designer • 3D & AI Commercial Director • Brand Architect
+            </p>
+
+            <p class="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
+                نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومنصات رقمية متكاملة تصنع الفارق لعلامتك التجارية.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto">
+                <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
+                    <span>معرض الأعمال والتصميمات</span>
+                    <i class="fa-solid fa-sparkles"></i>
+                </a>
+                <a href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>جرّب التصميم بنفسك</span>
+                </a>
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-instagram text-base"></i>
+                    <span>إنستجرام الرسمي</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الأعمال -->
+    <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
+                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span class="gold-text">المشاريع والتصميمات</span></h2>
+            </div>
+
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <!-- الكارت 1 -->
+                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-neutral-900">
+                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="حلويات العميد" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">متجر إلكتروني وهوية</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">منصة مصنع حلويات العميد</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الهوية التجارية الكاملة، المنيو الفاخر، وتطوير المتجر الإلكتروني الرسمي ولوحة الإدارة لمصنع حلويات العميد.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://al-ameed-sweets.vercel.app" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
+                            <span>زيارة الموقع المباشر</span>
+                            <i class="fa-solid fa-arrow-up-left-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- الكارت 2 -->
+                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-neutral-900">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="إنتاج إعلاني 3D" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">3D & AI Animation</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">إنتاج إعلاني ثلاثي الأبعاد وأنيميشن</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">إخراج وإنتاج الإعلانات التجارية الاحترافية بالذكاء الاصطناعي وسلاسل الأنيميشن ثلاثية الأبعاد بأعلى دقة بصرية.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
+                            <span>اطلب إعلانك التجاري</span>
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- الكارت 3 -->
+                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-neutral-900">
+                            <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80" alt="هوية PixelPerfect" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">Brand Identity</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">هوية PixelPerfect البصرية</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الشعارات الملكية ثلاثية الأبعاد، المطبوعات الفاخرة، والهويات البصرية المتكاملة للشركات والبراندات.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
+                            <span>ابدأ تصميم هويتك</span>
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) -->
+    <section id="design-studio" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-10">
+                <div dir="ltr" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-en font-bold tracking-widest uppercase mb-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>LIVE CUSTOMIZATION ENGINE</span>
+                </div>
+                <h2 dir="ltr" class="font-luxury text-3xl sm:text-5xl font-black mt-1 gold-text tracking-wide">INTERACTIVE DESIGN STUDIO</h2>
+                <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر قالبك، خصّص الألوان والنصوص وارفع شعارك وشاهد النتيجة مباشرة، ثم حمّل المعاينة أو اطلب تنفيذها باحترافية</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- لوحة الأدوات والتحكم -->
+                <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-5">
+                    <!-- 1. اختيار القالب -->
+                    <div>
+                        <label class="block text-xs font-bold text-amber-300 mb-2.5">1. اختر قالب التصميم الجاهز</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="studioTemplatesList">
+                            <button type="button" onclick="selectStudioTemplate('ad')" data-tpl="ad" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition">إعلان تجاري</button>
+                            <button type="button" onclick="selectStudioTemplate('logo')" data-tpl="logo" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">هوية وشعار</button>
+                            <button type="button" onclick="selectStudioTemplate('banner')" data-tpl="banner" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">بانر احترافي</button>
+                            <button type="button" onclick="selectStudioTemplate('social')" data-tpl="social" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">سوشيال ميديا</button>
+                            <button type="button" onclick="selectStudioTemplate('product')" data-tpl="product" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition col-span-2 sm:col-span-2">إعلان منتج فاخر</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. تعديل النصوص والعناوين -->
+                    <div class="space-y-2.5 border-t border-neutral-800/80 pt-4">
+                        <label class="block text-xs font-bold text-amber-300">2. تعديل النصوص والعناوين</label>
+                        <input type="text" id="studioBadgeInput" oninput="renderStudioCanvas()" value="EXCLUSIVE COMMERCIAL" placeholder="الشارة العلوية..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white focus:border-amber-400 outline-none transition">
+                        <input type="text" id="studioTitleInput" oninput="renderStudioCanvas()" value="ROYAL COLLECTION" placeholder="العنوان الرئيسي..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white focus:border-amber-400 outline-none transition">
+                        <input type="text" id="studioSubInput" oninput="renderStudioCanvas()" value="ارتقِ بهوية علامتك التجارية إلى مستوى عالمي" placeholder="الوصف أو العنوان الفرعي..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white focus:border-amber-400 outline-none transition">
+                    </div>
+
+                    <!-- 3. تغيير الألوان -->
+                    <div class="border-t border-neutral-800/80 pt-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-bold text-amber-300">3. ألوان التصميم</label>
+                            <div class="flex gap-1.5">
+                                <button type="button" onclick="applyStudioPalette('#09090b','#D4AF37','#FFFFFF')" title="ملكي أسود وذهبي" class="w-5 h-5 rounded-full border border-amber-400/70 bg-gradient-to-tr from-black to-amber-400"></button>
+                                <button type="button" onclick="applyStudioPalette('#041511','#E5C158','#FCF6BA')" title="زمردي وذهبي" class="w-5 h-5 rounded-full border border-emerald-400/70 bg-gradient-to-tr from-emerald-950 to-amber-300"></button>
+                                <button type="button" onclick="applyStudioPalette('#13071c','#F3D06B','#FFFFFF')" title="بنفسجي ملكي وذهبي" class="w-5 h-5 rounded-full border border-purple-400/70 bg-gradient-to-tr from-purple-950 to-amber-300"></button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2.5">
+                            <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
+                                <span class="text-[10px] text-neutral-400 mb-1">الخلفية</span>
+                                <input type="color" id="studioBgColor" oninput="renderStudioCanvas()" value="#09090b" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
+                            </div>
+                            <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
+                                <span class="text-[10px] text-neutral-400 mb-1">الإطار والذهبي</span>
+                                <input type="color" id="studioAccentColor" oninput="renderStudioCanvas()" value="#D4AF37" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
+                            </div>
+                            <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
+                                <span class="text-[10px] text-neutral-400 mb-1">لون النص</span>
+                                <input type="color" id="studioTextColor" oninput="renderStudioCanvas()" value="#FFFFFF" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. رفع شعار أو صورة -->
+                    <div class="border-t border-neutral-800/80 pt-4">
+                        <label class="block text-xs font-bold text-amber-300 mb-2">4. إضافة شعار أو صورة خاصة</label>
+                        <input type="file" id="studioAssetInput" accept="image/*" onchange="handleStudioImageUpload(event)" class="w-full text-xs text-neutral-300 file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black cursor-pointer">
+                    </div>
+
+                    <!-- الأزرار التفاعلية -->
+                    <div class="border-t border-neutral-800/80 pt-4 space-y-2.5">
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button type="button" onclick="resetStudioDesign()" dir="ltr" class="py-2.5 px-3 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-red-500/50 text-neutral-200 font-en font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-rotate-left text-amber-400"></i>
+                                <span>RESET</span>
+                            </button>
+                            <button type="button" onclick="downloadStudioDesign()" dir="ltr" class="py-2.5 px-3 rounded-xl bg-neutral-900 border border-amber-500/40 hover:bg-amber-500/10 text-amber-300 font-en font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-download"></i>
+                                <span>DOWNLOAD</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="orderStudioDesign()" dir="ltr" class="w-full py-3.5 px-4 rounded-xl gold-btn text-black font-en font-black text-xs tracking-wider shadow-lg shadow-amber-500/20 hover:scale-[1.01] transition flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>ORDER THIS DESIGN</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- منطقة المعاينة المباشرة -->
+                <div class="lg:col-span-7 glass-panel rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center">
+                    <div class="w-full flex justify-between items-center mb-4 text-xs text-neutral-400">
+                        <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> معاينة حية مباشرة</span>
+                        <span id="studioFormatLabel" dir="ltr" class="font-en text-[11px] text-amber-400/90 font-semibold">1080 × 1080 PX</span>
+                    </div>
+                    <div class="w-full flex items-center justify-center bg-black/70 rounded-2xl p-3 sm:p-6 border border-amber-500/20 overflow-hidden">
+                        <canvas id="studioPreviewCanvas" width="900" height="900" class="w-full max-w-[460px] h-auto rounded-xl shadow-2xl transition-all duration-300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التواصل -->
+    <section class="py-16 px-5">
+        <div class="max-w-3xl mx-auto glass-panel rounded-3xl p-8 sm:p-10 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-white mb-3">
+                جاهز لتنفيذ تصميمك <span class="gold-text">بمستوى عالمي؟</span>
+            </h2>
+            <p class="text-neutral-400 text-sm mb-7">تواصل مباشرة عبر واتساب لطلب تصميم لوجو، هوية بصرية، إعلان 3D، أو موقع إلكتروني.</p>
+            <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl hover:scale-[1.02] transition">
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                <span>01006102339 — تواصل واتساب</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- الفوتر (يحتوي على القفل المخفي في الزاوية) -->
+    <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
+        <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
+        <p>جميع الحقوق محفوظة &copy; 2026</p>
+        <button onclick="openAdminModal()" class="absolute left-5 bottom-5 w-8 h-8 rounded-full bg-neutral-900/70 border border-neutral-800 text-neutral-600 hover:text-amber-400 flex items-center justify-center transition">
+            <i class="fa-solid fa-lock text-[11px]"></i>
+        </button>
+    </footer>
+
+    <!-- نافذة الإدارة المحمية بحسابك في Supabase -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- تسجيل الدخول -->
+            <div id="loginView">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">دخول المالك (حماية Supabase)</h3>
+                    <p class="text-xs text-neutral-400 mt-1">لن يتمكن أي زائر من الدخول أو التعديل بدون حسابك</p>
+                </div>
+                <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
+                <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-left" dir="ltr">
+                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
+                <button onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
+                    تسجيل الدخول الآمن
+                </button>
+            </div>
+
+            <!-- لوحة التحكم السحابية -->
+            <div id="dashboardView" class="hidden space-y-4">
+                <div class="border-b border-neutral-800 pb-3">
+                    <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect السحابية</h3>
+                    <p class="text-[11px] text-emerald-400">كل صورة ترفعها هنا ستظهر فوراً لكل زوار موقعك من أي هاتف</p>
+                </div>
+
+                <!-- 1. رفع اللوجو -->
+                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                    <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (يظهر للجميع)</label>
+                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                    <button onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                        حفظ اللوجو في السحابة
+                    </button>
+                </div>
+
+                <!-- 2. رفع صورتك الشخصية -->
+                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                    <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية (تظهر للجميع)</label>
+                    <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                    <button onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                        حفظ صورتي الشخصية في السحابة
+                    </button>
+                </div>
+
+                <!-- 3. إضافة عمل جديد -->
+                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
+                    <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد للمعرض</label>
+                    <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                    <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                    <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
+                    <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
+                    <button onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
+                        نشر التصميم للزوار
+                    </button>
+                </div>
+
+                <button onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
+                    تسجيل خروج
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
@@ -55,245 +473,42 @@
         }
         animate();
 
-        // --- محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) ---
-        const studioPresets = {
-            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
-            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
-            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة للشركات والبراندات', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' },
-            social: { name: 'سوشيال ميديا', ratio: '1080 × 1350 PX', w: 800, h: 1000, badge: 'SPECIAL OFFER', title: 'STAND OUT NOW', sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى', bg: '#0a0a0c', accent: '#BF953F', text: '#F5F5F5' },
-            product: { name: 'إعلان منتج فاخر', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'LIMITED EDITION', title: 'SIGNATURE SERIES', sub: 'جودة استثنائية وتفاصيل مصممة بإتقان', bg: '#080705', accent: '#F3D06B', text: '#FFFFFF' }
-        };
-
-        let currentStudioTpl = 'ad';
-        let studioUploadedImg = null;
-
-        function selectStudioTemplate(tplKey) {
-            currentStudioTpl = tplKey;
-            const p = studioPresets[tplKey];
-            document.getElementById('studioBadgeInput').value = p.badge;
-            document.getElementById('studioTitleInput').value = p.title;
-            document.getElementById('studioSubInput').value = p.sub;
-            document.getElementById('studioBgColor').value = p.bg;
-            document.getElementById('studioAccentColor').value = p.accent;
-            document.getElementById('studioTextColor').value = p.text;
-            document.getElementById('studioFormatLabel').innerText = p.ratio;
-
-            document.querySelectorAll('.studio-tpl-btn').forEach(btn => {
-                const active = btn.dataset.tpl === tplKey;
-                btn.className = active
-                    ? 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition'
-                    : 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition';
-            });
-            renderStudioCanvas();
-        }
-
-        function applyStudioPalette(bg, accent, text) {
-            document.getElementById('studioBgColor').value = bg;
-            document.getElementById('studioAccentColor').value = accent;
-            document.getElementById('studioTextColor').value = text;
-            renderStudioCanvas();
-        }
-
-        function handleStudioImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    studioUploadedImg = img;
-                    renderStudioCanvas();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetStudioDesign() {
-            studioUploadedImg = null;
-            document.getElementById('studioAssetInput').value = '';
-            selectStudioTemplate(currentStudioTpl);
-        }
-
-        function renderStudioCanvas() {
-            const c = document.getElementById('studioPreviewCanvas');
-            if (!c) return;
-            const sCtx = c.getContext('2d');
-            const p = studioPresets[currentStudioTpl];
-            c.width = p.w;
-            c.height = p.h;
-
-            const bg = document.getElementById('studioBgColor').value || '#09090b';
-            const accent = document.getElementById('studioAccentColor').value || '#D4AF37';
-            const textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
-            const badgeText = document.getElementById('studioBadgeInput').value || '';
-            const titleText = document.getElementById('studioTitleInput').value || '';
-            const subText = document.getElementById('studioSubInput').value || '';
-
-            // 1. الخلفية
-            sCtx.fillStyle = bg;
-            sCtx.fillRect(0, 0, c.width, c.height);
-
-            // 2. هالة إضاءة ذهبية في المنتصف
-            sCtx.save();
-            sCtx.globalAlpha = 0.18;
-            const grad = sCtx.createRadialGradient(c.width / 2, c.height / 2, 20, c.width / 2, c.height / 2, c.width * 0.6);
-            grad.addColorStop(0, accent);
-            grad.addColorStop(1, 'transparent');
-            sCtx.fillStyle = grad;
-            sCtx.fillRect(0, 0, c.width, c.height);
-            sCtx.restore();
-
-            // 3. الإطار الخارجي والداخلي
-            const pad = Math.round(Math.min(c.width, c.height) * 0.055);
-            sCtx.save();
-            sCtx.strokeStyle = accent;
-            sCtx.globalAlpha = 0.65;
-            sCtx.lineWidth = 3;
-            sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
-
-            sCtx.globalAlpha = 0.25;
-            sCtx.lineWidth = 1;
-            sCtx.strokeRect(pad + 12, pad + 12, c.width - (pad + 12) * 2, c.height - (pad + 12) * 2);
-            sCtx.restore();
-
-            const cx = c.width / 2;
-            const isBanner = currentStudioTpl === 'banner';
-            let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
-
-            // 4. الشعار أو الصورة المرفوعة
-            if (studioUploadedImg) {
-                const maxImgSize = isBanner ? 115 : 210;
-                const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
-                const iw = studioUploadedImg.width * scale;
-                const ih = studioUploadedImg.height * scale;
-                sCtx.save();
-                sCtx.shadowColor = accent;
-                sCtx.shadowBlur = 20;
-                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih);
-                sCtx.restore();
-                contentY += ih + 35;
-            } else {
-                const emblemR = isBanner ? 34 : 58;
-                sCtx.save();
-                sCtx.beginPath();
-                sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
-                sCtx.strokeStyle = accent;
-                sCtx.lineWidth = 3;
-                sCtx.stroke();
-
-                sCtx.fillStyle = accent;
-                sCtx.font = `900 ${emblemR}px Cinzel, serif`;
-                sCtx.textAlign = 'center';
-                sCtx.textBaseline = 'middle';
-                sCtx.fillText('P', cx, contentY + emblemR * 0.55);
-                sCtx.restore();
-                contentY += emblemR * 2 + 30;
-            }
-
-            // 5. الشارة العلوية
-            if (badgeText) {
-                sCtx.fillStyle = accent;
-                sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
-                sCtx.textAlign = 'center';
-                sCtx.fillText(badgeText.toUpperCase(), cx, contentY);
-                contentY += isBanner ? 44 : 60;
-            }
-
-            // 6. العنوان الرئيسي
-            sCtx.fillStyle = textColor;
-            sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`;
-            sCtx.textAlign = 'center';
-            sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
-
-            // 7. خط فاصل ذهبي
-            contentY += isBanner ? 24 : 36;
-            sCtx.beginPath();
-            sCtx.moveTo(cx - 80, contentY);
-            sCtx.lineTo(cx + 80, contentY);
-            sCtx.strokeStyle = accent;
-            sCtx.lineWidth = 3;
-            sCtx.stroke();
-
-            // 8. الوصف الفرعي
-            contentY += isBanner ? 36 : 50;
-            sCtx.save();
-            sCtx.fillStyle = textColor;
-            sCtx.globalAlpha = 0.85;
-            sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
-            sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
-            sCtx.restore();
-
-            // 9. توقيع الاستوديو
-            sCtx.save();
-            sCtx.fillStyle = accent;
-            sCtx.globalAlpha = 0.7;
-            sCtx.font = '700 14px Montserrat, sans-serif';
-            sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
-            sCtx.restore();
-        }
-
-        function downloadStudioDesign() {
-            const c = document.getElementById('studioPreviewCanvas');
-            const link = document.createElement('a');
-            link.download = `PixelPerfect-${currentStudioTpl}-${Date.now()}.png`;
-            link.href = c.toDataURL('image/png');
-            link.click();
-        }
-
-        function orderStudioDesign() {
-            const tplName = studioPresets[currentStudioTpl].name;
-            const title = document.getElementById('studioTitleInput').value;
-            const sub = document.getElementById('studioSubInput').value;
-            const bg = document.getElementById('studioBgColor').value;
-            const accent = document.getElementById('studioAccentColor').value;
-            const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
-
-            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n` +
-                        `• نوع القالب: ${tplName}\n` +
-                        `• العنوان: ${title}\n` +
-                        `• الوصف: ${sub}\n` +
-                        `• الألوان المختارة: خلفية (${bg}) / ذهبي (${accent})\n` +
-                        `• شعار خاص: ${hasLogo}`;
-
-            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // تشغيل الاستوديو فوراً عند تحميل الصفحة
-        selectStudioTemplate('ad');
-
-        // جلب البيانات من Supabase
+        // جلب الصور والأعمال المحفوظة للجميع من Supabase وإظهارها بنعومة بعد اكتمال التحميل
         window.addEventListener('DOMContentLoaded', async () => {
             const logoImg = document.getElementById('customLogoImg');
             const logoLetter = document.getElementById('defaultLogoLetter');
             const portraitImg = document.getElementById('heroPortraitImg');
 
-            logoLetter.classList.add('loaded');
-
             try {
                 const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
+                
                 if (settings && settings.logo_url) {
                     logoImg.onload = () => {
-                        logoLetter.classList.add('hidden');
                         logoImg.classList.remove('hidden');
                         requestAnimationFrame(() => logoImg.classList.add('loaded'));
                     };
                     logoImg.src = settings.logo_url;
+                } else {
+                    logoLetter.classList.add('loaded');
                 }
 
                 if (settings && settings.portrait_url) {
-                    portraitImg.onload = () => requestAnimationFrame(() => portraitImg.classList.add('loaded'));
+                    portraitImg.onload = () => {
+                        requestAnimationFrame(() => portraitImg.classList.add('loaded'));
+                    };
                     portraitImg.src = settings.portrait_url;
                 } else {
                     portraitImg.onload = () => portraitImg.classList.add('loaded');
                     portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
                 }
             } catch (e) {
+                logoLetter.classList.add('loaded');
                 portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
                 portraitImg.classList.add('loaded');
             }
 
             loadPublicProjects();
+            selectStudioTemplate('ad');
         });
 
         async function loadPublicProjects() {
@@ -396,4 +611,238 @@
             alert("تم نشر التصميم لجميع الزوار!");
             location.reload();
         }
+
+        // --- محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) ---
+        const studioPresets = {
+            ad: {
+                name: 'إعلان تجاري',
+                ratio: '1080 × 1080 PX',
+                w: 900, h: 900,
+                badge: 'EXCLUSIVE COMMERCIAL',
+                title: 'ROYAL COLLECTION',
+                sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي',
+                bg: '#09090b',
+                accent: '#D4AF37',
+                text: '#FFFFFF'
+            },
+            logo: {
+                name: 'هوية وشعار',
+                ratio: '1000 × 1000 PX',
+                w: 900, h: 900,
+                badge: 'EST. 2026',
+                title: 'PIXELPERFECT',
+                sub: 'LUXURY VISUAL IDENTITY',
+                bg: '#050505',
+                accent: '#E5C158',
+                text: '#FCF6BA'
+            },
+            banner: {
+                name: 'بانر احترافي',
+                ratio: '1920 × 820 PX',
+                w: 1000, h: 450,
+                badge: 'PREMIUM STUDIO',
+                title: 'CREATIVE EXCELLENCE',
+                sub: 'تصميمات احترافية متكاملة للشركات والبراندات',
+                bg: '#0c0a09',
+                accent: '#D4AF37',
+                text: '#FFFFFF'
+            },
+            social: {
+                name: 'سوشيال ميديا',
+                ratio: '1080 × 1350 PX',
+                w: 800, h: 1000,
+                badge: 'SPECIAL OFFER',
+                title: 'STAND OUT NOW',
+                sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى',
+                bg: '#0a0a0c',
+                accent: '#BF953F',
+                text: '#F5F5F5'
+            },
+            product: {
+                name: 'إعلان منتج فاخر',
+                ratio: '1080 × 1080 PX',
+                w: 900, h: 900,
+                badge: 'LIMITED EDITION',
+                title: 'SIGNATURE SERIES',
+                sub: 'جودة استثنائية وتفاصيل مصممة بإتقان',
+                bg: '#080705',
+                accent: '#F3D06B',
+                text: '#FFFFFF'
+            }
+        };
+
+        let currentStudioTpl = 'ad';
+        let studioUploadedImg = null;
+
+        function selectStudioTemplate(tplKey) {
+            currentStudioTpl = tplKey;
+            const p = studioPresets[tplKey];
+            document.getElementById('studioBadgeInput').value = p.badge;
+            document.getElementById('studioTitleInput').value = p.title;
+            document.getElementById('studioSubInput').value = p.sub;
+            document.getElementById('studioBgColor').value = p.bg;
+            document.getElementById('studioAccentColor').value = p.accent;
+            document.getElementById('studioTextColor').value = p.text;
+            document.getElementById('studioFormatLabel').innerText = p.ratio;
+
+            document.querySelectorAll('.studio-tpl-btn').forEach(btn => {
+                const active = btn.dataset.tpl === tplKey;
+                btn.className = active
+                    ? 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition'
+                    : 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition';
+            });
+            renderStudioCanvas();
+        }
+
+        function applyStudioPalette(bg, accent, text) {
+            document.getElementById('studioBgColor').value = bg;
+            document.getElementById('studioAccentColor').value = accent;
+            document.getElementById('studioTextColor').value = text;
+            renderStudioCanvas();
+        }
+
+        function handleStudioImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    studioUploadedImg = img;
+                    renderStudioCanvas();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetStudioDesign() {
+            studioUploadedImg = null;
+            document.getElementById('studioAssetInput').value = '';
+            selectStudioTemplate(currentStudioTpl);
+        }
+
+        function renderStudioCanvas() {
+            const c = document.getElementById('studioPreviewCanvas');
+            if (!c) return;
+            const sCtx = c.getContext('2d');
+            const p = studioPresets[currentStudioTpl];
+            c.width = p.w;
+            c.height = p.h;
+
+            const bg = document.getElementById('studioBgColor').value;
+            const accent = document.getElementById('studioAccentColor').value;
+            const textColor = document.getElementById('studioTextColor').value;
+            const badgeText = document.getElementById('studioBadgeInput').value;
+            const titleText = document.getElementById('studioTitleInput').value;
+            const subText = document.getElementById('studioSubInput').value;
+
+            sCtx.fillStyle = bg;
+            sCtx.fillRect(0, 0, c.width, c.height);
+
+            const grad = sCtx.createRadialGradient(c.width / 2, c.height / 2, 30, c.width / 2, c.height / 2, c.width * 0.65);
+            grad.addColorStop(0, accent + '2E');
+            grad.addColorStop(1, 'transparent');
+            sCtx.fillStyle = grad;
+            sCtx.fillRect(0, 0, c.width, c.height);
+
+            const pad = Math.round(Math.min(c.width, c.height) * 0.055);
+            sCtx.strokeStyle = accent + '88';
+            sCtx.lineWidth = 3;
+            sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
+
+            sCtx.strokeStyle = accent + '33';
+            sCtx.lineWidth = 1;
+            sCtx.strokeRect(pad + 12, pad + 12, c.width - (pad + 12) * 2, c.height - (pad + 12) * 2);
+
+            const cx = c.width / 2;
+            const isBanner = currentStudioTpl === 'banner';
+            let contentY = isBanner ? c.height * 0.23 : c.height * 0.21;
+
+            if (studioUploadedImg) {
+                const maxImgSize = isBanner ? 115 : 205;
+                const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
+                const iw = studioUploadedImg.width * scale;
+                const ih = studioUploadedImg.height * scale;
+                sCtx.save();
+                sCtx.shadowColor = accent + '55';
+                sCtx.shadowBlur = 24;
+                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 15, iw, ih);
+                sCtx.restore();
+                contentY += ih + 32;
+            } else {
+                const emblemR = isBanner ? 34 : 58;
+                sCtx.save();
+                sCtx.beginPath();
+                sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
+                sCtx.strokeStyle = accent;
+                sCtx.lineWidth = 3;
+                sCtx.stroke();
+                sCtx.fillStyle = accent;
+                sCtx.font = `900 ${emblemR}px Cinzel, serif`;
+                sCtx.textAlign = 'center';
+                sCtx.textBaseline = 'middle';
+                sCtx.fillText('P', cx, contentY + emblemR * 0.55);
+                sCtx.restore();
+                contentY += emblemR * 2 + 28;
+            }
+
+            if (badgeText) {
+                sCtx.fillStyle = accent;
+                sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
+                sCtx.textAlign = 'center';
+                sCtx.fillText(badgeText.toUpperCase(), cx, contentY);
+                contentY += isBanner ? 42 : 58;
+            }
+
+            sCtx.fillStyle = textColor;
+            sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`;
+            sCtx.textAlign = 'center';
+            sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
+
+            contentY += isBanner ? 24 : 34;
+            sCtx.beginPath();
+            sCtx.moveTo(cx - 80, contentY);
+            sCtx.lineTo(cx + 80, contentY);
+            sCtx.strokeStyle = accent;
+            sCtx.lineWidth = 3;
+            sCtx.stroke();
+
+            contentY += isBanner ? 36 : 48;
+            sCtx.fillStyle = textColor + 'CC';
+            sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
+            sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
+
+            sCtx.fillStyle = accent + 'AA';
+            sCtx.font = '700 14px Montserrat, sans-serif';
+            sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
+        }
+
+        function downloadStudioDesign() {
+            const c = document.getElementById('studioPreviewCanvas');
+            const link = document.createElement('a');
+            link.download = `PixelPerfect-${currentStudioTpl}-${Date.now()}.png`;
+            link.href = c.toDataURL('image/png');
+            link.click();
+        }
+
+        function orderStudioDesign() {
+            const tplName = studioPresets[currentStudioTpl].name;
+            const title = document.getElementById('studioTitleInput').value;
+            const sub = document.getElementById('studioSubInput').value;
+            const bg = document.getElementById('studioBgColor').value;
+            const accent = document.getElementById('studioAccentColor').value;
+            const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
+
+            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n` +
+                        `• نوع القالب: ${tplName}\n` +
+                        `• العنوان: ${title}\n` +
+                        `• الوصف: ${sub}\n` +
+                        `• الألوان المختارة: خلفية (${bg}) / ذهبي (${accent})\n` +
+                        `• شعار خاص: ${hasLogo}`;
+
+            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
+        }
     </script>
+</body>
+</html>
