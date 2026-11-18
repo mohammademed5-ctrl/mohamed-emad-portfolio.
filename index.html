@@ -1,55 +1,268 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محمد عماد | PixelPerfect</title>
+    <title>محمد عماد | PixelPerfect — مصمم بصري وفنان رقمي</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
         body {
-            background-color: #0b0b0b;
-            color: #f3f4f6;
-            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #050505;
+            color: #f5f5f5;
+            overflow-x: hidden;
         }
-        .gold-text {
-            color: #d4af37;
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 70%, #FBF5B7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .gold-border {
-            border-color: #d4af37;
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
-        .gold-bg {
-            background-color: #d4af37;
+        .glass-card {
+            background: rgba(18, 18, 18, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(212, 175, 55, 0.22);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .gold-bg:hover {
-            background-color: #c19b2e;
+        .glass-card:hover {
+            border-color: rgba(212, 175, 55, 0.7);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -15px rgba(212, 175, 55, 0.2);
+        }
+        .hero-glow {
+            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.16) 0%, rgba(5, 5, 5, 0) 65%);
+        }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .float-anim {
+            animation: floatSlow 4s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center p-6">
+<body class="selection:bg-amber-500/30 selection:text-amber-200">
 
-    <!-- الهيدر أو الشعار -->
-    <header class="w-full max-w-2xl text-center py-8">
-        <h1 class="text-4xl font-ext500 tracking-wider gold-text mb-2">محمد عماد</h1>
-        <p class="text-gray-400 text-lg">PixelPerfect - تصميم بصري وإبداعي بلا حدود</p>
-    </header>
-
-    <!-- المحتوى الرئيسي -->
-    <main class="w-full max-w-xl bg-neutral-900 border gold-border p-8 rounded-2xl shadow-2xl text-center">
-        <h2 class="text-2xl font-bold mb-4 text-white">مرحباً بكم في بورتفوليو الأعمال الفاخرة</h2>
-        <p class="text-gray-300 leading-relaxed mb-6">
-            مصمم بصري ومطور واجهات تفاعلية. نعمل على تقديم أحدث التصاميم الرقمية والهويات البصرية بأعلى معايير الجودة والفخامة.
-        </p>
-        
-        <div class="flex flex-col gap-4">
-            <a href="https://wa.me/201016552275" target="_blank" class="gold-bg text-black font-bold py-3 px-6 rounded-xl transition shadow-lg">
-                تواصل عبر واتساب
+    <!-- شريط التنقل العلوي -->
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-lg border-b border-amber-500/15">
+        <div class="max-w-5xl mx-auto px-5 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2.5">
+                <span class="w-9 h-9 rounded-lg gold-gradient-bg flex items-center justify-center text-black font-black text-lg shadow-lg shadow-amber-500/20">P</span>
+                <div>
+                    <span class="font-black text-lg tracking-wide gold-gradient-text block leading-none">PIXELPERFECT</span>
+                    <span class="text-[11px] text-neutral-400">محمد عماد</span>
+                </div>
+            </a>
+            <a href="https://wa.me/201016552275" target="_blank" class="px-4 py-2 rounded-full text-xs font-bold gold-gradient-bg text-black hover:opacity-90 transition shadow-md shadow-amber-500/20 flex items-center gap-1.5">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>اطلب مشروعك</span>
             </a>
         </div>
-    </main>
+    </nav>
+
+    <!-- الواجهة الرئيسية (Hero Section) -->
+    <section class="relative pt-32 pb-20 px-5 hero-glow">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold mb-6 float-anim">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>الإبداع البصري وتطوير المنصات الرقمية</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-black mb-5 leading-tight">
+                أنا <span class="gold-gradient-text">محمد عماد</span>
+                <span class="block text-xl sm:text-3xl font-bold text-neutral-200 mt-3">
+                    مؤسس براند PixelPerfect للتصميم والإنتاج الرقمي
+                </span>
+            </h1>
+
+            <p class="text-neutral-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-9">
+                نحوّل الأفكار إلى تجارب بصرية فاخرة؛ بدءاً من تصميم الهويات التجارية والإعلانات الاحترافية بالذكاء الاصطناعي والـ 3D، وحتى بناء المواقع والتطبيقات المتكاملة.
+            </p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#works" class="w-full sm:w-auto px-8 py-3.5 rounded-xl gold-gradient-bg text-black font-bold text-sm shadow-lg shadow-amber-500/25 hover:scale-[1.02] transition flex items-center justify-center gap-2">
+                    <span>استكشف أبرز أعمالي</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-instagram text-base"></i>
+                    <span>تابعني على إنستجرام</span>
+                </a>
+            </div>
+
+            <!-- إحصائيات سريعة -->
+            <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-xl mx-auto mt-14 pt-8 border-t border-neutral-800/80">
+                <div>
+                    <div class="text-2xl sm:text-3xl font-black gold-gradient-text">+100</div>
+                    <div class="text-xs text-neutral-400 mt-1">تصميم وهوية بصرية</div>
+                </div>
+                <div>
+                    <div class="text-2xl sm:text-3xl font-black gold-gradient-text">3D & AI</div>
+                    <div class="text-xs text-neutral-400 mt-1">إنتاج إعلاني متطور</div>
+                </div>
+                <div>
+                    <div class="text-2xl sm:text-3xl font-black gold-gradient-text">100%</div>
+                    <div class="text-xs text-neutral-400 mt-1">دقة واحترافية التنفيذ</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الخدمات -->
+    <section id="services" class="py-16 px-5">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">ماذا أقدم لك؟</span>
+                <h2 class="text-3xl font-black mt-2 text-white">خدمات <span class="gold-gradient-text">PixelPerfect</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4">
+                        <i class="fa-solid fa-pen-nib"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">الهوية البصرية واللوجو</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        تصميم شعارات 3D فاخرة، منيوهات تجارية، وتغليف منتجات يمنح مشروعك طابعاً ملكياً لا يُنسى.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">إعلانات AI وأنيميشن 3D</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        صناعة فيديوهات إعلانية احترافية للمنتجات والمطاعم والبراندات بأحدث تقنيات الذكاء الاصطناعي والتحريك.
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl mb-4">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">تطوير المواقع والتطبيقات</h3>
+                    <p class="text-neutral-400 text-sm leading-relaxed">
+                        بناء متاجر إلكترونية سريعة ولوحات تحكم متكاملة بتصميمات عصرية متجاوبة مع جميع الهواتف.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم معرض الأعمال المختارة -->
+    <section id="works" class="py-16 px-5 bg-neutral-950/60 border-y border-neutral-900">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">نماذج من الإنجازات</span>
+                <h2 class="text-3xl font-black mt-2 text-white">أبرز <span class="gold-gradient-text">المشاريع المنفذة</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- مشروع 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">متجر إلكتروني وهوية</span>
+                            <i class="fa-solid fa-store text-amber-400 text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">منصة مصنع حلويات العميد</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            تصميم وتطوير المتجر الإلكتروني الرسمي ولوحة الإدارة والهوية التجارية الكاملة لمصنع حلويات العميد.
+                        </p>
+                    </div>
+                    <a href="https://al-ameed-sweets.vercel.app" target="_blank" class="inline-flex items-center gap-2 text-amber-400 text-sm font-bold hover:text-amber-300 transition">
+                        <span>معاينة المشروع مباشرة</span>
+                        <i class="fa-solid fa-arrow-up-left-from-square text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- مشروع 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">منصة ترفيهية وتواصل</span>
+                            <i class="fa-solid fa-microphone-lines text-amber-400 text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">تطبيق الأمير / سهرة (SAHRA)</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+                            تصميم الواجهات الملكية وتطوير نظام غرف الدردشة الصوتية التفاعلية، الهدايا الافتراضية، ولوحة التحكم.
+                        </p>
+                    </div>
+                    <a href="https://al-ameer.vercel.app" target="_blank" class="inline-flex items-center gap-2 text-amber-400 text-sm font-bold hover:text-amber-300 transition">
+                        <span>معاينة المنصة</span>
+                        <i class="fa-solid fa-arrow-up-left-from-square text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- مشروع 3 -->
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">إنتاج إعلاني 3D</span>
+                            <i class="fa-solid fa-film text-amber-400 text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">سلاسل الأنيميشن والإعلانات التجارية</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-4">
+                            إخراج وإنتاج إعلانات مستحضرات التجميل (Fleur Massey) وسلاسل القصص الكرتونية ثلاثية الأبعاد (لوجي وبندق).
+                        </p>
+                    </div>
+                    <span class="text-xs text-neutral-500 font-semibold">إنتاج استوديو PixelPerfect</span>
+                </div>
+
+                <!-- مشروع 4 -->
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between p-6">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">براندينج وتصميم جرافيك</span>
+                            <i class="fa-solid fa-gem text-amber-400 text-lg"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">هوية PixelPerfect البصرية</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-4">
+                            تصميم الشعار ثلاثي الأبعاد والبورتفوليو الاحترافي المخصص للعلامات التجارية الباحثة عن الفخامة والتميز.
+                        </p>
+                    </div>
+                    <span class="text-xs text-neutral-500 font-semibold">تصميم: محمد عماد</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التواصل المباشر -->
+    <section class="py-20 px-5">
+        <div class="max-w-3xl mx-auto glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+            <h2 class="text-2xl sm:text-4xl font-black text-white mb-4">
+                جاهز نبدأ مشروعك القادم <span class="gold-gradient-text">بأعلى جودة؟</span>
+            </h2>
+            <p class="text-neutral-400 text-sm sm:text-base mb-8 max-w-lg mx-auto">
+                تواصل معي مباشرة عبر واتساب لمناقشة فكرة تصميمك، إعلانك، أو موقعك الإلكتروني وتنفيذه بأسرع وقت.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://wa.me/201016552275" target="_blank" class="px-8 py-4 rounded-xl gold-gradient-bg text-black font-black text-base shadow-xl shadow-amber-500/25 hover:scale-[1.02] transition flex items-center justify-center gap-2.5">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>تواصل واتساب: 01016552275</span>
+                </a>
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="px-8 py-4 rounded-xl bg-neutral-900 border border-neutral-700 text-white font-bold text-base hover:border-amber-400 transition flex items-center justify-center gap-2.5">
+                    <i class="fa-brands fa-instagram text-xl text-amber-400"></i>
+                    <span>@mohmed_emad__3</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- الفوتر -->
-    <footer class="w-full text-center py-6 text-gray-500 text-sm">
-        جميع الحقوق محفوظة &copy; 2026 - محمد عماد (PixelPerfect)
+    <footer class="py-8 px-5 border-t border-neutral-900 text-center text-neutral-500 text-xs">
+        <p class="font-bold text-neutral-400 mb-1">PIXELPERFECT — MOHAMED EMAD</p>
+        <p>جميع الحقوق محفوظة &copy; 2026 — تصميم وتطوير محمد عماد</p>
     </footer>
 
 </body>
