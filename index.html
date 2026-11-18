@@ -796,3 +796,429 @@
                 }
             }
         }
+        function renderAdminFeaturesList() {
+            const container = document.getElementById('featuresManagementList');
+            if (!container) return;
+            const keys = Object.keys(siteFeaturesMap);
+            if (!keys.length) {
+                container.innerHTML = `<p class="text-xs text-amber-300 bg-neutral-900 p-4 rounded-xl">لم يتم العثور على بيانات المميزات في جدول site_features بعد.</p>`;
+                return;
+            }
+            container.innerHTML = keys.map(key => {
+                const f = siteFeaturesMap[key];
+                const statusBadge = f.visibility_status === 'maintenance'
+                    ? '<span class="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40">تحت الصيانة</span>'
+                    : (f.is_enabled && f.visibility_status === 'visible'
+                        ? '<span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">مفعلة وظاهرة</span>'
+                        : '<span class="px-2 py-0.5 rounded-full text-[10px] bg-neutral-800 text-neutral-400">مخفية / متوقفة</span>');
+
+                return `
+                <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 space-y-3">
+                    <div class="flex flex-wrap justify-between items-center gap-2 border-b border-neutral-800 pb-2.5">
+                        <div class="flex items-center gap-2">
+                            <i class="${f.icon_class} text-amber-400"></i>
+                            <strong class="text-sm text-white">${f.display_name}</strong>
+                            ${statusBadge}
+                        </div>
+                        <label class="inline-flex items-center gap-2 cursor-pointer text-xs">
+                            <input type="checkbox" id="feat_enabled_${key}" ${f.is_enabled ? 'checked' : ''} class="accent-amber-500 w-4 h-4">
+                            <span class="text-amber-200 font-bold">تشغيل الميزة</span>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 mb-1">اسم الميزة الظاهر</label>
+                            <input type="text" id="feat_name_${key}" value="${f.display_name}" class="w-full px-3 py-2 rounded-xl bg-black border border-neutral-700 text-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 mb-1">أيقونة FontAwesome</label>
+                            <input type="text" id="feat_icon_${key}" value="${f.icon_class}" dir="ltr" class="w-full px-3 py-2 rounded-xl bg-black border border-neutral-700 text-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 mb-1">حالة الظهور</label>
+                            <select id="feat_status_${key}" class="w-full px-3 py-2 rounded-xl bg-black border border-neutral-700 text-white outline-none">
+                                <option value="visible" ${f.visibility_status === 'visible' ? 'selected' : ''}>ظاهرة للزوار</option>
+                                <option value="hidden" ${f.visibility_status === 'hidden' ? 'selected' : ''}>مخفية تماماً</option>
+                                <option value="maintenance" ${f.visibility_status === 'maintenance' ? 'selected' : ''}>إيقاف مؤقت للصيانة</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 mb-1">مكان الظهور في الموقع</label>
+                            <select id="feat_place_${key}" class="w-full px-3 py-2 rounded-xl bg-black border border-neutral-700 text-white outline-none">
+                                <option value="navbar" ${f.placement === 'navbar' ? 'selected' : ''}>الشريط العلوي (Navbar)</option>
+                                <option value="more_menu" ${f.placement === 'more_menu' ? 'selected' : ''}>داخل قائمة المزيد</option>
+                                <option value="sidebar" ${f.placement === 'sidebar' ? 'selected' : ''}>القائمة الجانبية (Sidebar)</option>
+                                <option value="user_area" ${f.placement === 'user_area' ? 'selected' : ''}>أزرار الواجهة / المستخدم</option>
+                                <option value="section" ${f.placement === 'section' ? 'selected' : ''}>قسم مستقل داخل الصفحة</option>
+                                <option value="hidden" ${f.placement === 'hidden' ? 'selected' : ''}>مخفية من الواجهة</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-neutral-400 mb-1">الفئات المسموح لها</label>
+                            <select id="feat_audience_${key}" class="w-full px-3 py-2 rounded-xl bg-black border border-neutral-700 text-white outline-none">
+                                <option value="all" ${f.allowed_audience === 'all' ? 'selected' : ''}>جميع الزوار والمستخدمين</option>
+                                <option value="authenticated" ${f.allowed_audience === 'authenticated' ? 'selected' : ''}>المسجلون بحساب فقط</option>
+                                <option value="admin_only" ${f.allowed_audience === 'admin_only' ? 'selected' : ''}>السوبر أدمن فقط (تجريبي)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="button" onclick="saveFeatureConfig('${key}')" class="w-full py-2 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">حفظ إعدادات الميزة</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function saveFeatureConfig(key) {
+            if (!isVerifiedSuperAdmin) return alert("غير مصرح: هذه العملية متاحة للسوبر أدمن فقط.");
+            const payload = {
+                is_enabled: document.getElementById(`feat_enabled_${key}`).checked,
+                display_name: document.getElementById(`feat_name_${key}`).value.trim(),
+                icon_class: document.getElementById(`feat_icon_${key}`).value.trim(),
+                visibility_status: document.getElementById(`feat_status_${key}`).value,
+                placement: document.getElementById(`feat_place_${key}`).value,
+                allowed_audience: document.getElementById(`feat_audience_${key}`).value,
+                updated_at: new Date().toISOString()
+            };
+            const { error } = await sb.from('site_features').update(payload).eq('feature_key', key);
+            if (error) return alert("رفض الخادم التعديل: " + error.message);
+            alert("تم حفظ إعدادات الميزة في قاعدة البيانات وتطبيقها فوراً!");
+            await loadSiteFeatures();
+        }
+
+        let activeVoiceRoom = null, myParticipantRow = null, livekitRoomInstance = null, roomRealtimeChannel = null;
+
+        async function openVoiceLobby() {
+            const fVoice = siteFeaturesMap['pixelperfect_voice'];
+            if (!fVoice || !canUserAccessFeature(fVoice)) return alert("ميزة الغرف الصوتية غير متاحة حالياً.");
+            if (fVoice.visibility_status === 'maintenance' && !isVerifiedSuperAdmin) {
+                document.getElementById('featureMaintenanceText').innerText = fVoice.maintenance_note || "الغرف الصوتية في وضع الصيانة.";
+                document.getElementById('featureMaintenanceBanner').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('voiceModal').classList.remove('hidden');
+            document.getElementById('voiceLobbyView').classList.remove('hidden');
+            document.getElementById('voiceActiveRoomView').classList.add('hidden');
+            document.getElementById('voiceServerBadge').innerText = "حالة محرك الصوت: WebRTC SFU (LiveKit) جاهز";
+            await fetchPublicRooms();
+        }
+
+        function closeVoiceLobby() {
+            if (activeVoiceRoom) leaveVoiceRoom();
+            document.getElementById('voiceModal').classList.add('hidden');
+        }
+
+        async function fetchPublicRooms() {
+            if (!sb) return;
+            const { data: rooms } = await sb.from('voice_rooms').select('*').eq('is_active', true).eq('room_type', 'public').order('created_at', { ascending: false });
+            const list = document.getElementById('publicRoomsList');
+            if (!rooms || !rooms.length) {
+                list.innerHTML = `<p class="text-xs text-neutral-500 col-span-2 text-center py-6">لا توجد غرف عامة نشطة حالياً.</p>`;
+                return;
+            }
+            list.innerHTML = rooms.map(r => `<div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 flex justify-between items-center gap-3"><div><span class="text-[10px] text-amber-400 font-bold block">المضيف: ${r.host_name}</span><h5 class="text-sm font-bold text-white">${r.title}</h5></div><button type="button" onclick="enterVoiceRoom('${r.id}')" class="px-4 py-2 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">دخول</button></div>`).join('');
+        }
+
+        async function createVoiceRoom() {
+            const title = document.getElementById('newRoomTitle').value.trim();
+            const hostName = document.getElementById('voiceHostDisplayName').value.trim() || (currentUser ? currentUser.email.split('@')[0] : 'مضيف الغرفة');
+            const roomType = document.getElementById('newRoomType').value;
+            if (!title) return alert("اكتب عنوان الغرفة أولاً.");
+            if (!currentUser) return alert("إنشاء الغرف يتطلب تسجيل الدخول.");
+            const inviteCode = roomType === 'private' ? ('PP-' + Math.floor(1000 + Math.random() * 9000)) : null;
+            const { data: room, error } = await sb.from('voice_rooms').insert([{ title, room_type: roomType, invite_code: inviteCode, host_id: currentUser.id, host_name: hostName, livekit_room_name: `pp_room_${Date.now()}` }]).select().single();
+            if (error) return alert("تعذر إنشاء الغرفة: " + error.message);
+            await enterVoiceRoom(room.id, hostName, 'host');
+        }
+
+        async function joinPrivateRoomByCode() {
+            const code = document.getElementById('joinPrivateCodeInput').value.trim();
+            const guestName = document.getElementById('guestDisplayNameInput').value.trim() || 'زائر PixelPerfect';
+            if (!code) return alert("أدخل كود الدعوة أولاً.");
+            const { data: rooms, error } = await sb.rpc('verify_private_room_code', { p_code: code });
+            if (error || !rooms || !rooms.length) return alert("كود الدعوة غير صحيح.");
+            await enterVoiceRoom(rooms[0].id, guestName, 'listener');
+        }
+
+        async function enterVoiceRoom(roomId, customName = null, preferredRole = null) {
+            const myId = currentUser ? currentUser.id : guestSessionId;
+            const { data: ban } = await sb.from('voice_bans').select('id').eq('identifier', myId).maybeSingle();
+            if (ban) return alert("تم حظرك من دخول الغرف الصوتية.");
+            const { data: room } = await sb.from('voice_rooms').select('*').eq('id', roomId).maybeSingle();
+            if (!room) return alert("الغرفة غير موجودة.");
+            activeVoiceRoom = room;
+            const isHost = currentUser && room.host_id === currentUser.id;
+            const role = preferredRole || (isHost || isVerifiedSuperAdmin ? 'host' : 'listener');
+            const displayName = customName || document.getElementById('guestDisplayNameInput').value.trim() || (currentUser ? currentUser.email.split('@')[0] : 'مستمع');
+            const { data: part } = await sb.from('voice_participants').insert([{ room_id: room.id, user_id: currentUser ? currentUser.id : null, guest_session_id: myId, display_name: displayName, role, is_muted: true }]).select().single();
+            myParticipantRow = part;
+            document.getElementById('voiceLobbyView').classList.add('hidden');
+            document.getElementById('voiceActiveRoomView').classList.remove('hidden');
+            document.getElementById('activeRoomTitle').innerText = room.title;
+            document.getElementById('activeRoomBadge').innerText = room.room_type === 'private' ? 'غرفة خاصة' : 'غرفة عامة';
+            if (room.room_type === 'private' && room.invite_code) {
+                document.getElementById('activeRoomInviteBox').classList.remove('hidden');
+                document.getElementById('activeRoomCodeText').innerText = room.invite_code;
+            } else { document.getElementById('activeRoomInviteBox').classList.add('hidden'); }
+            await connectLiveKitAudio(room.livekit_room_name, displayName, myId, role !== 'listener');
+            subscribeToRoomRealtime(room.id);
+            await refreshRoomParticipants();
+            await refreshRoomChat();
+        }
+
+        async function connectLiveKitAudio(roomName, participantName, participantId, canPublish) {
+            const badge = document.getElementById('voiceServerBadge');
+            try {
+                const { data, error } = await sb.functions.invoke('livekit-token', { body: { roomName, participantName, participantId, canPublish } });
+                if (error || !data || !data.token || !data.url) {
+                    badge.innerHTML = `<span class="text-amber-400">تنبيه الصوت: خادم LiveKit بانتظار مفاتيح API (الدردشة والإدارة نشطة).</span>`;
+                    return;
+                }
+                livekitRoomInstance = new window.LivekitClient.Room();
+                await livekitRoomInstance.connect(data.url, data.token);
+                livekitRoomInstance.on('trackSubscribed', (track) => { if (track.kind === 'audio') document.body.appendChild(track.attach()); });
+                badge.innerHTML = `<span class="text-emerald-400">● متصل بخادم الصوت الحي (WebRTC SFU نشط)</span>`;
+            } catch (e) { badge.innerHTML = `<span class="text-amber-400">تنبيه الصوت: بانتظار إعداد Edge Function (livekit-token).</span>`; }
+        }
+
+        function subscribeToRoomRealtime(roomId) {
+            if (roomRealtimeChannel) sb.removeChannel(roomRealtimeChannel);
+            roomRealtimeChannel = sb.channel(`voice_room_${roomId}`)
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'voice_participants', filter: `room_id=eq.${roomId}` }, () => refreshRoomParticipants())
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voice_messages', filter: `room_id=eq.${roomId}` }, () => refreshRoomChat())
+                .subscribe();
+        }
+
+        async function refreshRoomParticipants() {
+            if (!activeVoiceRoom) return;
+            const { data: list } = await sb.from('voice_participants').select('*').eq('room_id', activeVoiceRoom.id);
+            if (!list) return;
+            document.getElementById('activeRoomCount').innerText = list.length;
+            if (myParticipantRow && !list.find(p => p.id === myParticipantRow.id)) { alert("تمت إزالتك من الغرفة."); leaveVoiceRoom(true); return; }
+            const me = list.find(p => myParticipantRow && p.id === myParticipantRow.id);
+            if (me) myParticipantRow = me;
+            const amIAdminOrHost = me && (me.role === 'host' || me.role === 'moderator' || isVerifiedSuperAdmin);
+            document.getElementById('roomSpeakersGrid').innerHTML = list.filter(p => p.role !== 'listener').map(p => `<div class="bg-neutral-900 p-3 rounded-2xl border border-amber-500/30 text-center relative"><div class="w-12 h-12 rounded-full gold-btn text-black font-black flex items-center justify-center mx-auto mb-1.5 text-base ${!p.is_muted ? 'speaking-ring' : ''}">${p.display_name.charAt(0).toUpperCase()}</div><span class="text-xs font-bold text-white block truncate">${p.display_name}</span><span class="text-[10px] text-amber-400 block">${p.role === 'host' ? 'مدير الغرفة' : 'متحدث'}</span>${amIAdminOrHost && p.id !== myParticipantRow.id ? `<div class="mt-1.5 flex justify-center gap-1"><button type="button" onclick="adminMuteParticipant('${p.id}', ${!p.is_muted})" class="px-1.5 py-0.5 rounded bg-neutral-800 text-[9px] text-amber-300">كتم</button><button type="button" onclick="adminKickParticipant('${p.id}')" class="px-1.5 py-0.5 rounded bg-red-950 text-[9px] text-red-300">طرد</button></div>` : ''}</div>`).join('');
+            document.getElementById('roomListenersGrid').innerHTML = list.filter(p => p.role === 'listener').map(p => `<div class="bg-neutral-900/60 p-2.5 rounded-xl border border-neutral-800 text-center"><div class="w-9 h-9 rounded-full bg-neutral-800 text-neutral-200 font-bold flex items-center justify-center mx-auto mb-1 text-xs relative">${p.display_name.charAt(0).toUpperCase()}${p.hand_raised ? '<span class="absolute -top-1 -right-1 text-xs">✋</span>' : ''}</div><span class="text-[11px] text-neutral-300 block truncate">${p.display_name}</span>${amIAdminOrHost ? `<div class="mt-1 flex justify-center gap-1"><button type="button" onclick="adminChangeRole('${p.id}', 'speaker')" class="px-1.5 py-0.5 rounded bg-emerald-950 text-[9px] text-emerald-300">تصعيد</button><button type="button" onclick="adminKickParticipant('${p.id}')" class="px-1.5 py-0.5 rounded bg-red-950 text-[9px] text-red-300">طرد</button></div>` : ''}</div>`).join('');
+        }
+
+        async function toggleMyMicrophone() {
+            if (!myParticipantRow) return;
+            if (myParticipantRow.role === 'listener') return alert("اضغط على 'رفع اليد' ليمنحك مدير الغرفة صلاحية التحدث.");
+            const nextMuted = !myParticipantRow.is_muted;
+            if (livekitRoomInstance && livekitRoomInstance.localParticipant) await livekitRoomInstance.localParticipant.setMicrophoneEnabled(!nextMuted);
+            await sb.from('voice_participants').update({ is_muted: nextMuted }).eq('id', myParticipantRow.id);
+            document.getElementById('toggleMicBtn').innerHTML = nextMuted ? `<i class="fa-solid fa-microphone-slash text-red-400"></i><span>المايك مغلق</span>` : `<i class="fa-solid fa-microphone text-emerald-400"></i><span>المايك مفتوح</span>`;
+        }
+        async function toggleRaiseHand() { if (myParticipantRow) await sb.from('voice_participants').update({ hand_raised: !myParticipantRow.hand_raised }).eq('id', myParticipantRow.id); }
+        async function adminMuteParticipant(id, s) { await sb.from('voice_participants').update({ is_muted: s }).eq('id', id); }
+        async function adminChangeRole(id, r) { await sb.from('voice_participants').update({ role: r, hand_raised: false, is_muted: true }).eq('id', id); }
+        async function adminKickParticipant(id) { await sb.from('voice_participants').delete().eq('id', id); }
+        async function sendRoomChatMessage() {
+            const input = document.getElementById('roomChatInput');
+            if (!input.value.trim() || !activeVoiceRoom || !myParticipantRow) return;
+            const content = input.value.trim(); input.value = '';
+            await sb.from('voice_messages').insert([{ room_id: activeVoiceRoom.id, sender_name: myParticipantRow.display_name, sender_role: myParticipantRow.role, content, msg_type: 'text' }]);
+        }
+        async function sendRoomReaction(emoji) { if (activeVoiceRoom && myParticipantRow) await sb.from('voice_messages').insert([{ room_id: activeVoiceRoom.id, sender_name: myParticipantRow.display_name, content: emoji, msg_type: 'emoji' }]); }
+        async function refreshRoomChat() {
+            if (!activeVoiceRoom) return;
+            const { data: msgs } = await sb.from('voice_messages').select('*').eq('room_id', activeVoiceRoom.id).order('created_at', { ascending: true }).limit(40);
+            const box = document.getElementById('roomChatMessages');
+            if (msgs && box) { box.innerHTML = msgs.map(m => m.msg_type === 'emoji' ? `<div class="text-center text-amber-300/90 text-[11px]">تفاعل <strong>${m.sender_name}</strong> بـ ${m.content}</div>` : `<div class="bg-neutral-900/90 px-3 py-1.5 rounded-xl"><span class="text-amber-400 font-bold">${m.sender_name}:</span> <span class="text-neutral-200">${m.content}</span></div>`).join(''); box.scrollTop = box.scrollHeight; }
+        }
+        async function reportCurrentRoom() {
+            if (!activeVoiceRoom) return;
+            const reason = prompt("اكتب سبب الإبلاغ:");
+            if (reason) { await sb.from('voice_reports').insert([{ room_id: activeVoiceRoom.id, reported_user_name: activeVoiceRoom.host_name, reason }]); alert("تم إرسال البلاغ."); }
+        }
+        function copyInviteLink() { if (activeVoiceRoom && activeVoiceRoom.invite_code) { const u = `${window.location.origin}?voice_code=${activeVoiceRoom.invite_code}`; navigator.clipboard.writeText(u); alert("تم نسخ الرابط: " + u); } }
+        async function leaveVoiceRoom(kicked = false) {
+            if (livekitRoomInstance) { livekitRoomInstance.disconnect(); livekitRoomInstance = null; }
+            if (roomRealtimeChannel) { sb.removeChannel(roomRealtimeChannel); roomRealtimeChannel = null; }
+            if (!kicked && myParticipantRow) await sb.from('voice_participants').delete().eq('id', myParticipantRow.id);
+            if (!kicked && activeVoiceRoom && currentUser && activeVoiceRoom.host_id === currentUser.id) await sb.from('voice_rooms').update({ is_active: false }).eq('id', activeVoiceRoom.id);
+            activeVoiceRoom = null; myParticipantRow = null;
+            document.getElementById('voiceActiveRoomView').classList.add('hidden'); document.getElementById('voiceLobbyView').classList.remove('hidden');
+            fetchPublicRooms();
+        }
+
+        async function openAdminModal() {
+            const modal = document.getElementById('adminModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            try {
+                const isAdmin = await checkSuperAdminStatus();
+                document.getElementById('loginView').classList.toggle('hidden', !!currentUser);
+                document.getElementById('dashboardView').classList.toggle('hidden', !currentUser);
+                if (currentUser) {
+                    const badge = document.getElementById('adminRoleBadge');
+                    badge.innerText = isAdmin ? `● تم التحقق من صلاحية Super Admin (${currentUser.email})` : `⚠️ سجل حسابك في جدول super_admins لتفعيل تعديل المميزات.`;
+                    badge.className = isAdmin ? "text-[11px] text-emerald-400" : "text-[11px] text-amber-400";
+                    if (isAdmin) { renderAdminFeaturesList(); loadAdminVoiceStats(); }
+                }
+            } catch (e) { document.getElementById('loginView').classList.remove('hidden'); document.getElementById('dashboardView').classList.add('hidden'); }
+        }
+        function closeAdminModal() { const m = document.getElementById('adminModal'); if (m) m.classList.add('hidden'); }
+        function switchAdminTab(tabName) {
+            document.getElementById('adminTabFeatures').classList.toggle('hidden', tabName !== 'features');
+            document.getElementById('adminTabAssets').classList.toggle('hidden', tabName !== 'assets');
+            document.getElementById('adminTabVoiceStats').classList.toggle('hidden', tabName !== 'voiceStats');
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                const active = btn.dataset.admintab === tabName;
+                btn.className = active ? 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold gold-btn text-black cursor-pointer' : 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800 cursor-pointer';
+            });
+            if (tabName === 'voiceStats') loadAdminVoiceStats();
+        }
+        async function loadAdminVoiceStats() {
+            if (!sb) return;
+            try {
+                const { count: rC } = await sb.from('voice_rooms').select('*', { count: 'exact', head: true }).eq('is_active', true);
+                const { count: uC } = await sb.from('voice_participants').select('*', { count: 'exact', head: true });
+                const { data: reps } = await sb.from('voice_reports').select('*').order('created_at', { ascending: false });
+                document.getElementById('statActiveRooms').innerText = rC || 0;
+                document.getElementById('statOnlineUsers').innerText = uC || 0;
+                document.getElementById('statPendingReports').innerText = (reps || []).filter(r => r.status === 'pending').length;
+                const repBox = document.getElementById('adminReportsList');
+                repBox.innerHTML = (!reps || !reps.length) ? `<p class="text-neutral-500">لا توجد بلاغات واردة.</p>` : reps.map(r => `<div class="p-2.5 rounded-xl bg-black border border-neutral-800 flex justify-between items-center gap-2"><div><strong class="text-red-300">${r.reported_user_name || 'غرفة'}</strong>: <span class="text-neutral-300">${r.reason}</span></div><button type="button" onclick="resolveVoiceReport('${r.id}')" class="px-2.5 py-1 rounded bg-emerald-900/50 text-emerald-300 text-[10px]">تمت المعالجة</button></div>`).join('');
+            } catch (e) {}
+        }
+        async function resolveVoiceReport(id) { await sb.from('voice_reports').update({ status: 'resolved' }).eq('id', id); loadAdminVoiceStats(); }
+        async function banVoiceUser() {
+            const identifier = document.getElementById('banIdentifierInput').value.trim();
+            const reason = document.getElementById('banReasonInput').value.trim() || 'مخالفة القواعد';
+            if (!identifier) return alert("أدخل معرّف المستخدم.");
+            const { error } = await sb.from('voice_bans').insert([{ identifier, reason }]);
+            if (error) return alert("خطأ: " + error.message);
+            alert("تم حظر المستخدم."); document.getElementById('banIdentifierInput').value = '';
+        }
+        async function handleSupabaseLogin() {
+            const email = document.getElementById('adminEmailInput').value.trim();
+            const password = document.getElementById('adminPassInput').value.trim();
+            const btn = document.getElementById('loginBtn'), errEl = document.getElementById('loginErrorMsg');
+            errEl.classList.add('hidden'); btn.innerText = "جاري التحقق...";
+            const { error } = await sb.auth.signInWithPassword({ email, password });
+            btn.innerText = "تسجيل الدخول الآمن";
+            if (error) { errEl.innerText = "بيانات الدخول غير صحيحة"; errEl.classList.remove('hidden'); }
+            else { await loadSiteFeatures(); openAdminModal(); }
+        }
+        async function handleSupabaseLogout() { if (sb) await sb.auth.signOut(); location.reload(); }
+        async function uploadAsset(type, inputId) {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return alert("اختر الصورة أولاً");
+            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
+            const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+            alert("تم الحفظ في السحابة بنجاح!"); location.reload();
+        }
+        async function publishProjectToSupabase() {
+            const title = document.getElementById('newWorkTitle').value.trim();
+            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
+            const description = document.getElementById('newWorkDesc').value.trim();
+            const file = document.getElementById('newWorkImgInput').files[0];
+            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
+            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const { error: dbErr } = await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+            alert("تم نشر التصميم للزوار!"); location.reload();
+        }
+        async function deleteProjectFromSupabase(id) { if (confirm("حذف التصميم؟")) { await sb.from('portfolio_projects').delete().eq('id', id); location.reload(); } }
+
+        const studioPresets = {
+            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
+            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
+            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة للشركات والبراندات', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' },
+            social: { name: 'سوشيال ميديا', ratio: '1080 × 1350 PX', w: 800, h: 1000, badge: 'SPECIAL OFFER', title: 'STAND OUT NOW', sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى', bg: '#0a0a0c', accent: '#BF953F', text: '#F5F5F5' },
+            product: { name: 'إعلان منتج فاخر', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'LIMITED EDITION', title: 'SIGNATURE SERIES', sub: 'جودة استثنائية وتفاصيل مصممة بإتقان', bg: '#080705', accent: '#F3D06B', text: '#FFFFFF' }
+        };
+        let currentStudioTpl = 'ad', studioUploadedImg = null;
+        function selectStudioTemplate(tplKey) {
+            currentStudioTpl = tplKey; const p = studioPresets[tplKey];
+            document.getElementById('studioBadgeInput').value = p.badge; document.getElementById('studioTitleInput').value = p.title; document.getElementById('studioSubInput').value = p.sub;
+            document.getElementById('studioBgColor').value = p.bg; document.getElementById('studioAccentColor').value = p.accent; document.getElementById('studioTextColor').value = p.text;
+            document.getElementById('studioFormatLabel').innerText = p.ratio;
+            document.querySelectorAll('.studio-tpl-btn').forEach(btn => {
+                const active = btn.dataset.tpl === tplKey;
+                btn.className = active ? 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition' : 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition';
+            });
+            renderStudioCanvas();
+        }
+        function applyStudioPalette(bg, accent, text) { document.getElementById('studioBgColor').value = bg; document.getElementById('studioAccentColor').value = accent; document.getElementById('studioTextColor').value = text; renderStudioCanvas(); }
+        function handleStudioImageUpload(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) { const img = new Image(); img.onload = function() { studioUploadedImg = img; renderStudioCanvas(); }; img.src = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+        function resetStudioDesign() { studioUploadedImg = null; document.getElementById('studioAssetInput').value = ''; selectStudioTemplate(currentStudioTpl); }
+        function renderStudioCanvas() {
+            const c = document.getElementById('studioPreviewCanvas'); if (!c) return;
+            const sCtx = c.getContext('2d'), p = studioPresets[currentStudioTpl];
+            c.width = p.w; c.height = p.h;
+            const bg = document.getElementById('studioBgColor').value || '#09090b', accent = document.getElementById('studioAccentColor').value || '#D4AF37', textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
+            const badgeText = document.getElementById('studioBadgeInput').value || '', titleText = document.getElementById('studioTitleInput').value || '', subText = document.getElementById('studioSubInput').value || '';
+            sCtx.fillStyle = bg; sCtx.fillRect(0, 0, c.width, c.height);
+            const pad = Math.round(Math.min(c.width, c.height) * 0.055);
+            sCtx.strokeStyle = accent; sCtx.lineWidth = 3; sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
+            const cx = c.width / 2, isBanner = currentStudioTpl === 'banner';
+            let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
+            if (studioUploadedImg) {
+                const maxImgSize = isBanner ? 115 : 210, scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
+                const iw = studioUploadedImg.width * scale, ih = studioUploadedImg.height * scale;
+                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih); contentY += ih + 35;
+            } else {
+                const emblemR = isBanner ? 34 : 58;
+                sCtx.beginPath(); sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2); sCtx.strokeStyle = accent; sCtx.lineWidth = 3; sCtx.stroke();
+                sCtx.fillStyle = accent; sCtx.font = `900 ${emblemR}px Cinzel, serif`; sCtx.textAlign = 'center'; sCtx.textBaseline = 'middle'; sCtx.fillText('P', cx, contentY + emblemR * 0.55); contentY += emblemR * 2 + 30;
+            }
+            if (badgeText) { sCtx.fillStyle = accent; sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`; sCtx.textAlign = 'center'; sCtx.fillText(badgeText.toUpperCase(), cx, contentY); contentY += isBanner ? 44 : 60; }
+            sCtx.fillStyle = textColor; sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`; sCtx.textAlign = 'center'; sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
+            contentY += isBanner ? 24 : 36; sCtx.beginPath(); sCtx.moveTo(cx - 80, contentY); sCtx.lineTo(cx + 80, contentY); sCtx.strokeStyle = accent; sCtx.lineWidth = 3; sCtx.stroke();
+            contentY += isBanner ? 36 : 50; sCtx.fillStyle = textColor; sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`; sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
+            sCtx.fillStyle = accent; sCtx.font = '700 14px Montserrat, sans-serif'; sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
+        }
+        function downloadStudioDesign() { const c = document.getElementById('studioPreviewCanvas'), link = document.createElement('a'); link.download = `PixelPerfect-${currentStudioTpl}-${Date.now()}.png`; link.href = c.toDataURL('image/png'); link.click(); }
+        function orderStudioDesign() {
+            const tplName = studioPresets[currentStudioTpl].name, title = document.getElementById('studioTitleInput').value, sub = document.getElementById('studioSubInput').value;
+            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n• نوع القالب: ${tplName}\n• العنوان: ${title}\n• الوصف: ${sub}`;
+            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        selectStudioTemplate('ad');
+
+        (async function bootstrapSite() {
+            if (!sb) return;
+            await loadSiteFeatures();
+            const inviteParam = new URLSearchParams(window.location.search).get('voice_code');
+            if (inviteParam) { document.getElementById('joinPrivateCodeInput').value = inviteParam; openVoiceLobby(); }
+            const logoImg = document.getElementById('customLogoImg'), logoLetter = document.getElementById('defaultLogoLetter'), portraitImg = document.getElementById('heroPortraitImg');
+            try {
+                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
+                if (settings) {
+                    if (settings.logo_url) { logoImg.src = settings.logo_url; logoImg.classList.remove('hidden'); logoLetter.classList.add('hidden'); }
+                    if (settings.portrait_url) { portraitImg.src = settings.portrait_url; }
+                }
+            } catch (e) {}
+            try {
+                const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
+                if (items && items.length) {
+                    const grid = document.getElementById('projectsGrid');
+                    items.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
+                        card.innerHTML = `<div><div class="relative h-52 overflow-hidden bg-neutral-900"><img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>${isVerifiedSuperAdmin ? `<button type="button" onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg cursor-pointer"><i class="fa-solid fa-trash"></i></button>` : ''}</div><div class="p-6"><h3 class="text-xl font-bold text-white mb-2">${item.title}</h3><p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p></div></div><div class="px-6 pb-6"><a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2"><span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i></a></div>`;
+                        grid.prepend(card);
+                    });
+                }
+            } catch (e) {}
+        })();
+    </script>
+</body>
+</html>
