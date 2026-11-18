@@ -1,40 +1,3 @@
-        async function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        async function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-        async function handleSupabaseLogin() {
-            const email = document.getElementById('adminEmailInput').value.trim(), password = document.getElementById('adminPassInput').value.trim();
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            if (error) document.getElementById('loginErrorMsg').innerText = 'خطأ في البيانات', document.getElementById('loginErrorMsg').classList.remove('hidden');
-            else location.reload();
-        }
-        async function handleSupabaseLogout() { await sb.auth.signOut(); location.reload(); }
-        async function uploadAsset(type, inputId) {
-            const file = document.getElementById(inputId).files[0]; if (!file) return alert('اختر ملفاً');
-            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert(error.message);
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            await sb.from('portfolio_settings').upsert({ id: 1, logo_url: data.publicUrl });
-            alert('تم الحفظ!'); location.reload();
-        }
-
-        const studioPresets = {
-            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
-            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
-            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' }
-        };
-        function selectStudioTemplate(k) { renderStudioCanvas(); }
-        function renderStudioCanvas() {
-            const c = document.getElementById('studioPreviewCanvas'); if (!c) return;
-            const ctx = c.getContext('2d'); ctx.fillStyle = '#09090b'; ctx.fillRect(0, 0, c.width, c.height);
-            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 40px Cinzel, serif'; ctx.textAlign = 'center'; ctx.fillText('PIXELPERFECT', c.width/2, c.height/2);
-        }
-        function downloadStudioDesign() { const link = document.createElement('a'); link.download = 'design.png'; link.href = document.getElementById('studioPreviewCanvas').toDataURL(); link.click(); }
-
-        selectStudioTemplate('ad');
-        loadMemberSession();
-    </script>
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
@@ -103,7 +66,7 @@
                     <span>غرفتي الخاصة VIP</span>
                 </button>
 
-                <!-- قائمة المزيد (الثلاث شرط) -->
+                <!-- قائمة المزيد -->
                 <div class="relative">
                     <button type="button" id="moreMenuBtn" onclick="toggleMoreMenu(event)" class="px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-amber-500/40 transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-bars"></i>
@@ -124,6 +87,159 @@
             </div>
         </div>
     </nav>
+
+    <!-- واجهة البطل -->
+    <section class="relative pt-28 pb-16 px-5">
+        <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
+            <div class="relative w-56 sm:w-64 h-64 sm:h-72 mb-4 flex items-end justify-center">
+                <div class="absolute inset-4 rounded-full bg-amber-500/25 blur-2xl animate-pulse"></div>
+                <img id="heroPortraitImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl transition-opacity duration-500">
+            </div>
+
+            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
+                <i class="fa-solid fa-crown text-amber-400"></i>
+                <span>Founder of PixelPerfect Studio</span>
+            </div>
+
+            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3">MOHAMED EMAD</h1>
+            <p dir="ltr" class="font-en text-sm sm:text-lg font-semibold text-neutral-200 tracking-wide mb-4">Creative Designer • 3D & AI Commercial Director • Brand Architect</p>
+            <p class="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومنصات رقمية متكاملة تصنع الفارق لعلامتك التجارية.</p>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto flex-wrap">
+                <a id="heroPortfolioBtn" href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2"><span>معرض الأعمال والتصميمات</span><i class="fa-solid fa-sparkles"></i></a>
+                <a id="heroStudioBtn" href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i><span>جرّب التصميم بنفسك</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم معرض الأعمال -->
+    <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
+                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span id="portfolioSectionTitle" class="gold-text">المشاريع والتصميمات</span></h2>
+            </div>
+            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-neutral-900">
+                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="حلويات العميد" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">متجر إلكتروني وهوية</span>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">منصة مصنع حلويات العميد</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الهوية التجارية الكاملة، المنيو الفاخر، وتطوير المتجر الإلكتروني الرسمي لمصنع حلويات العميد.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://al-ameed-sweets.vercel.app" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2"><span>زيارة الموقع المباشر</span><i class="fa-solid fa-arrow-up-left-from-square"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- استوديو التصميم التفاعلي -->
+    <section id="design-studio" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-10">
+                <div dir="ltr" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-en font-bold tracking-widest uppercase mb-2">
+                    <i id="studioSectionIcon" class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <span>LIVE CUSTOMIZATION ENGINE</span>
+                </div>
+                <h2 id="studioSectionTitle" dir="ltr" class="font-luxury text-3xl sm:text-5xl font-black mt-1 gold-text tracking-wide">INTERACTIVE DESIGN STUDIO</h2>
+                <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر قالبك، خصّص الألوان والنصوص وشاهد النتيجة مباشرة</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-amber-300 mb-2.5">1. اختر قالب التصميم</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            <button type="button" onclick="selectStudioTemplate('ad')" data-tpl="ad" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition">إعلان تجاري</button>
+                            <button type="button" onclick="selectStudioTemplate('logo')" data-tpl="logo" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">هوية وشعار</button>
+                            <button type="button" onclick="selectStudioTemplate('banner')" data-tpl="banner" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">بانر احترافي</button>
+                        </div>
+                    </div>
+                    <div class="space-y-2.5 border-t border-neutral-800/80 pt-4">
+                        <label class="block text-xs font-bold text-amber-300">2. تعديل النصوص</label>
+                        <input type="text" id="studioBadgeInput" oninput="renderStudioCanvas()" value="EXCLUSIVE COMMERCIAL" class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
+                        <input type="text" id="studioTitleInput" oninput="renderStudioCanvas()" value="ROYAL COLLECTION" class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
+                        <input type="text" id="studioSubInput" oninput="renderStudioCanvas()" value="ارتقِ بهوية علامتك التجارية" class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
+                    </div>
+                    <div class="pt-2">
+                        <button type="button" onclick="downloadStudioDesign()" dir="ltr" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-xs cursor-pointer shadow-lg">DOWNLOAD DESIGN</button>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 glass-panel rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center">
+                    <span id="studioFormatLabel" dir="ltr" class="font-en text-[11px] text-amber-400 font-semibold mb-3">1080 × 1080 PX</span>
+                    <canvas id="studioPreviewCanvas" width="900" height="900" class="w-full max-w-[440px] h-auto rounded-xl shadow-2xl"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
+        <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
+        <p>جميع الحقوق محفوظة &copy; 2026</p>
+        <button type="button" onclick="openAdminModal()" aria-label="Admin Login" class="absolute left-5 bottom-5 w-11 h-11 rounded-full bg-neutral-900 border border-amber-500/40 text-amber-400 hover:scale-110 flex items-center justify-center transition z-40 cursor-pointer shadow-lg"><i class="fa-solid fa-lock text-sm"></i></button>
+    </footer>
+
+    <!-- نافذة دخول الأعضاء -->
+    <div id="memberAuthModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-md rounded-3xl p-6 relative border border-purple-500/40 bg-gradient-to-b from-[#160926] to-[#08050d] shadow-2xl">
+            <button type="button" onclick="document.getElementById('memberAuthModal').classList.add('hidden')" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/10 text-neutral-300 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center mb-5">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-700 to-amber-500 text-white flex items-center justify-center mx-auto mb-2.5 text-xl shadow-lg"><i class="fa-solid fa-users"></i></div>
+                <h3 class="text-xl font-black gold-text">بوابة الأعضاء — PixelPerfect</h3>
+                <p class="text-xs text-purple-200/70 mt-1">حسابات مستقلة تماماً عن لوحة إدارة الموقع</p>
+            </div>
+            <div id="memberLoggedInBox" class="hidden text-center space-y-4 py-2">
+                <img id="memberProfileAvatarDisplay" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 rounded-full object-cover mx-auto border-2 border-amber-400">
+                <div><h4 id="memberProfileNameDisplay" class="text-lg font-black text-white">اسم العضو</h4><p id="memberProfileEmailDisplay" class="text-xs text-purple-300"></p></div>
+                <div class="flex gap-2">
+                    <button type="button" onclick="document.getElementById('memberAuthModal').classList.add('hidden'); openVipRoomEntry();" class="flex-1 py-2.5 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">دخول غرفة VIP</button>
+                    <button type="button" onclick="handleMemberLogout()" class="px-4 py-2.5 rounded-xl bg-red-950/70 border border-red-500/40 text-red-300 font-bold text-xs cursor-pointer">خروج</button>
+                </div>
+            </div>
+            <div id="memberAuthForms" class="space-y-3">
+                <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-black/50 border border-purple-500/20">
+                    <button type="button" id="tabMemberLoginBtn" onclick="switchMemberAuthMode('login')" class="py-2 rounded-lg text-xs font-bold bg-purple-700 text-white cursor-pointer">تسجيل الدخول</button>
+                    <button type="button" id="tabMemberSignupBtn" onclick="switchMemberAuthMode('signup')" class="py-2 rounded-lg text-xs font-bold text-neutral-400 cursor-pointer">حساب جديد</button>
+                </div>
+                <div id="memberSignupExtraFields" class="hidden space-y-2">
+                    <input type="text" id="memberRegUsername" placeholder="اسم المستخدم الظاهر..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-xs text-white outline-none">
+                    <input type="file" id="memberRegAvatarFile" accept="image/*" class="w-full text-xs text-neutral-300 file:py-1 file:px-2">
+                </div>
+                <input type="email" id="memberAuthEmail" placeholder="البريد الإلكتروني..." dir="ltr" class="w-full px-3.5 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-xs text-white outline-none text-left">
+                <input type="password" id="memberAuthPass" placeholder="كلمة المرور..." dir="ltr" class="w-full px-3.5 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-xs text-white outline-none text-left">
+                <p id="memberAuthMsg" class="hidden text-xs text-center text-amber-300"></p>
+                <button type="button" id="memberAuthSubmitBtn" onclick="submitMemberAuth()" class="w-full py-3 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">دخول العضو</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة بوابة غرفة VIP -->
+    <div id="vipRoomGateModal" class="fixed inset-0 z-50 hidden bg-black/92 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-md rounded-3xl p-6 relative border border-amber-500/40 bg-gradient-to-b from-[#1a0b2e] to-[#07040c] shadow-2xl space-y-4">
+            <button type="button" onclick="document.getElementById('vipRoomGateModal').classList.add('hidden')" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/10 text-neutral-300 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center">
+                <i class="fa-solid fa-crown text-3xl text-amber-400 mb-2"></i>
+                <h3 class="text-xl font-black gold-text">غرفتي الخاصة VIP</h3>
+                <p class="text-xs text-purple-200/80 mt-1">غرفة صوتية خاصة بكلمة مرور حصرية</p>
+            </div>
+            <div id="vipOwnerGateBox" class="hidden space-y-3">
+                <input type="text" id="vipOwnerRoomTitle" value="مجلس PixelPerfect VIP" placeholder="اسم الغرفة..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/70 border border-purple-500/30 text-xs text-white outline-none">
+                <input type="text" id="vipOwnerInitialPass" placeholder="كلمة مرور لدعوة الضيوف..." dir="ltr" class="w-full px-3.5 py-2.5 rounded-xl bg-black/70 border border-amber-400/40 text-xs text-white outline-none text-left">
+                <button type="button" onclick="ownerLaunchVipRoom()" class="w-full py-3 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">فتح غرفتي الخاصة VIP الآن</button>
+            </div>
+            <div id="vipGuestGateBox" class="hidden space-y-3">
+                <input type="password" id="vipGuestPasswordInput" placeholder="أدخل كلمة مرور الغرفة..." dir="ltr" class="w-full px-3.5 py-3 rounded-xl bg-black/70 border border-amber-400/40 text-xs text-white outline-none text-left">
+                <button type="button" onclick="guestEnterVipRoom()" class="w-full py-3 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">تحقق ودخول الغرفة</button>
+            </div>
+        </div>
+    </div>
+
     <!-- نافذة غرفة VIP ذات الـ 15 مايك الملكية -->
     <div id="vipRoomFullModal" class="fixed inset-0 z-50 hidden bg-[#06030b]/98 backdrop-blur-xl overflow-y-auto p-2 sm:p-4">
         <div class="max-w-6xl mx-auto rounded-3xl border border-amber-500/40 bg-gradient-to-b from-[#170929] via-[#0d0617] to-[#050308] shadow-2xl p-4 sm:p-6 space-y-5">
@@ -170,26 +286,151 @@
         </div>
     </div>
 
-    <!-- دوال الجافاسكريبت للغرفة والمايكات -->
+    <!-- لوحة تحكم السوبر أدمن الأصلية -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-7 relative my-auto max-h-[92vh] overflow-y-auto border-amber-500/40">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-neutral-800 text-neutral-300 flex items-center justify-center cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            <div id="loginView" class="max-w-md mx-auto py-4">
+                <div class="text-center mb-6"><div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl"><i class="fa-solid fa-shield-halved"></i></div><h3 class="text-xl font-bold text-white">بوابة Super Admin</h3></div>
+                <input type="email" id="adminEmailInput" value="Mmohammedemad99@gmail.com" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 outline-none text-left" dir="ltr">
+                <input type="password" id="adminPassInput" placeholder="الباسورد..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 outline-none text-left" dir="ltr">
+                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
+                <button type="button" onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm cursor-pointer">تسجيل الدخول الآمن</button>
+            </div>
+            <div id="dashboardView" class="hidden space-y-5">
+                <div class="border-b border-neutral-800 pb-4 flex justify-between items-center">
+                    <h3 class="text-lg font-black gold-text">لوحة تحكم Super Admin</h3>
+                    <button type="button" onclick="handleSupabaseLogout()" class="px-4 py-2 rounded-xl bg-red-950/60 text-red-300 text-xs font-bold cursor-pointer">خروج</button>
+                </div>
+                <p id="adminRoleBadge" class="text-xs text-emerald-400"></p>
+                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
+                    <label class="block text-xs font-bold text-amber-300">رفع لوجو أو صورة شخصية</label>
+                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 mb-2 w-full">
+                    <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold cursor-pointer">حفظ اللوجو</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الجافاسكريبت الشامل والآمن -->
     <script>
-        let memberAuthMode = 'login', currentMemberProfile = null, currentVipRoom = null, currentVipRoomPassPlain = '', isVipOwner = false, vipRealtimeSub = null;
+        const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
+        let sb = null;
+        try { if (window.supabase) sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) {}
+
+        let currentUser = null, isVerifiedSuperAdmin = false, siteFeaturesMap = {};
+        const guestSessionId = localStorage.getItem('pp_guest_id') || ('guest_' + Math.random().toString(36).substring(2, 10));
+        localStorage.setItem('pp_guest_id', guestSessionId);
+
+        (function initParticles() {
+            const canvas = document.getElementById('luxuryCanvas'); if (!canvas) return;
+            const ctx = canvas.getContext('2d'); let particles = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize); resize();
+            for (let i = 0; i < 40; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4, r: Math.random() * 1.8 + 0.6 });
+            function loop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > canvas.width) p.vx *= -1; if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(212, 175, 55, 0.45)'; ctx.fill();
+                });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+
+        function toggleMoreMenu(e) { if (e) e.stopPropagation(); document.getElementById('moreDropdownMenu').classList.toggle('hidden'); }
+        function closeMoreMenu() { document.getElementById('moreDropdownMenu').classList.add('hidden'); }
+        document.addEventListener('click', (e) => { const m = document.getElementById('moreDropdownMenu'), b = document.getElementById('moreMenuBtn'); if (m && !m.classList.contains('hidden') && !m.contains(e.target) && b && !b.contains(e.target)) m.classList.add('hidden'); });
+
+        async function checkSuperAdminStatus() {
+            if (!sb) return false;
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                currentUser = session ? session.user : null;
+                if (!currentUser) { isVerifiedSuperAdmin = false; return false; }
+                const { data } = await sb.from('super_admins').select('user_id').eq('user_id', currentUser.id).maybeSingle();
+                isVerifiedSuperAdmin = !!data;
+                return isVerifiedSuperAdmin;
+            } catch (e) { return false; }
+        }
+
+        let memberAuthMode = 'login', currentMemberProfile = null, currentVipRoom = null, currentVipRoomPassPlain = '', vipLivekitRoom = null, vipRealtimeSub = null, isVipOwner = false;
+
+        function switchMemberAuthMode(mode) {
+            memberAuthMode = mode;
+            document.getElementById('memberSignupExtraFields').classList.toggle('hidden', mode !== 'signup');
+            document.getElementById('tabMemberLoginBtn').className = mode === 'login' ? 'py-2 rounded-lg text-xs font-bold bg-purple-700 text-white cursor-pointer' : 'py-2 rounded-lg text-xs font-bold text-neutral-400 cursor-pointer';
+            document.getElementById('tabMemberSignupBtn').className = mode === 'signup' ? 'py-2 rounded-lg text-xs font-bold bg-purple-700 text-white cursor-pointer' : 'py-2 rounded-lg text-xs font-bold text-neutral-400 cursor-pointer';
+            document.getElementById('memberAuthSubmitBtn').innerText = mode === 'login' ? 'دخول العضو' : 'إنشاء حساب عضو جديد';
+        }
 
         async function loadMemberSession() {
             if (!sb) return null;
             const { data: { session } } = await sb.auth.getSession();
-            if (!session) { currentMemberProfile = null; return null; }
+            if (!session) { currentMemberProfile = null; document.getElementById('memberNavBtnLabel').innerText = 'دخول الأعضاء'; return null; }
             const { data: prof } = await sb.from('member_profiles').select('*').eq('user_id', session.user.id).maybeSingle();
             currentMemberProfile = prof || { user_id: session.user.id, username: session.user.email.split('@')[0], avatar_url: '' };
+            document.getElementById('memberNavBtnLabel').innerText = currentMemberProfile.username;
             return currentMemberProfile;
+        }
+
+        async function openMemberAuthModal() {
+            document.getElementById('memberAuthModal').classList.remove('hidden');
+            const prof = await loadMemberSession();
+            const { data: { session } } = await sb.auth.getSession();
+            if (session && prof) {
+                document.getElementById('memberAuthForms').classList.add('hidden');
+                document.getElementById('memberLoggedInBox').classList.remove('hidden');
+                document.getElementById('memberProfileNameDisplay').innerText = prof.username;
+                document.getElementById('memberProfileEmailDisplay').innerText = session.user.email;
+                if (prof.avatar_url) document.getElementById('memberProfileAvatarDisplay').src = prof.avatar_url;
+            } else {
+                document.getElementById('memberAuthForms').classList.remove('hidden');
+                document.getElementById('memberLoggedInBox').classList.add('hidden');
+            }
         }
 
         async function submitMemberAuth() {
             const email = document.getElementById('memberAuthEmail').value.trim();
             const password = document.getElementById('memberAuthPass').value.trim();
-            if (!email || !password) return alert('أدخل البريد وكلمة المرور.');
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            if (error) alert('بيانات الدخول غير صحيحة.');
-            else { alert('تم تسجيل الدخول بنجاح!'); document.getElementById('memberAuthModal').classList.add('hidden'); }
+            const msgEl = document.getElementById('memberAuthMsg'); msgEl.classList.add('hidden');
+            if (!email || !password) { msgEl.innerText = 'أدخل البريد وكلمة المرور.'; msgEl.classList.remove('hidden'); return; }
+
+            if (memberAuthMode === 'signup') {
+                const username = document.getElementById('memberRegUsername').value.trim() || email.split('@')[0];
+                const { data, error } = await sb.auth.signUp({ email, password });
+                if (error) { msgEl.innerText = error.message; msgEl.classList.remove('hidden'); return; }
+                let avatarUrl = '';
+                const file = document.getElementById('memberRegAvatarFile').files[0];
+                if (file && data.user) {
+                    const path = `avatars/${data.user.id}_${Date.now()}.${file.name.split('.').pop()}`;
+                    const { error: upErr } = await sb.storage.from('portfolio_assets').upload(path, file);
+                    if (!upErr) avatarUrl = sb.storage.from('portfolio_assets').getPublicUrl(path).data.publicUrl;
+                }
+                if (data.user) await sb.from('member_profiles').upsert({ user_id: data.user.id, username, avatar_url: avatarUrl });
+                alert('تم إنشاء حساب العضو بنجاح!'); await openMemberAuthModal();
+            } else {
+                const { error } = await sb.auth.signInWithPassword({ email, password });
+                if (error) { msgEl.innerText = 'بيانات الدخول غير صحيحة.'; msgEl.classList.remove('hidden'); return; }
+                await openMemberAuthModal();
+            }
+        }
+
+        async function handleMemberLogout() {
+            await sb.auth.signOut(); currentMemberProfile = null;
+            document.getElementById('memberNavBtnLabel').innerText = 'دخول الأعضاء';
+            document.getElementById('memberAuthModal').classList.add('hidden');
+        }
+
+        async function openVipRoomEntry() {
+            const prof = await loadMemberSession();
+            if (!prof) { alert('يرجى تسجيل الدخول بحساب عضو أولاً.'); return openMemberAuthModal(); }
+            const adminCheck = await checkSuperAdminStatus();
+            document.getElementById('vipRoomGateModal').classList.remove('hidden');
+            document.getElementById('vipOwnerGateBox').classList.toggle('hidden', !adminCheck);
+            document.getElementById('vipGuestGateBox').classList.toggle('hidden', adminCheck);
         }
 
         async function ownerLaunchVipRoom() {
@@ -234,9 +475,13 @@
 
         async function refreshVipSeatsAndMembers() {
             if (!currentVipRoom) return;
+            const { data: roomInfo } = await sb.from('vip_private_rooms').select('*').eq('id', currentVipRoom.id).maybeSingle();
+            if (!roomInfo || !roomInfo.is_active) { alert('تم إنهاء الغرفة.'); return leaveVipRoom(true); }
+
             const { data: seats } = await sb.from('vip_room_seats').select('*').eq('room_id', currentVipRoom.id).order('seat_number');
-            const mySeat = (seats || []).find(s => s.user_id === currentMemberProfile?.user_id);
+            const mySeat = (seats || []).find(s => s.user_id === currentMemberProfile.user_id);
             document.getElementById('vipLeaveSeatBtn').classList.toggle('hidden', !mySeat || mySeat.seat_number === 1);
+            document.getElementById('vipMyMicToggleBtn').innerHTML = (mySeat && !mySeat.is_muted) ? 'المايك مفتوح' : 'المايك مغلق';
 
             document.getElementById('vip15SeatsGrid').innerHTML = (seats || []).map(s => {
                 const isHost = s.seat_number === 1, occupied = !!s.user_id;
@@ -268,7 +513,7 @@
                 return;
             }
             await sb.from('vip_mic_requests').upsert({ room_id: currentVipRoom.id, seat_number: seatNumber, user_id: currentMemberProfile.user_id, username: currentMemberProfile.username, avatar_url: currentMemberProfile.avatar_url, status: 'pending' });
-            alert('تم إرسال طلب الصعود على المايك.');
+            alert('تم إرسال طلب الصعود على المايك لصاحب الغرفة.');
         }
 
         async function ownerHandleMicRequest(reqId, seatNum, userId, username, avatarUrl, approved) {
@@ -293,12 +538,12 @@
         }
 
         function copyVipRoomPass() {
-            if (!currentVipRoomPassPlain) return alert('كلمة المرور غير مسجلة في الذاكرة الحالية.');
+            if (!currentVipRoomPassPlain) return alert('كلمة المرور غير مخزنة في الذاكرة الحالية.');
             navigator.clipboard.writeText(currentVipRoomPassPlain); alert('تم النسخ: ' + currentVipRoomPassPlain);
         }
 
         async function promptChangeVipPass() {
-            const newPass = prompt('أدخل كلمة مرور جديدة للغرفة:');
+            const newPass = prompt('أدخل كلمة مرور جديدة (أو اتركها فارغة للإلغاء):');
             if (newPass === null) return;
             await sb.rpc('update_vip_room_security', { p_room_id: currentVipRoom.id, p_new_password: newPass.trim(), p_clear_password: newPass.trim() === '', p_is_locked: null });
             currentVipRoomPassPlain = newPass.trim(); alert('تم التحديث.');
@@ -332,73 +577,10 @@
             currentVipRoom = null; document.getElementById('vipRoomFullModal').classList.add('hidden');
         }
 
-        loadMemberSession();
-    </script>
-</body>
-</html>
-    <!-- تفعيل دوال الجافاسكريبت الإضافية والتحقق النهائي -->
-    <script>
-        async function fetchPublicRooms() {
-            if (!sb) return;
-            const { data: rooms } = await sb.from('vip_private_rooms').select('*').eq('is_active', true);
-            if (rooms && rooms.length > 0) {
-                console.log("Rooms found:", rooms.length);
-            }
-        }
-
-        async function joinPrivateRoomByCode() {
-            const code = document.getElementById('vipGuestPasswordInput').value.trim();
-            if (!code) return alert("أدخل كلمة المرور أولاً.");
-            await guestEnterVipRoom();
-        }
-
-        async function leaveVipRoomCompletely() {
-            await leaveVipRoom(false);
-        }
-
-        // تهيئة أولية عند تحميل الصفحة
-        (async function initSite() {
-            if (!sb) return;
-            const prof = await loadMemberSession();
-            if (prof && prof.username) {
-                const badge = document.getElementById('memberNavBtnLabel');
-                if (badge) badge.innerText = prof.username;
-            }
-            fetchPublicRooms();
-        })();
-    </script>
-</body>
-</html>
-    <!-- تفعيل دوال الجافاسكريبت الإضافية والتحقق النهائي -->
-    <script>
-        async function fetchPublicRooms() {
-            if (!sb) return;
-            const { data: rooms } = await sb.from('vip_private_rooms').select('*').eq('is_active', true);
-            if (rooms && rooms.length > 0) {
-                console.log("Rooms found:", rooms.length);
-            }
-        }
-
-        async function joinPrivateRoomByCode() {
-            const code = document.getElementById('vipGuestPasswordInput').value.trim();
-            if (!code) return alert("أدخل كلمة المرور أولاً.");
-            await guestEnterVipRoom();
-        }
-
-        async function leaveVipRoomCompletely() {
-            await leaveVipRoom(false);
-        }
-
-        // تهيئة أولية عند تحميل الصفحة
-        (async function initSite() {
-            if (!sb) return;
-            const prof = await loadMemberSession();
-            if (prof && prof.username) {
-                const badge = document.getElementById('memberNavBtnLabel');
-                if (badge) badge.innerText = prof.username;
-            }
-            fetchPublicRooms();
-        })();
-    </script>
-</body>
-</html>
+        async function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        async function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        async function handleSupabaseLogin() {
+            const email = document.getElementById('adminEmailInput').value.trim(), password = document.getElementById('adminPassInput').value.trim();
+            const { error } = await sb.auth.signInWithPassword({ email, password });
+            if (error) document.getElementById('loginErrorMsg').innerText = 'خطأ في البيانات', document.getElementById('loginErrorMsg').classList.remove('hidden');
+            else lo
