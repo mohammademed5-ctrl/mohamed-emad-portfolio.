@@ -66,7 +66,7 @@
                     <span>غرفتي الخاصة VIP</span>
                 </button>
 
-                <!-- قائمة المزيد -->
+                <!-- قائمة المزيد (الثلاث شرط) -->
                 <div class="relative">
                     <button type="button" id="moreMenuBtn" onclick="toggleMoreMenu(event)" class="px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-amber-500/40 transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-bars"></i>
@@ -74,7 +74,7 @@
                     </button>
                     <div id="moreDropdownMenu" class="hidden absolute left-0 mt-2 w-56 glass-panel rounded-2xl p-2 shadow-2xl border border-amber-500/30 z-50 space-y-1">
                         <a href="#portfolio" onclick="closeMoreMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10"><i class="fa-solid fa-sparkles text-amber-400 w-4"></i><span>معرض الأعمال</span></a>
-                        <a href="#design-studio" onclick="closeMoreMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10"><i class="fa-solid fa-wand-magic-sparkles text-amber-400 w-4"></i><span>استوديو التصميم</span></a>
+                        <a href="#design-studio" onclick="closeMoreMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10"><i class="fa-solid fa-wand-magic-sparkles text-amber-400 w-4"></i><span>استوديو التصميم التفاعلي</span></a>
                         <div class="border-t border-neutral-800 my-1"></div>
                         <button type="button" onclick="closeMoreMenu(); openAdminModal();" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-amber-300 hover:bg-neutral-900 text-right cursor-pointer"><i class="fa-solid fa-shield-halved text-amber-400 w-4"></i><span>لوحة تحكم Super Admin</span></button>
                     </div>
@@ -112,6 +112,7 @@
             </div>
         </div>
     </section>
+
     <!-- قسم معرض الأعمال -->
     <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
@@ -198,7 +199,7 @@
                 <img id="memberProfileAvatarDisplay" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" class="w-20 h-20 rounded-full object-cover mx-auto border-2 border-amber-400">
                 <div><h4 id="memberProfileNameDisplay" class="text-lg font-black text-white">اسم العضو</h4><p id="memberProfileEmailDisplay" class="text-xs text-purple-300"></p></div>
                 <div class="flex gap-2">
-                    <button type="button" onclick="document.getElementById('memberAuthModal').classList.add('hidden'); openVipRoomEntry();" class="flex-1 py-2.5 rounded-xl gold-btn text-black font-bold text-xs cursor-pointer">دخول غرفة VIP</button>
+                    <button type="button" onclick="document.getElementById('memberAuthModal').classList.add('hidden'); openVipRoomEntry();" class="flex-1 py-2.5 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">دخول غرفة VIP</button>
                     <button type="button" onclick="handleMemberLogout()" class="px-4 py-2.5 rounded-xl bg-red-950/70 border border-red-500/40 text-red-300 font-bold text-xs cursor-pointer">خروج</button>
                 </div>
             </div>
@@ -581,6 +582,9 @@
         async function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
         async function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
         async function handleSupabaseLogin() {
+        async function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        async function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        async function handleSupabaseLogin() {
             const email = document.getElementById('adminEmailInput').value.trim(), password = document.getElementById('adminPassInput').value.trim();
             const { error } = await sb.auth.signInWithPassword({ email, password });
             if (error) document.getElementById('loginErrorMsg').innerText = 'خطأ في البيانات', document.getElementById('loginErrorMsg').classList.remove('hidden');
@@ -615,3 +619,4 @@
     </script>
 </body>
 </html>
+     
