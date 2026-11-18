@@ -29,11 +29,11 @@
             background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
         .glass-panel {
-            background: rgba(14, 14, 14, 0.86);
+            background: rgba(14, 14, 14, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .glass-panel:hover {
             border-color: rgba(212, 175, 55, 0.72);
@@ -44,8 +44,6 @@
             -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
             mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
         }
-        .smooth-asset { opacity: 0; transition: opacity 0.45s ease-in-out; }
-        .smooth-asset.loaded { opacity: 1; }
         #luxuryCanvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; pointer-events: none;
@@ -80,7 +78,7 @@
             <a href="#" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
                     <span id="defaultLogoLetter" class="font-luxury">P</span>
-                    <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover smooth-asset">
+                    <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover">
                 </div>
                 <div dir="ltr" class="text-left">
                     <span class="font-en font-black text-base sm:text-lg tracking-wider gold-text block leading-none">PIXELPERFECT</span>
@@ -88,7 +86,7 @@
                 </div>
             </a>
 
-            <!-- روابط ديناميكية حسب إعدادات Feature Management -->
+            <!-- روابط التنقل -->
             <div class="flex items-center gap-2">
                 <a id="navStudioLink" href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -96,35 +94,35 @@
                 </a>
 
                 <!-- نقطة ظهور الغرف الصوتية في الشريط العلوي (مخفية افتراضياً) -->
-                <button type="button" id="voiceNavSlot" onclick="openVoiceLobby()" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-500/15 border border-amber-500/50 text-amber-200 hover:bg-amber-500/25 transition">
+                <button type="button" id="voiceNavSlot" onclick="openVoiceLobby()" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-500/15 border border-amber-500/50 text-amber-200 hover:bg-amber-500/25 transition cursor-pointer">
                     <i id="voiceNavIcon" class="fa-solid fa-microphone-lines text-amber-400"></i>
                     <span id="voiceNavLabel">الغرف الصوتية</span>
                 </button>
 
-                <!-- قائمة المزيد -->
+                <!-- قائمة المزيد (الثلاث شرط) -->
                 <div class="relative">
-                    <button type="button" onclick="toggleMoreMenu()" class="px-3 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-amber-500/40 transition flex items-center gap-1.5">
+                    <button type="button" id="moreMenuBtn" onclick="toggleMoreMenu(event)" class="px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-amber-500/40 transition flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-bars"></i>
                         <span class="hidden md:inline">المزيد</span>
                     </button>
                     <div id="moreDropdownMenu" class="hidden absolute left-0 mt-2 w-56 glass-panel rounded-2xl p-2 shadow-2xl border border-amber-500/30 z-50 space-y-1">
-                        <a href="#portfolio" onclick="toggleMoreMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
+                        <a href="#portfolio" onclick="closeMoreMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
                             <i class="fa-solid fa-sparkles text-amber-400 w-4"></i>
                             <span>معرض الأعمال</span>
                         </a>
-                        <a href="#design-studio" onclick="toggleMoreMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
+                        <a href="#design-studio" onclick="closeMoreMenu()" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
                             <i class="fa-solid fa-wand-magic-sparkles text-amber-400 w-4"></i>
                             <span>استوديو التصميم</span>
                         </a>
                         <!-- نقطة ظهور الغرف الصوتية داخل قائمة المزيد -->
-                        <button type="button" id="voiceMoreSlot" onclick="toggleMoreMenu(); openVoiceLobby();" class="hidden w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-amber-300 font-bold hover:bg-amber-500/15 text-right">
+                        <button type="button" id="voiceMoreSlot" onclick="closeMoreMenu(); openVoiceLobby();" class="hidden w-full items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-amber-300 font-bold hover:bg-amber-500/15 text-right cursor-pointer">
                             <i id="voiceMoreIcon" class="fa-solid fa-microphone-lines text-amber-400 w-4"></i>
                             <span id="voiceMoreLabel">الغرف الصوتية</span>
                         </button>
                         <div class="border-t border-neutral-800 my-1"></div>
-                        <button type="button" onclick="toggleMoreMenu(); openAdminModal();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-400 hover:text-amber-300 hover:bg-neutral-900 text-right">
+                        <button type="button" onclick="closeMoreMenu(); openAdminModal();" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-amber-300 hover:bg-neutral-900 text-right cursor-pointer">
                             <i class="fa-solid fa-shield-halved text-amber-400 w-4"></i>
-                            <span>بوابة الإدارة / الحساب</span>
+                            <span>لوحة تحكم Super Admin</span>
                         </button>
                     </div>
                 </div>
@@ -137,8 +135,8 @@
         </div>
     </nav>
 
-    <!-- نقطة ظهور جانبية (Sidebar Slot) للغرف الصوتية عند اختيارها من السوبر أدمن -->
-    <button type="button" id="voiceSidebarSlot" onclick="openVoiceLobby()" class="hidden fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-neutral-950/95 border border-r-0 border-amber-500/50 rounded-l-2xl px-3 py-4 shadow-2xl flex-col items-center gap-2 text-amber-300 hover:bg-amber-500/10 transition">
+    <!-- نقطة ظهور جانبية (Sidebar Slot) للغرف الصوتية -->
+    <button type="button" id="voiceSidebarSlot" onclick="openVoiceLobby()" class="hidden fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-neutral-950/95 border border-r-0 border-amber-500/50 rounded-l-2xl px-3 py-4 shadow-2xl flex-col items-center gap-2 text-amber-300 hover:bg-amber-500/10 transition cursor-pointer">
         <i id="voiceSidebarIcon" class="fa-solid fa-microphone-lines text-lg text-amber-400"></i>
         <span id="voiceSidebarLabel" class="text-[11px] font-bold [writing-mode:vertical-rl]">الغرف الصوتية</span>
     </button>
@@ -148,7 +146,7 @@
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
             <div class="relative w-56 sm:w-64 h-64 sm:h-72 mb-4 flex items-end justify-center">
                 <div class="absolute inset-4 rounded-full bg-amber-500/25 blur-2xl animate-pulse"></div>
-                <img id="heroPortraitImg" src="" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl smooth-asset">
+                <img id="heroPortraitImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl transition-opacity duration-500">
             </div>
 
             <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
@@ -177,8 +175,7 @@
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span>جرّب التصميم بنفسك</span>
                 </a>
-                <!-- نقطة ظهور الغرف الصوتية في الواجهة (مخفية افتراضياً) -->
-                <button type="button" id="voiceHeroSlot" onclick="openVoiceLobby()" class="hidden w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500/15 border border-amber-500/50 text-amber-200 font-bold text-sm hover:bg-amber-500/25 transition items-center justify-center gap-2">
+                <button type="button" id="voiceHeroSlot" onclick="openVoiceLobby()" class="hidden w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500/15 border border-amber-500/50 text-amber-200 font-bold text-sm hover:bg-amber-500/25 transition items-center justify-center gap-2 cursor-pointer">
                     <i id="voiceHeroIcon" class="fa-solid fa-microphone-lines text-amber-400"></i>
                     <span id="voiceHeroLabel">الغرف الصوتية</span>
                 </button>
@@ -190,7 +187,7 @@
         </div>
     </section>
 
-    <!-- شريط تنبيه الصيانة لأي ميزة في وضع Maintenance -->
+    <!-- شريط تنبيه الصيانة -->
     <div id="featureMaintenanceBanner" class="hidden max-w-4xl mx-auto px-5 mb-8">
         <div class="glass-panel rounded-2xl p-4 border-amber-500/40 flex items-center justify-between gap-3">
             <div class="flex items-center gap-3 text-xs text-amber-200">
@@ -369,7 +366,7 @@
         </div>
     </section>
 
-    <!-- قسم الغرف الصوتية في الصفحة (مخفي افتراضياً حتى يتم تفعيله وتحديد مكانه كقسم) -->
+    <!-- قسم الغرف الصوتية في الصفحة (مخفي افتراضياً) -->
     <section id="voiceSectionSlot" class="hidden py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-5xl mx-auto glass-panel rounded-3xl p-8 text-center">
             <div class="w-14 h-14 rounded-2xl gold-btn text-black flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
@@ -377,7 +374,7 @@
             </div>
             <h2 id="voiceSectionTitle" class="text-2xl sm:text-3xl font-black text-white mb-2">PixelPerfect Voice</h2>
             <p class="text-neutral-400 text-sm max-w-xl mx-auto mb-6">انضم إلى الغرف الصوتية الحية، تواصل مع المصممين والعملاء، أو أنشئ غرفتك الخاصة بدعوة حصرية.</p>
-            <button type="button" onclick="openVoiceLobby()" class="px-8 py-3.5 rounded-xl gold-btn text-black font-black text-sm shadow-lg hover:scale-[1.02] transition inline-flex items-center gap-2">
+            <button type="button" onclick="openVoiceLobby()" class="px-8 py-3.5 rounded-xl gold-btn text-black font-black text-sm shadow-lg hover:scale-[1.02] transition inline-flex items-center gap-2 cursor-pointer">
                 <i class="fa-solid fa-headset"></i>
                 <span>دخول قاعة الغرف الصوتية</span>
             </button>
@@ -398,16 +395,16 @@
         </div>
     </section>
 
-    <!-- الفوتر -->
+    <!-- الفوتر (يحتوي على القفل) -->
     <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
         <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
         <p>جميع الحقوق محفوظة &copy; 2026</p>
-        <button type="button" onclick="openAdminModal()" class="absolute left-5 bottom-5 w-9 h-9 rounded-full bg-neutral-900 border border-amber-500/30 text-amber-400 hover:scale-110 flex items-center justify-center transition z-30 cursor-pointer">
-            <i class="fa-solid fa-lock text-xs"></i>
+        <button type="button" id="footerLockBtn" onclick="openAdminModal()" aria-label="Admin Login" class="absolute left-5 bottom-5 w-11 h-11 rounded-full bg-neutral-900 border border-amber-500/40 text-amber-400 hover:scale-110 active:scale-95 flex items-center justify-center transition z-40 cursor-pointer shadow-lg">
+            <i class="fa-solid fa-lock text-sm"></i>
         </button>
     </footer>
 
-    <!-- نافذة الغرف الصوتية (PixelPerfect Voice Lobby & Active Room) -->
+    <!-- نافذة الغرف الصوتية (PixelPerfect Voice) -->
     <div id="voiceModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
         <div class="glass-panel w-full max-w-5xl rounded-3xl p-5 sm:p-7 relative my-auto max-h-[92vh] overflow-y-auto border-amber-500/40">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-4 mb-5">
@@ -420,7 +417,7 @@
                         <p id="voiceServerBadge" class="text-[11px] text-neutral-400">حالة خادم الصوت: جاري الفحص...</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeVoiceLobby()" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white flex items-center justify-center">
+                <button type="button" onclick="closeVoiceLobby()" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white flex items-center justify-center cursor-pointer">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -438,7 +435,7 @@
                                 <option value="private">غرفة خاصة (بكود دعوة)</option>
                             </select>
                         </div>
-                        <button type="button" onclick="createVoiceRoom()" class="w-full py-2.5 rounded-xl gold-btn text-black font-black text-xs">
+                        <button type="button" onclick="createVoiceRoom()" class="w-full py-2.5 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">
                             إنشاء وبدء الغرفة الآن
                         </button>
                     </div>
@@ -449,7 +446,7 @@
                             <input type="text" id="joinPrivateCodeInput" placeholder="أدخل كود الدعوة (مثال: PP-8492)..." dir="ltr" class="w-full px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white uppercase outline-none focus:border-amber-400 mb-2">
                             <input type="text" id="guestDisplayNameInput" placeholder="اسمك المستعار للدخول..." class="w-full px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
                         </div>
-                        <button type="button" onclick="joinPrivateRoomByCode()" class="w-full py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 hover:bg-amber-500 hover:text-black font-bold text-xs transition">
+                        <button type="button" onclick="joinPrivateRoomByCode()" class="w-full py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 hover:bg-amber-500 hover:text-black font-bold text-xs transition cursor-pointer">
                             التحقق من الكود والدخول
                         </button>
                     </div>
@@ -458,7 +455,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-3">
                         <h4 class="text-sm font-bold text-white">الغرف العامة النشطة حالياً</h4>
-                        <button type="button" onclick="fetchPublicRooms()" class="text-xs text-amber-400 hover:underline"><i class="fa-solid fa-rotate"></i> تحديث</button>
+                        <button type="button" onclick="fetchPublicRooms()" class="text-xs text-amber-400 hover:underline cursor-pointer"><i class="fa-solid fa-rotate"></i> تحديث</button>
                     </div>
                     <div id="publicRoomsList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <p class="text-xs text-neutral-500 col-span-2 text-center py-6">لا توجد غرف عامة مفتوحة حالياً.</p>
@@ -476,14 +473,14 @@
                         </div>
                         <p class="text-xs text-neutral-400 mt-1">
                             المتواجدون الآن: <span id="activeRoomCount" class="text-amber-300 font-bold">1</span>
-                            <span id="activeRoomInviteBox" class="hidden mr-3 text-emerald-400">• كود الدعوة: <strong id="activeRoomCodeText" class="select-all"></strong> <button type="button" onclick="copyInviteLink()" class="underline text-xs mr-1">نسخ الرابط</button></span>
+                            <span id="activeRoomInviteBox" class="hidden mr-3 text-emerald-400">• كود الدعوة: <strong id="activeRoomCodeText" class="select-all"></strong> <button type="button" onclick="copyInviteLink()" class="underline text-xs mr-1 cursor-pointer">نسخ الرابط</button></span>
                         </p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button type="button" onclick="reportCurrentRoom()" class="px-3 py-2 rounded-xl bg-red-950/50 border border-red-500/30 text-red-300 text-xs font-bold hover:bg-red-900/50">
+                        <button type="button" onclick="reportCurrentRoom()" class="px-3 py-2 rounded-xl bg-red-950/50 border border-red-500/30 text-red-300 text-xs font-bold hover:bg-red-900/50 cursor-pointer">
                             <i class="fa-solid fa-flag"></i> إبلاغ
                         </button>
-                        <button type="button" onclick="leaveVoiceRoom()" class="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-500">
+                        <button type="button" onclick="leaveVoiceRoom()" class="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-500 cursor-pointer">
                             مغادرة الغرفة
                         </button>
                     </div>
@@ -502,20 +499,20 @@
 
                         <div class="border-t border-neutral-800 pt-3 flex flex-wrap items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
-                                <button type="button" id="toggleMicBtn" onclick="toggleMyMicrophone()" class="px-4 py-2 rounded-xl bg-neutral-800 text-neutral-300 text-xs font-bold flex items-center gap-1.5">
+                                <button type="button" id="toggleMicBtn" onclick="toggleMyMicrophone()" class="px-4 py-2 rounded-xl bg-neutral-800 text-neutral-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-solid fa-microphone-slash"></i>
                                     <span>المايك مغلق</span>
                                 </button>
-                                <button type="button" id="raiseHandBtn" onclick="toggleRaiseHand()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-1.5">
+                                <button type="button" id="raiseHandBtn" onclick="toggleRaiseHand()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
                                     <i class="fa-solid fa-hand"></i>
                                     <span>رفع اليد</span>
                                 </button>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <button type="button" onclick="sendRoomReaction('👏')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">👏</button>
-                                <button type="button" onclick="sendRoomReaction('🔥')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">🔥</button>
-                                <button type="button" onclick="sendRoomReaction('👑')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">👑</button>
-                                <button type="button" onclick="sendRoomReaction('❤️')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">❤️</button>
+                                <button type="button" onclick="sendRoomReaction('👏')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm cursor-pointer">👏</button>
+                                <button type="button" onclick="sendRoomReaction('🔥')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm cursor-pointer">🔥</button>
+                                <button type="button" onclick="sendRoomReaction('👑')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm cursor-pointer">👑</button>
+                                <button type="button" onclick="sendRoomReaction('❤️')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm cursor-pointer">❤️</button>
                             </div>
                         </div>
                     </div>
@@ -525,7 +522,7 @@
                         <div id="roomChatMessages" class="flex-1 overflow-y-auto space-y-2 text-xs pl-1"></div>
                         <div class="pt-2 border-t border-neutral-800 flex gap-2 mt-2">
                             <input type="text" id="roomChatInput" onkeypress="if(event.key==='Enter') sendRoomChatMessage()" placeholder="اكتب رسالة للغرفة..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
-                            <button type="button" onclick="sendRoomChatMessage()" class="px-3.5 py-2 rounded-xl gold-btn text-black font-bold text-xs">إرسال</button>
+                            <button type="button" onclick="sendRoomChatMessage()" class="px-3.5 py-2 rounded-xl gold-btn text-black font-bold text-xs cursor-pointer">إرسال</button>
                         </div>
                     </div>
                 </div>
@@ -536,7 +533,7 @@
     <!-- لوحة تحكم السوبر أدمن المتكاملة -->
     <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
         <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-7 relative my-auto max-h-[92vh] overflow-y-auto border-amber-500/40">
-            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-neutral-800 text-neutral-300 hover:text-white flex items-center justify-center">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-neutral-800 text-neutral-300 hover:text-white flex items-center justify-center cursor-pointer">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -547,12 +544,12 @@
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white">بوابة Super Admin (حماية Supabase)</h3>
-                    <p class="text-xs text-neutral-400 mt-1">التحقق من الصلاحيات يتم من الخادم عبر Row Level Security</p>
+                    <p class="text-xs text-neutral-400 mt-1">أدخل بيانات حسابك للتحكم في إعدادات وصور ومميزات الموقع</p>
                 </div>
-                <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
+                <input type="email" id="adminEmailInput" value="Mmohammedemad99@gmail.com" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
                 <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-left" dir="ltr">
                 <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
-                <button type="button" onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
+                <button type="button" onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm cursor-pointer">
                     تسجيل الدخول الآمن
                 </button>
             </div>
@@ -564,21 +561,21 @@
                         <h3 class="text-lg sm:text-xl font-black gold-text">لوحة تحكم Super Admin — PixelPerfect</h3>
                         <p id="adminRoleBadge" class="text-[11px] text-emerald-400">جاري التحقق من صلاحية السوبر أدمن من الخادم...</p>
                     </div>
-                    <button type="button" onclick="handleSupabaseLogout()" class="px-4 py-2 rounded-xl bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
+                    <button type="button" onclick="handleSupabaseLogout()" class="px-4 py-2 rounded-xl bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold cursor-pointer">
                         تسجيل خروج
                     </button>
                 </div>
 
                 <!-- تبويبات لوحة الإدارة -->
                 <div class="flex flex-wrap gap-2 border-b border-neutral-800 pb-3">
-                    <button type="button" onclick="switchAdminTab('features')" data-admintab="features" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold gold-btn text-black">
+                    <button type="button" onclick="switchAdminTab('features')" data-admintab="features" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold gold-btn text-black cursor-pointer">
                         <i class="fa-solid fa-sliders ml-1"></i> Feature Management – إدارة المميزات
                     </button>
-                    <button type="button" onclick="switchAdminTab('voiceStats')" data-admintab="voiceStats" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800">
-                        <i class="fa-solid fa-microphone-lines ml-1"></i> إحصائيات الصوت والبلاغات
-                    </button>
-                    <button type="button" onclick="switchAdminTab('assets')" data-admintab="assets" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800">
+                    <button type="button" onclick="switchAdminTab('assets')" data-admintab="assets" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800 cursor-pointer">
                         <i class="fa-solid fa-images ml-1"></i> اللوجو، صورتي، والمعرض
+                    </button>
+                    <button type="button" onclick="switchAdminTab('voiceStats')" data-admintab="voiceStats" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800 cursor-pointer">
+                        <i class="fa-solid fa-microphone-lines ml-1"></i> إحصائيات الصوت والبلاغات
                     </button>
                 </div>
 
@@ -586,48 +583,41 @@
                 <div id="adminTabFeatures" class="space-y-4">
                     <div class="flex justify-between items-center">
                         <h4 class="text-sm font-bold text-amber-300">التحكم المستقل في مميزات الموقع (محفوظ في Supabase)</h4>
-                        <button type="button" onclick="loadSiteFeatures()" class="text-xs text-neutral-400 hover:text-amber-300"><i class="fa-solid fa-rotate"></i> تحديث</button>
+                        <button type="button" onclick="loadSiteFeatures()" class="text-xs text-neutral-400 hover:text-amber-300 cursor-pointer"><i class="fa-solid fa-rotate"></i> تحديث</button>
                     </div>
                     <div id="featuresManagementList" class="space-y-4"></div>
                 </div>
 
-                <!-- التبويب 2: إحصائيات الغرف الصوتية والبلاغات والحظر -->
-                <div id="adminTabVoiceStats" class="hidden space-y-5">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
-                            <span class="text-xs text-neutral-400 block">الغرف النشطة</span>
-                            <strong id="statActiveRooms" class="text-2xl font-black gold-text">0</strong>
-                        </div>
-                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
-                            <span class="text-xs text-neutral-400 block">المتصلون بالصوت</span>
-                            <strong id="statOnlineUsers" class="text-2xl font-black text-emerald-400">0</strong>
-                        </div>
-                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center col-span-2 sm:col-span-1">
-                            <span class="text-xs text-neutral-400 block">البلاغات المعلقة</span>
-                            <strong id="statPendingReports" class="text-2xl font-black text-red-400">0</strong>
-                        </div>
-                    </div>
-
-                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-3">
-                        <h4 class="text-xs font-bold text-amber-300">البلاغات الواردة من الغرف الصوتية</h4>
-                        <div id="adminReportsList" class="space-y-2 text-xs text-neutral-400">لا توجد بلاغات حالياً.</div>
-                    </div>
-
-                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2.5">
-                        <h4 class="text-xs font-bold text-red-400">حظر مستخدم أو جلسة من الغرف الصوتية</h4>
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <input type="text" id="banIdentifierInput" placeholder="معرّف المستخدم (User ID / Guest ID)..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
-                            <input type="text" id="banReasonInput" placeholder="سبب الحظر..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
-                            <button type="button" onclick="banVoiceUser()" class="px-4 py-2 rounded-xl bg-red-600 text-white font-bold text-xs">تنفيذ الحظر</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- التبويب 3: إدارة اللوجو والصورة الشخصية والمعرض -->
+                <!-- التبويب 2: إدارة اللوجو والصورة الشخصية والمعرض -->
                 <div id="adminTabAssets" class="hidden space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                             <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع</label>
                             <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                            <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
-                                حفظ اللوجو في السحاب
+                            <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold cursor-pointer">
+                                حفظ اللوجو في السحابة
+                            </button>
+                        </div>
+
+                        <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                            <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية</label>
+                            <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                            <button type="button" onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold cursor-pointer">
+                                حفظ صورتي الشخصية في السحابة
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
+                        <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد للمعرض</label>
+                        <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                        <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                        <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
+                        <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
+                        <button type="button" onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black cursor-pointer">
+                            نشر التصميم للزوار
+                        </button>
+                    </div>
+                </div>
+
+                <!-- الت
