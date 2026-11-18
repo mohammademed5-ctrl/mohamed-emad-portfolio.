@@ -28,7 +28,7 @@
             background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
         .glass-panel {
-            background: rgba(14, 14, 14, 0.82);
+            background: rgba(14, 14, 14, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
@@ -82,11 +82,11 @@
     <div class="ambient-orb orb-2"></div>
 
     <!-- الشريط العلوي -->
-    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-amber-500/20">
+    <nav class="fixed top-0 w-full z-40 bg-black/85 backdrop-blur-xl border-b border-amber-500/20">
         <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
-                    <span id="defaultLogoLetter" class="font-luxury smooth-asset">P</span>
+                    <span id="defaultLogoLetter" class="font-luxury">P</span>
                     <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover smooth-asset">
                 </div>
                 <div dir="ltr" class="text-left">
@@ -240,10 +240,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 <!-- لوحة الأدوات والتحكم -->
                 <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-5">
-                    <!-- 1. اختيار القالب -->
                     <div>
                         <label class="block text-xs font-bold text-amber-300 mb-2.5">1. اختر قالب التصميم الجاهز</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="studioTemplatesList">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             <button type="button" onclick="selectStudioTemplate('ad')" data-tpl="ad" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition">إعلان تجاري</button>
                             <button type="button" onclick="selectStudioTemplate('logo')" data-tpl="logo" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">هوية وشعار</button>
                             <button type="button" onclick="selectStudioTemplate('banner')" data-tpl="banner" class="studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition">بانر احترافي</button>
@@ -252,7 +251,6 @@
                         </div>
                     </div>
 
-                    <!-- 2. تعديل النصوص والعناوين -->
                     <div class="space-y-2.5 border-t border-neutral-800/80 pt-4">
                         <label class="block text-xs font-bold text-amber-300">2. تعديل النصوص والعناوين</label>
                         <input type="text" id="studioBadgeInput" oninput="renderStudioCanvas()" value="EXCLUSIVE COMMERCIAL" placeholder="الشارة العلوية..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white focus:border-amber-400 outline-none transition">
@@ -260,14 +258,13 @@
                         <input type="text" id="studioSubInput" oninput="renderStudioCanvas()" value="ارتقِ بهوية علامتك التجارية إلى مستوى عالمي" placeholder="الوصف أو العنوان الفرعي..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white focus:border-amber-400 outline-none transition">
                     </div>
 
-                    <!-- 3. تغيير الألوان -->
                     <div class="border-t border-neutral-800/80 pt-4">
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-xs font-bold text-amber-300">3. ألوان التصميم</label>
                             <div class="flex gap-1.5">
-                                <button type="button" onclick="applyStudioPalette('#09090b','#D4AF37','#FFFFFF')" title="ملكي أسود وذهبي" class="w-5 h-5 rounded-full border border-amber-400/70 bg-gradient-to-tr from-black to-amber-400"></button>
+                                <button type="button" onclick="applyStudioPalette('#09090b','#D4AF37','#FFFFFF')" title="أسود وذهبي" class="w-5 h-5 rounded-full border border-amber-400/70 bg-gradient-to-tr from-black to-amber-400"></button>
                                 <button type="button" onclick="applyStudioPalette('#041511','#E5C158','#FCF6BA')" title="زمردي وذهبي" class="w-5 h-5 rounded-full border border-emerald-400/70 bg-gradient-to-tr from-emerald-950 to-amber-300"></button>
-                                <button type="button" onclick="applyStudioPalette('#13071c','#F3D06B','#FFFFFF')" title="بنفسجي ملكي وذهبي" class="w-5 h-5 rounded-full border border-purple-400/70 bg-gradient-to-tr from-purple-950 to-amber-300"></button>
+                                <button type="button" onclick="applyStudioPalette('#13071c','#F3D06B','#FFFFFF')" title="بنفسجي ملكي" class="w-5 h-5 rounded-full border border-purple-400/70 bg-gradient-to-tr from-purple-950 to-amber-300"></button>
                             </div>
                         </div>
                         <div class="grid grid-cols-3 gap-2.5">
@@ -276,23 +273,21 @@
                                 <input type="color" id="studioBgColor" oninput="renderStudioCanvas()" value="#09090b" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
                             </div>
                             <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
-                                <span class="text-[10px] text-neutral-400 mb-1">الإطار والذهبي</span>
+                                <span class="text-[10px] text-neutral-400 mb-1">الذهبي</span>
                                 <input type="color" id="studioAccentColor" oninput="renderStudioCanvas()" value="#D4AF37" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
                             </div>
                             <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
-                                <span class="text-[10px] text-neutral-400 mb-1">لون النص</span>
+                                <span class="text-[10px] text-neutral-400 mb-1">النص</span>
                                 <input type="color" id="studioTextColor" oninput="renderStudioCanvas()" value="#FFFFFF" class="w-full h-7 rounded cursor-pointer bg-transparent border-0">
                             </div>
                         </div>
                     </div>
 
-                    <!-- 4. رفع شعار أو صورة -->
                     <div class="border-t border-neutral-800/80 pt-4">
                         <label class="block text-xs font-bold text-amber-300 mb-2">4. إضافة شعار أو صورة خاصة</label>
                         <input type="file" id="studioAssetInput" accept="image/*" onchange="handleStudioImageUpload(event)" class="w-full text-xs text-neutral-300 file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black cursor-pointer">
                     </div>
 
-                    <!-- الأزرار التفاعلية -->
                     <div class="border-t border-neutral-800/80 pt-4 space-y-2.5">
                         <div class="grid grid-cols-2 gap-2.5">
                             <button type="button" onclick="resetStudioDesign()" dir="ltr" class="py-2.5 px-3 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-red-500/50 text-neutral-200 font-en font-bold text-xs transition flex items-center justify-center gap-1.5">
@@ -343,15 +338,15 @@
     <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
         <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
         <p>جميع الحقوق محفوظة &copy; 2026</p>
-        <button onclick="openAdminModal()" class="absolute left-5 bottom-5 w-8 h-8 rounded-full bg-neutral-900/70 border border-neutral-800 text-neutral-600 hover:text-amber-400 flex items-center justify-center transition">
-            <i class="fa-solid fa-lock text-[11px]"></i>
+        <button type="button" onclick="openAdminModal()" class="absolute left-5 bottom-5 w-9 h-9 rounded-full bg-neutral-900 border border-amber-500/30 text-amber-400 hover:scale-110 flex items-center justify-center transition z-30 cursor-pointer">
+            <i class="fa-solid fa-lock text-xs"></i>
         </button>
     </footer>
 
     <!-- نافذة الإدارة المحمية بحسابك في Supabase -->
     <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -367,7 +362,7 @@
                 <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
                 <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-left" dir="ltr">
                 <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
-                <button onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
+                <button type="button" onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
                     تسجيل الدخول الآمن
                 </button>
             </div>
@@ -383,7 +378,7 @@
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                     <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (يظهر للجميع)</label>
                     <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                    <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
                         حفظ اللوجو في السحابة
                     </button>
                 </div>
@@ -392,7 +387,7 @@
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                     <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية (تظهر للجميع)</label>
                     <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                    <button type="button" onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
                         حفظ صورتي الشخصية في السحابة
                     </button>
                 </div>
@@ -404,12 +399,12 @@
                     <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
                     <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
                     <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
-                    <button onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
+                    <button type="button" onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
                         نشر التصميم للزوار
                     </button>
                 </div>
 
-                <button onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
+                <button type="button" onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
                     تسجيل خروج
                 </button>
             </div>
@@ -419,153 +414,72 @@
     <script>
         const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // خلفية الجزيئات الذهبية المتحركة
-        const canvas = document.getElementById('luxuryCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class GoldParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.45;
-                this.vy = (Math.random() - 0.5) * 0.45;
-                this.radius = Math.random() * 1.8 + 0.6;
+        // خلفية الجزيئات الذهبية
+        (function initParticles() {
+            const canvas = document.getElementById('luxuryCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 1.8 + 0.6
+                });
             }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            function loop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
+                    ctx.fill();
+                });
+                requestAnimationFrame(loop);
             }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
-                ctx.fill();
-            }
-        }
-        for (let i = 0; i < 45; i++) particles.push(new GoldParticle());
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 130) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(212, 175, 55, ${(1 - dist / 130) * 0.16})`;
-                        ctx.lineWidth = 0.7;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-        animate();
+            loop();
+        })();
 
-        // جلب الصور والأعمال المحفوظة للجميع من Supabase وإظهارها بنعومة بعد اكتمال التحميل
-        window.addEventListener('DOMContentLoaded', async () => {
-            const logoImg = document.getElementById('customLogoImg');
-            const logoLetter = document.getElementById('defaultLogoLetter');
-            const portraitImg = document.getElementById('heroPortraitImg');
-
-            try {
-                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
-                
-                if (settings && settings.logo_url) {
-                    logoImg.onload = () => {
-                        logoImg.classList.remove('hidden');
-                        requestAnimationFrame(() => logoImg.classList.add('loaded'));
-                    };
-                    logoImg.src = settings.logo_url;
-                } else {
-                    logoLetter.classList.add('loaded');
-                }
-
-                if (settings && settings.portrait_url) {
-                    portraitImg.onload = () => {
-                        requestAnimationFrame(() => portraitImg.classList.add('loaded'));
-                    };
-                    portraitImg.src = settings.portrait_url;
-                } else {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
-                    portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                }
-            } catch (e) {
-                logoLetter.classList.add('loaded');
-                portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                portraitImg.classList.add('loaded');
-            }
-
-            loadPublicProjects();
-            selectStudioTemplate('ad');
-        });
-
-        async function loadPublicProjects() {
-            const { data: { session } } = await sb.auth.getSession();
-            const isAdmin = !!session;
-            const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-            if (!items) return;
-            const grid = document.getElementById('projectsGrid');
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
-                card.innerHTML = `
-                    <div>
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
-                            ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6">
-                        <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                            <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
-                        </a>
-                    </div>`;
-                grid.prepend(card);
-            });
-        }
-
-        async function deleteProjectFromSupabase(id) {
-            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
-            await sb.from('portfolio_projects').delete().eq('id', id);
-            location.reload();
-        }
-
+        // نظام الإدارة والحماية
         async function openAdminModal() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            const { data: { session } } = await sb.auth.getSession();
-            document.getElementById('loginView').classList.toggle('hidden', !!session);
-            document.getElementById('dashboardView').classList.toggle('hidden', !session);
+            const modal = document.getElementById('adminModal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                document.getElementById('loginView').classList.toggle('hidden', !!session);
+                document.getElementById('dashboardView').classList.toggle('hidden', !session);
+            } catch (e) {
+                document.getElementById('loginView').classList.remove('hidden');
+                document.getElementById('dashboardView').classList.add('hidden');
+            }
         }
 
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
 
         async function handleSupabaseLogin() {
             const email = document.getElementById('adminEmailInput').value.trim();
             const password = document.getElementById('adminPassInput').value.trim();
             const btn = document.getElementById('loginBtn');
+            const errEl = document.getElementById('loginErrorMsg');
+            errEl.classList.add('hidden');
             btn.innerText = "جاري التحقق...";
             const { error } = await sb.auth.signInWithPassword({ email, password });
             btn.innerText = "تسجيل الدخول الآمن";
             if (error) {
-                const errEl = document.getElementById('loginErrorMsg');
-                errEl.innerText = "بيانات الدخول غير صحيحة";
+                errEl.innerText = "بيانات الدخول غير صحيحة أو الحساب غير مفعل";
                 errEl.classList.remove('hidden');
             } else {
                 openAdminModal();
@@ -589,7 +503,7 @@
             const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
             if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
 
-            alert("تم الحفظ في السحابة بنجاح وسيظهر لجميع الزوار!");
+            alert("تم الحفظ في السحابة بنجاح!");
             location.reload();
         }
 
@@ -612,63 +526,19 @@
             location.reload();
         }
 
-        // --- محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) ---
+        async function deleteProjectFromSupabase(id) {
+            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
+            await sb.from('portfolio_projects').delete().eq('id', id);
+            location.reload();
+        }
+
+        // محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO)
         const studioPresets = {
-            ad: {
-                name: 'إعلان تجاري',
-                ratio: '1080 × 1080 PX',
-                w: 900, h: 900,
-                badge: 'EXCLUSIVE COMMERCIAL',
-                title: 'ROYAL COLLECTION',
-                sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي',
-                bg: '#09090b',
-                accent: '#D4AF37',
-                text: '#FFFFFF'
-            },
-            logo: {
-                name: 'هوية وشعار',
-                ratio: '1000 × 1000 PX',
-                w: 900, h: 900,
-                badge: 'EST. 2026',
-                title: 'PIXELPERFECT',
-                sub: 'LUXURY VISUAL IDENTITY',
-                bg: '#050505',
-                accent: '#E5C158',
-                text: '#FCF6BA'
-            },
-            banner: {
-                name: 'بانر احترافي',
-                ratio: '1920 × 820 PX',
-                w: 1000, h: 450,
-                badge: 'PREMIUM STUDIO',
-                title: 'CREATIVE EXCELLENCE',
-                sub: 'تصميمات احترافية متكاملة للشركات والبراندات',
-                bg: '#0c0a09',
-                accent: '#D4AF37',
-                text: '#FFFFFF'
-            },
-            social: {
-                name: 'سوشيال ميديا',
-                ratio: '1080 × 1350 PX',
-                w: 800, h: 1000,
-                badge: 'SPECIAL OFFER',
-                title: 'STAND OUT NOW',
-                sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى',
-                bg: '#0a0a0c',
-                accent: '#BF953F',
-                text: '#F5F5F5'
-            },
-            product: {
-                name: 'إعلان منتج فاخر',
-                ratio: '1080 × 1080 PX',
-                w: 900, h: 900,
-                badge: 'LIMITED EDITION',
-                title: 'SIGNATURE SERIES',
-                sub: 'جودة استثنائية وتفاصيل مصممة بإتقان',
-                bg: '#080705',
-                accent: '#F3D06B',
-                text: '#FFFFFF'
-            }
+            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
+            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
+            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة للشركات والبراندات', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' },
+            social: { name: 'سوشيال ميديا', ratio: '1080 × 1350 PX', w: 800, h: 1000, badge: 'SPECIAL OFFER', title: 'STAND OUT NOW', sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى', bg: '#0a0a0c', accent: '#BF953F', text: '#F5F5F5' },
+            product: { name: 'إعلان منتج فاخر', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'LIMITED EDITION', title: 'SIGNATURE SERIES', sub: 'جودة استثنائية وتفاصيل مصممة بإتقان', bg: '#080705', accent: '#F3D06B', text: '#FFFFFF' }
         };
 
         let currentStudioTpl = 'ad';
@@ -707,10 +577,7 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
-                img.onload = function() {
-                    studioUploadedImg = img;
-                    renderStudioCanvas();
-                };
+                img.onload = function() { studioUploadedImg = img; renderStudioCanvas(); };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
@@ -727,52 +594,36 @@
             if (!c) return;
             const sCtx = c.getContext('2d');
             const p = studioPresets[currentStudioTpl];
-            c.width = p.w;
-            c.height = p.h;
+            c.width = p.w; c.height = p.h;
 
-            const bg = document.getElementById('studioBgColor').value;
-            const accent = document.getElementById('studioAccentColor').value;
-            const textColor = document.getElementById('studioTextColor').value;
-            const badgeText = document.getElementById('studioBadgeInput').value;
-            const titleText = document.getElementById('studioTitleInput').value;
-            const subText = document.getElementById('studioSubInput').value;
+            const bg = document.getElementById('studioBgColor').value || '#09090b';
+            const accent = document.getElementById('studioAccentColor').value || '#D4AF37';
+            const textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
+            const badgeText = document.getElementById('studioBadgeInput').value || '';
+            const titleText = document.getElementById('studioTitleInput').value || '';
+            const subText = document.getElementById('studioSubInput').value || '';
 
             sCtx.fillStyle = bg;
             sCtx.fillRect(0, 0, c.width, c.height);
 
-            const grad = sCtx.createRadialGradient(c.width / 2, c.height / 2, 30, c.width / 2, c.height / 2, c.width * 0.65);
-            grad.addColorStop(0, accent + '2E');
-            grad.addColorStop(1, 'transparent');
-            sCtx.fillStyle = grad;
-            sCtx.fillRect(0, 0, c.width, c.height);
-
             const pad = Math.round(Math.min(c.width, c.height) * 0.055);
-            sCtx.strokeStyle = accent + '88';
+            sCtx.strokeStyle = accent;
             sCtx.lineWidth = 3;
             sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
 
-            sCtx.strokeStyle = accent + '33';
-            sCtx.lineWidth = 1;
-            sCtx.strokeRect(pad + 12, pad + 12, c.width - (pad + 12) * 2, c.height - (pad + 12) * 2);
-
             const cx = c.width / 2;
             const isBanner = currentStudioTpl === 'banner';
-            let contentY = isBanner ? c.height * 0.23 : c.height * 0.21;
+            let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
 
             if (studioUploadedImg) {
-                const maxImgSize = isBanner ? 115 : 205;
+                const maxImgSize = isBanner ? 115 : 210;
                 const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
                 const iw = studioUploadedImg.width * scale;
                 const ih = studioUploadedImg.height * scale;
-                sCtx.save();
-                sCtx.shadowColor = accent + '55';
-                sCtx.shadowBlur = 24;
-                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 15, iw, ih);
-                sCtx.restore();
-                contentY += ih + 32;
+                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih);
+                contentY += ih + 35;
             } else {
                 const emblemR = isBanner ? 34 : 58;
-                sCtx.save();
                 sCtx.beginPath();
                 sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
                 sCtx.strokeStyle = accent;
@@ -783,8 +634,7 @@
                 sCtx.textAlign = 'center';
                 sCtx.textBaseline = 'middle';
                 sCtx.fillText('P', cx, contentY + emblemR * 0.55);
-                sCtx.restore();
-                contentY += emblemR * 2 + 28;
+                contentY += emblemR * 2 + 30;
             }
 
             if (badgeText) {
@@ -792,7 +642,7 @@
                 sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
                 sCtx.textAlign = 'center';
                 sCtx.fillText(badgeText.toUpperCase(), cx, contentY);
-                contentY += isBanner ? 42 : 58;
+                contentY += isBanner ? 44 : 60;
             }
 
             sCtx.fillStyle = textColor;
@@ -800,7 +650,7 @@
             sCtx.textAlign = 'center';
             sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
 
-            contentY += isBanner ? 24 : 34;
+            contentY += isBanner ? 24 : 36;
             sCtx.beginPath();
             sCtx.moveTo(cx - 80, contentY);
             sCtx.lineTo(cx + 80, contentY);
@@ -808,12 +658,12 @@
             sCtx.lineWidth = 3;
             sCtx.stroke();
 
-            contentY += isBanner ? 36 : 48;
-            sCtx.fillStyle = textColor + 'CC';
+            contentY += isBanner ? 36 : 50;
+            sCtx.fillStyle = textColor;
             sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
             sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
 
-            sCtx.fillStyle = accent + 'AA';
+            sCtx.fillStyle = accent;
             sCtx.font = '700 14px Montserrat, sans-serif';
             sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
         }
@@ -833,16 +683,69 @@
             const bg = document.getElementById('studioBgColor').value;
             const accent = document.getElementById('studioAccentColor').value;
             const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
-
-            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n` +
-                        `• نوع القالب: ${tplName}\n` +
-                        `• العنوان: ${title}\n` +
-                        `• الوصف: ${sub}\n` +
-                        `• الألوان المختارة: خلفية (${bg}) / ذهبي (${accent})\n` +
-                        `• شعار خاص: ${hasLogo}`;
-
+            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n• نوع القالب: ${tplName}\n• العنوان: ${title}\n• الوصف: ${sub}\n• الألوان: خلفية (${bg}) / ذهبي (${accent})\n• شعار خاص: ${hasLogo}`;
             window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
         }
+
+        // تشغيل الاستوديو وجلب البيانات السحابية فور تحميل الصفحة
+        selectStudioTemplate('ad');
+
+        (async function loadAllAssets() {
+            const logoImg = document.getElementById('customLogoImg');
+            const logoLetter = document.getElementById('defaultLogoLetter');
+            const portraitImg = document.getElementById('heroPortraitImg');
+
+            try {
+                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
+                if (settings && settings.logo_url) {
+                    logoImg.onload = () => {
+                        logoLetter.classList.add('hidden');
+                        logoImg.classList.remove('hidden');
+                        logoImg.classList.add('loaded');
+                    };
+                    logoImg.src = settings.logo_url;
+                }
+                if (settings && settings.portrait_url) {
+                    portraitImg.onload = () => portraitImg.classList.add('loaded');
+                    portraitImg.src = settings.portrait_url;
+                } else {
+                    portraitImg.onload = () => portraitImg.classList.add('loaded');
+                    portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
+                }
+            } catch (e) {
+                portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
+                portraitImg.classList.add('loaded');
+            }
+
+            const { data: { session } } = await sb.auth.getSession();
+            const isAdmin = !!session;
+            const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
+            if (items) {
+                const grid = document.getElementById('projectsGrid');
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
+                    card.innerHTML = `
+                        <div>
+                            <div class="relative h-52 overflow-hidden bg-neutral-900">
+                                <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
+                                ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
+                                <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6">
+                            <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
+                                <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        </div>`;
+                    grid.prepend(card);
+                });
+            }
+        })();
     </script>
 </body>
 </html>
