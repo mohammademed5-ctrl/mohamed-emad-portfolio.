@@ -6,6 +6,7 @@
     <title>MOHAMED EMAD | PixelPerfect</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client@2.5.7/dist/livekit-client.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -28,41 +29,30 @@
             background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
         .glass-panel {
-            background: rgba(14, 14, 14, 0.85);
+            background: rgba(14, 14, 14, 0.86);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
             transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .glass-panel:hover {
-            border-color: rgba(212, 175, 55, 0.75);
-            box-shadow: 0 22px 50px -15px rgba(212, 175, 55, 0.22);
+            border-color: rgba(212, 175, 55, 0.72);
+            box-shadow: 0 22px 50px -15px rgba(212, 175, 55, 0.2);
         }
-        .project-card:hover {
-            transform: translateY(-6px);
-        }
+        .project-card:hover { transform: translateY(-6px); }
         .portrait-fade {
             -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
             mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
         }
-        .smooth-asset {
-            opacity: 0;
-            transition: opacity 0.45s ease-in-out;
-        }
-        .smooth-asset.loaded {
-            opacity: 1;
-        }
+        .smooth-asset { opacity: 0; transition: opacity 0.45s ease-in-out; }
+        .smooth-asset.loaded { opacity: 1; }
         #luxuryCanvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2; pointer-events: none;
         }
         .ambient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(95px);
-            z-index: -1;
-            pointer-events: none;
+            position: fixed; border-radius: 50%; filter: blur(95px);
+            z-index: -1; pointer-events: none;
             animation: driftOrb 16s ease-in-out infinite alternate;
         }
         .orb-1 { width: 340px; height: 340px; background: rgba(212, 175, 55, 0.14); top: 10%; right: -60px; }
@@ -72,18 +62,21 @@
             50% { transform: translate(-35px, 40px) scale(1.12); }
             100% { transform: translate(25px, -30px) scale(0.95); }
         }
+        .speaking-ring {
+            box-shadow: 0 0 0 3px #D4AF37, 0 0 18px rgba(212, 175, 55, 0.65);
+        }
     </style>
 </head>
 <body class="selection:bg-amber-500/30 selection:text-amber-200">
 
-    <!-- الخلفية المتحركة الفاخرة -->
+    <!-- الخلفية المتحركة -->
     <canvas id="luxuryCanvas"></canvas>
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
 
     <!-- الشريط العلوي -->
     <nav class="fixed top-0 w-full z-40 bg-black/85 backdrop-blur-xl border-b border-amber-500/20">
-        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-4 sm:px-5 py-3.5 flex justify-between items-center gap-2">
             <a href="#" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
                     <span id="defaultLogoLetter" class="font-luxury">P</span>
@@ -95,11 +88,47 @@
                 </div>
             </a>
 
-            <div class="flex items-center gap-2.5">
-                <a href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
+            <!-- روابط ديناميكية حسب إعدادات Feature Management -->
+            <div class="flex items-center gap-2">
+                <a id="navStudioLink" href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>استوديو التصميم</span>
+                    <span id="navStudioText">استوديو التصميم</span>
                 </a>
+
+                <!-- نقطة ظهور الغرف الصوتية في الشريط العلوي (مخفية افتراضياً) -->
+                <button type="button" id="voiceNavSlot" onclick="openVoiceLobby()" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-amber-500/15 border border-amber-500/50 text-amber-200 hover:bg-amber-500/25 transition">
+                    <i id="voiceNavIcon" class="fa-solid fa-microphone-lines text-amber-400"></i>
+                    <span id="voiceNavLabel">الغرف الصوتية</span>
+                </button>
+
+                <!-- قائمة المزيد -->
+                <div class="relative">
+                    <button type="button" onclick="toggleMoreMenu()" class="px-3 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-neutral-800 text-neutral-300 hover:border-amber-500/40 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-bars"></i>
+                        <span class="hidden md:inline">المزيد</span>
+                    </button>
+                    <div id="moreDropdownMenu" class="hidden absolute left-0 mt-2 w-56 glass-panel rounded-2xl p-2 shadow-2xl border border-amber-500/30 z-50 space-y-1">
+                        <a href="#portfolio" onclick="toggleMoreMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
+                            <i class="fa-solid fa-sparkles text-amber-400 w-4"></i>
+                            <span>معرض الأعمال</span>
+                        </a>
+                        <a href="#design-studio" onclick="toggleMoreMenu()" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-200 hover:bg-amber-500/10">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400 w-4"></i>
+                            <span>استوديو التصميم</span>
+                        </a>
+                        <!-- نقطة ظهور الغرف الصوتية داخل قائمة المزيد -->
+                        <button type="button" id="voiceMoreSlot" onclick="toggleMoreMenu(); openVoiceLobby();" class="hidden w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-amber-300 font-bold hover:bg-amber-500/15 text-right">
+                            <i id="voiceMoreIcon" class="fa-solid fa-microphone-lines text-amber-400 w-4"></i>
+                            <span id="voiceMoreLabel">الغرف الصوتية</span>
+                        </button>
+                        <div class="border-t border-neutral-800 my-1"></div>
+                        <button type="button" onclick="toggleMoreMenu(); openAdminModal();" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs text-neutral-400 hover:text-amber-300 hover:bg-neutral-900 text-right">
+                            <i class="fa-solid fa-shield-halved text-amber-400 w-4"></i>
+                            <span>بوابة الإدارة / الحساب</span>
+                        </button>
+                    </div>
+                </div>
+
                 <a href="https://wa.me/201006102339" target="_blank" class="px-4 py-2 rounded-full text-xs font-bold gold-btn text-black hover:opacity-90 transition shadow-md flex items-center gap-1.5">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>تواصل الآن</span>
@@ -107,6 +136,12 @@
             </div>
         </div>
     </nav>
+
+    <!-- نقطة ظهور جانبية (Sidebar Slot) للغرف الصوتية عند اختيارها من السوبر أدمن -->
+    <button type="button" id="voiceSidebarSlot" onclick="openVoiceLobby()" class="hidden fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-neutral-950/95 border border-r-0 border-amber-500/50 rounded-l-2xl px-3 py-4 shadow-2xl flex-col items-center gap-2 text-amber-300 hover:bg-amber-500/10 transition">
+        <i id="voiceSidebarIcon" class="fa-solid fa-microphone-lines text-lg text-amber-400"></i>
+        <span id="voiceSidebarLabel" class="text-[11px] font-bold [writing-mode:vertical-rl]">الغرف الصوتية</span>
+    </button>
 
     <!-- الواجهة الرئيسية -->
     <section class="relative pt-28 pb-16 px-5">
@@ -133,15 +168,20 @@
                 نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومنصات رقمية متكاملة تصنع الفارق لعلامتك التجارية.
             </p>
 
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto">
-                <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto flex-wrap">
+                <a id="heroPortfolioBtn" href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
                     <span>معرض الأعمال والتصميمات</span>
                     <i class="fa-solid fa-sparkles"></i>
                 </a>
-                <a href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
+                <a id="heroStudioBtn" href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span>جرّب التصميم بنفسك</span>
                 </a>
+                <!-- نقطة ظهور الغرف الصوتية في الواجهة (مخفية افتراضياً) -->
+                <button type="button" id="voiceHeroSlot" onclick="openVoiceLobby()" class="hidden w-full sm:w-auto px-7 py-3.5 rounded-xl bg-amber-500/15 border border-amber-500/50 text-amber-200 font-bold text-sm hover:bg-amber-500/25 transition items-center justify-center gap-2">
+                    <i id="voiceHeroIcon" class="fa-solid fa-microphone-lines text-amber-400"></i>
+                    <span id="voiceHeroLabel">الغرف الصوتية</span>
+                </button>
                 <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-instagram text-base"></i>
                     <span>إنستجرام الرسمي</span>
@@ -150,12 +190,23 @@
         </div>
     </section>
 
+    <!-- شريط تنبيه الصيانة لأي ميزة في وضع Maintenance -->
+    <div id="featureMaintenanceBanner" class="hidden max-w-4xl mx-auto px-5 mb-8">
+        <div class="glass-panel rounded-2xl p-4 border-amber-500/40 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 text-xs text-amber-200">
+                <i class="fa-solid fa-screwdriver-wrench text-amber-400 text-base"></i>
+                <span id="featureMaintenanceText">هذه الميزة قيد التطوير والصيانة حالياً.</span>
+            </div>
+            <button type="button" onclick="this.parentElement.parentElement.classList.add('hidden')" class="text-neutral-400 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
     <!-- قسم الأعمال -->
     <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
-                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span class="gold-text">المشاريع والتصميمات</span></h2>
+                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span id="portfolioSectionTitle" class="gold-text">المشاريع والتصميمات</span></h2>
             </div>
 
             <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
@@ -230,15 +281,14 @@
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-10">
                 <div dir="ltr" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-en font-bold tracking-widest uppercase mb-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+                    <i id="studioSectionIcon" class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
                     <span>LIVE CUSTOMIZATION ENGINE</span>
                 </div>
-                <h2 dir="ltr" class="font-luxury text-3xl sm:text-5xl font-black mt-1 gold-text tracking-wide">INTERACTIVE DESIGN STUDIO</h2>
+                <h2 id="studioSectionTitle" dir="ltr" class="font-luxury text-3xl sm:text-5xl font-black mt-1 gold-text tracking-wide">INTERACTIVE DESIGN STUDIO</h2>
                 <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر قالبك، خصّص الألوان والنصوص وارفع شعارك وشاهد النتيجة مباشرة، ثم حمّل المعاينة أو اطلب تنفيذها باحترافية</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <!-- لوحة الأدوات والتحكم -->
                 <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-5">
                     <div>
                         <label class="block text-xs font-bold text-amber-300 mb-2.5">1. اختر قالب التصميم الجاهز</label>
@@ -306,7 +356,6 @@
                     </div>
                 </div>
 
-                <!-- منطقة المعاينة المباشرة -->
                 <div class="lg:col-span-7 glass-panel rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center">
                     <div class="w-full flex justify-between items-center mb-4 text-xs text-neutral-400">
                         <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> معاينة حية مباشرة</span>
@@ -317,6 +366,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- قسم الغرف الصوتية في الصفحة (مخفي افتراضياً حتى يتم تفعيله وتحديد مكانه كقسم) -->
+    <section id="voiceSectionSlot" class="hidden py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-5xl mx-auto glass-panel rounded-3xl p-8 text-center">
+            <div class="w-14 h-14 rounded-2xl gold-btn text-black flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                <i id="voiceSectionIcon" class="fa-solid fa-microphone-lines"></i>
+            </div>
+            <h2 id="voiceSectionTitle" class="text-2xl sm:text-3xl font-black text-white mb-2">PixelPerfect Voice</h2>
+            <p class="text-neutral-400 text-sm max-w-xl mx-auto mb-6">انضم إلى الغرف الصوتية الحية، تواصل مع المصممين والعملاء، أو أنشئ غرفتك الخاصة بدعوة حصرية.</p>
+            <button type="button" onclick="openVoiceLobby()" class="px-8 py-3.5 rounded-xl gold-btn text-black font-black text-sm shadow-lg hover:scale-[1.02] transition inline-flex items-center gap-2">
+                <i class="fa-solid fa-headset"></i>
+                <span>دخول قاعة الغرف الصوتية</span>
+            </button>
         </div>
     </section>
 
@@ -334,7 +398,7 @@
         </div>
     </section>
 
-    <!-- الفوتر (يحتوي على القفل المخفي في الزاوية) -->
+    <!-- الفوتر -->
     <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
         <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
         <p>جميع الحقوق محفوظة &copy; 2026</p>
@@ -343,21 +407,147 @@
         </button>
     </footer>
 
-    <!-- نافذة الإدارة المحمية بحسابك في Supabase -->
-    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
-            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
+    <!-- نافذة الغرف الصوتية (PixelPerfect Voice Lobby & Active Room) -->
+    <div id="voiceModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="glass-panel w-full max-w-5xl rounded-3xl p-5 sm:p-7 relative my-auto max-h-[92vh] overflow-y-auto border-amber-500/40">
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-4 mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl gold-btn text-black flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-microphone-lines"></i>
+                    </div>
+                    <div>
+                        <h3 id="voiceModalHeaderTitle" class="text-lg sm:text-xl font-black gold-text">PixelPerfect Voice</h3>
+                        <p id="voiceServerBadge" class="text-[11px] text-neutral-400">حالة خادم الصوت: جاري الفحص...</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeVoiceLobby()" class="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-700 text-neutral-300 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- عرض الردهة -->
+            <div id="voiceLobbyView" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 space-y-3">
+                        <h4 class="text-xs font-bold text-amber-300 flex items-center gap-1.5"><i class="fa-solid fa-plus-circle"></i> إنشاء غرفة صوتية جديدة</h4>
+                        <input type="text" id="newRoomTitle" placeholder="عنوان الغرفة الصوتية..." class="w-full px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none focus:border-amber-400">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="voiceHostDisplayName" placeholder="اسمك الظاهر..." class="px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <select id="newRoomType" class="px-3 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-amber-200 outline-none">
+                                <option value="public">غرفة عامة (للجميع)</option>
+                                <option value="private">غرفة خاصة (بكود دعوة)</option>
+                            </select>
+                        </div>
+                        <button type="button" onclick="createVoiceRoom()" class="w-full py-2.5 rounded-xl gold-btn text-black font-black text-xs">
+                            إنشاء وبدء الغرفة الآن
+                        </button>
+                    </div>
+
+                    <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 space-y-3 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-amber-300 flex items-center gap-1.5 mb-3"><i class="fa-solid fa-key"></i> دخول غرفة خاصة عبر كود الدعوة</h4>
+                            <input type="text" id="joinPrivateCodeInput" placeholder="أدخل كود الدعوة (مثال: PP-8492)..." dir="ltr" class="w-full px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white uppercase outline-none focus:border-amber-400 mb-2">
+                            <input type="text" id="guestDisplayNameInput" placeholder="اسمك المستعار للدخول..." class="w-full px-3.5 py-2.5 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                        </div>
+                        <button type="button" onclick="joinPrivateRoomByCode()" class="w-full py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-200 hover:bg-amber-500 hover:text-black font-bold text-xs transition">
+                            التحقق من الكود والدخول
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="text-sm font-bold text-white">الغرف العامة النشطة حالياً</h4>
+                        <button type="button" onclick="fetchPublicRooms()" class="text-xs text-amber-400 hover:underline"><i class="fa-solid fa-rotate"></i> تحديث</button>
+                    </div>
+                    <div id="publicRoomsList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <p class="text-xs text-neutral-500 col-span-2 text-center py-6">لا توجد غرف عامة مفتوحة حالياً.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- عرض الغرفة النشطة -->
+            <div id="voiceActiveRoomView" class="hidden space-y-5">
+                <div class="bg-neutral-900/90 p-4 rounded-2xl border border-amber-500/30 flex flex-wrap justify-between items-center gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="activeRoomBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">عامة</span>
+                            <h4 id="activeRoomTitle" class="text-base font-black text-white">عنوان الغرفة</h4>
+                        </div>
+                        <p class="text-xs text-neutral-400 mt-1">
+                            المتواجدون الآن: <span id="activeRoomCount" class="text-amber-300 font-bold">1</span>
+                            <span id="activeRoomInviteBox" class="hidden mr-3 text-emerald-400">• كود الدعوة: <strong id="activeRoomCodeText" class="select-all"></strong> <button type="button" onclick="copyInviteLink()" class="underline text-xs mr-1">نسخ الرابط</button></span>
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="reportCurrentRoom()" class="px-3 py-2 rounded-xl bg-red-950/50 border border-red-500/30 text-red-300 text-xs font-bold hover:bg-red-900/50">
+                            <i class="fa-solid fa-flag"></i> إبلاغ
+                        </button>
+                        <button type="button" onclick="leaveVoiceRoom()" class="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-500">
+                            مغادرة الغرفة
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                    <div class="lg:col-span-7 bg-neutral-950/90 p-4 rounded-2xl border border-neutral-800 space-y-4">
+                        <div>
+                            <h5 class="text-xs font-bold text-amber-300 mb-3">المتحدثون على المنصة (Speakers)</h5>
+                            <div id="roomSpeakersGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                        </div>
+                        <div class="border-t border-neutral-800 pt-3">
+                            <h5 class="text-xs font-bold text-neutral-400 mb-3">المستمعون (Listeners)</h5>
+                            <div id="roomListenersGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                        </div>
+
+                        <div class="border-t border-neutral-800 pt-3 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="toggleMicBtn" onclick="toggleMyMicrophone()" class="px-4 py-2 rounded-xl bg-neutral-800 text-neutral-300 text-xs font-bold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-microphone-slash"></i>
+                                    <span>المايك مغلق</span>
+                                </button>
+                                <button type="button" id="raiseHandBtn" onclick="toggleRaiseHand()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-hand"></i>
+                                    <span>رفع اليد</span>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="sendRoomReaction('👏')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">👏</button>
+                                <button type="button" onclick="sendRoomReaction('🔥')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">🔥</button>
+                                <button type="button" onclick="sendRoomReaction('👑')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">👑</button>
+                                <button type="button" onclick="sendRoomReaction('❤️')" class="w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-sm">❤️</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 bg-neutral-950/90 p-4 rounded-2xl border border-neutral-800 flex flex-col h-80">
+                        <h5 class="text-xs font-bold text-amber-300 pb-2 border-b border-neutral-800 mb-2">الدردشة الكتابية المباشرة</h5>
+                        <div id="roomChatMessages" class="flex-1 overflow-y-auto space-y-2 text-xs pl-1"></div>
+                        <div class="pt-2 border-t border-neutral-800 flex gap-2 mt-2">
+                            <input type="text" id="roomChatInput" onkeypress="if(event.key==='Enter') sendRoomChatMessage()" placeholder="اكتب رسالة للغرفة..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <button type="button" onclick="sendRoomChatMessage()" class="px-3.5 py-2 rounded-xl gold-btn text-black font-bold text-xs">إرسال</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة تحكم السوبر أدمن المتكاملة -->
+    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/92 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="glass-panel w-full max-w-4xl rounded-3xl p-5 sm:p-7 relative my-auto max-h-[92vh] overflow-y-auto border-amber-500/40">
+            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-9 h-9 rounded-full bg-neutral-800 text-neutral-300 hover:text-white flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
             <!-- تسجيل الدخول -->
-            <div id="loginView">
+            <div id="loginView" class="max-w-md mx-auto py-4">
                 <div class="text-center mb-6">
                     <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white">دخول المالك (حماية Supabase)</h3>
-                    <p class="text-xs text-neutral-400 mt-1">لن يتمكن أي زائر من الدخول أو التعديل بدون حسابك</p>
+                    <h3 class="text-xl font-bold text-white">بوابة Super Admin (حماية Supabase)</h3>
+                    <p class="text-xs text-neutral-400 mt-1">التحقق من الصلاحيات يتم من الخادم عبر Row Level Security</p>
                 </div>
                 <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
                 <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-left" dir="ltr">
@@ -367,385 +557,77 @@
                 </button>
             </div>
 
-            <!-- لوحة التحكم السحابية -->
-            <div id="dashboardView" class="hidden space-y-4">
-                <div class="border-b border-neutral-800 pb-3">
-                    <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect السحابية</h3>
-                    <p class="text-[11px] text-emerald-400">كل صورة ترفعها هنا ستظهر فوراً لكل زوار موقعك من أي هاتف</p>
-                </div>
-
-                <!-- 1. رفع اللوجو -->
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (يظهر للجميع)</label>
-                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
-                        حفظ اللوجو في السحابة
+            <!-- لوحة تحكم السوبر أدمن -->
+            <div id="dashboardView" class="hidden space-y-5">
+                <div class="border-b border-neutral-800 pb-4 flex flex-wrap justify-between items-center gap-3 pl-10">
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-black gold-text">لوحة تحكم Super Admin — PixelPerfect</h3>
+                        <p id="adminRoleBadge" class="text-[11px] text-emerald-400">جاري التحقق من صلاحية السوبر أدمن من الخادم...</p>
+                    </div>
+                    <button type="button" onclick="handleSupabaseLogout()" class="px-4 py-2 rounded-xl bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
+                        تسجيل خروج
                     </button>
                 </div>
 
-                <!-- 2. رفع صورتك الشخصية -->
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية (تظهر للجميع)</label>
-                    <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button type="button" onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
-                        حفظ صورتي الشخصية في السحابة
+                <!-- تبويبات لوحة الإدارة -->
+                <div class="flex flex-wrap gap-2 border-b border-neutral-800 pb-3">
+                    <button type="button" onclick="switchAdminTab('features')" data-admintab="features" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold gold-btn text-black">
+                        <i class="fa-solid fa-sliders ml-1"></i> Feature Management – إدارة المميزات
+                    </button>
+                    <button type="button" onclick="switchAdminTab('voiceStats')" data-admintab="voiceStats" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800">
+                        <i class="fa-solid fa-microphone-lines ml-1"></i> إحصائيات الصوت والبلاغات
+                    </button>
+                    <button type="button" onclick="switchAdminTab('assets')" data-admintab="assets" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-neutral-900 text-neutral-300 border border-neutral-800">
+                        <i class="fa-solid fa-images ml-1"></i> اللوجو، صورتي، والمعرض
                     </button>
                 </div>
 
-                <!-- 3. إضافة عمل جديد -->
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
-                    <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد للمعرض</label>
-                    <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
-                    <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
-                    <button type="button" onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
-                        نشر التصميم للزوار
-                    </button>
+                <!-- التبويب 1: Feature Management -->
+                <div id="adminTabFeatures" class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-sm font-bold text-amber-300">التحكم المستقل في مميزات الموقع (محفوظ في Supabase)</h4>
+                        <button type="button" onclick="loadSiteFeatures()" class="text-xs text-neutral-400 hover:text-amber-300"><i class="fa-solid fa-rotate"></i> تحديث</button>
+                    </div>
+                    <div id="featuresManagementList" class="space-y-4"></div>
                 </div>
 
-                <button type="button" onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
-                    تسجيل خروج
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
-        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // خلفية الجزيئات الذهبية
-        (function initParticles() {
-            const canvas = document.getElementById('luxuryCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-            window.addEventListener('resize', resize);
-            resize();
-            for (let i = 0; i < 40; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    r: Math.random() * 1.8 + 0.6
-                });
-            }
-            function loop() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.x += p.vx; p.y += p.vy;
-                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
-                    ctx.fill();
-                });
-                requestAnimationFrame(loop);
-            }
-            loop();
-        })();
-
-        // نظام الإدارة والحماية
-        async function openAdminModal() {
-            const modal = document.getElementById('adminModal');
-            if (!modal) return;
-            modal.classList.remove('hidden');
-            try {
-                const { data: { session } } = await sb.auth.getSession();
-                document.getElementById('loginView').classList.toggle('hidden', !!session);
-                document.getElementById('dashboardView').classList.toggle('hidden', !session);
-            } catch (e) {
-                document.getElementById('loginView').classList.remove('hidden');
-                document.getElementById('dashboardView').classList.add('hidden');
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        async function handleSupabaseLogin() {
-            const email = document.getElementById('adminEmailInput').value.trim();
-            const password = document.getElementById('adminPassInput').value.trim();
-            const btn = document.getElementById('loginBtn');
-            const errEl = document.getElementById('loginErrorMsg');
-            errEl.classList.add('hidden');
-            btn.innerText = "جاري التحقق...";
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            btn.innerText = "تسجيل الدخول الآمن";
-            if (error) {
-                errEl.innerText = "بيانات الدخول غير صحيحة أو الحساب غير مفعل";
-                errEl.classList.remove('hidden');
-            } else {
-                openAdminModal();
-            }
-        }
-
-        async function handleSupabaseLogout() {
-            await sb.auth.signOut();
-            location.reload();
-        }
-
-        async function uploadAsset(type, inputId) {
-            const file = document.getElementById(inputId).files[0];
-            if (!file) return alert("اختر الصورة أولاً");
-            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert("خطأ في الرفع: " + error.message);
-
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
-            const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
-            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
-
-            alert("تم الحفظ في السحابة بنجاح!");
-            location.reload();
-        }
-
-        async function publishProjectToSupabase() {
-            const title = document.getElementById('newWorkTitle').value.trim();
-            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
-            const description = document.getElementById('newWorkDesc').value.trim();
-            const file = document.getElementById('newWorkImgInput').files[0];
-            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
-
-            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert("خطأ في الرفع: " + error.message);
-
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            const { error: dbErr } = await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
-            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
-
-            alert("تم نشر التصميم لجميع الزوار!");
-            location.reload();
-        }
-
-        async function deleteProjectFromSupabase(id) {
-            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
-            await sb.from('portfolio_projects').delete().eq('id', id);
-            location.reload();
-        }
-
-        // محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO)
-        const studioPresets = {
-            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
-            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
-            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة للشركات والبراندات', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' },
-            social: { name: 'سوشيال ميديا', ratio: '1080 × 1350 PX', w: 800, h: 1000, badge: 'SPECIAL OFFER', title: 'STAND OUT NOW', sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى', bg: '#0a0a0c', accent: '#BF953F', text: '#F5F5F5' },
-            product: { name: 'إعلان منتج فاخر', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'LIMITED EDITION', title: 'SIGNATURE SERIES', sub: 'جودة استثنائية وتفاصيل مصممة بإتقان', bg: '#080705', accent: '#F3D06B', text: '#FFFFFF' }
-        };
-
-        let currentStudioTpl = 'ad';
-        let studioUploadedImg = null;
-
-        function selectStudioTemplate(tplKey) {
-            currentStudioTpl = tplKey;
-            const p = studioPresets[tplKey];
-            document.getElementById('studioBadgeInput').value = p.badge;
-            document.getElementById('studioTitleInput').value = p.title;
-            document.getElementById('studioSubInput').value = p.sub;
-            document.getElementById('studioBgColor').value = p.bg;
-            document.getElementById('studioAccentColor').value = p.accent;
-            document.getElementById('studioTextColor').value = p.text;
-            document.getElementById('studioFormatLabel').innerText = p.ratio;
-
-            document.querySelectorAll('.studio-tpl-btn').forEach(btn => {
-                const active = btn.dataset.tpl === tplKey;
-                btn.className = active
-                    ? 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 transition'
-                    : 'studio-tpl-btn px-3 py-2.5 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900/80 text-neutral-300 hover:border-amber-500/50 transition';
-            });
-            renderStudioCanvas();
-        }
-
-        function applyStudioPalette(bg, accent, text) {
-            document.getElementById('studioBgColor').value = bg;
-            document.getElementById('studioAccentColor').value = accent;
-            document.getElementById('studioTextColor').value = text;
-            renderStudioCanvas();
-        }
-
-        function handleStudioImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() { studioUploadedImg = img; renderStudioCanvas(); };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetStudioDesign() {
-            studioUploadedImg = null;
-            document.getElementById('studioAssetInput').value = '';
-            selectStudioTemplate(currentStudioTpl);
-        }
-
-        function renderStudioCanvas() {
-            const c = document.getElementById('studioPreviewCanvas');
-            if (!c) return;
-            const sCtx = c.getContext('2d');
-            const p = studioPresets[currentStudioTpl];
-            c.width = p.w; c.height = p.h;
-
-            const bg = document.getElementById('studioBgColor').value || '#09090b';
-            const accent = document.getElementById('studioAccentColor').value || '#D4AF37';
-            const textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
-            const badgeText = document.getElementById('studioBadgeInput').value || '';
-            const titleText = document.getElementById('studioTitleInput').value || '';
-            const subText = document.getElementById('studioSubInput').value || '';
-
-            sCtx.fillStyle = bg;
-            sCtx.fillRect(0, 0, c.width, c.height);
-
-            const pad = Math.round(Math.min(c.width, c.height) * 0.055);
-            sCtx.strokeStyle = accent;
-            sCtx.lineWidth = 3;
-            sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
-
-            const cx = c.width / 2;
-            const isBanner = currentStudioTpl === 'banner';
-            let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
-
-            if (studioUploadedImg) {
-                const maxImgSize = isBanner ? 115 : 210;
-                const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
-                const iw = studioUploadedImg.width * scale;
-                const ih = studioUploadedImg.height * scale;
-                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih);
-                contentY += ih + 35;
-            } else {
-                const emblemR = isBanner ? 34 : 58;
-                sCtx.beginPath();
-                sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
-                sCtx.strokeStyle = accent;
-                sCtx.lineWidth = 3;
-                sCtx.stroke();
-                sCtx.fillStyle = accent;
-                sCtx.font = `900 ${emblemR}px Cinzel, serif`;
-                sCtx.textAlign = 'center';
-                sCtx.textBaseline = 'middle';
-                sCtx.fillText('P', cx, contentY + emblemR * 0.55);
-                contentY += emblemR * 2 + 30;
-            }
-
-            if (badgeText) {
-                sCtx.fillStyle = accent;
-                sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
-                sCtx.textAlign = 'center';
-                sCtx.fillText(badgeText.toUpperCase(), cx, contentY);
-                contentY += isBanner ? 44 : 60;
-            }
-
-            sCtx.fillStyle = textColor;
-            sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`;
-            sCtx.textAlign = 'center';
-            sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
-
-            contentY += isBanner ? 24 : 36;
-            sCtx.beginPath();
-            sCtx.moveTo(cx - 80, contentY);
-            sCtx.lineTo(cx + 80, contentY);
-            sCtx.strokeStyle = accent;
-            sCtx.lineWidth = 3;
-            sCtx.stroke();
-
-            contentY += isBanner ? 36 : 50;
-            sCtx.fillStyle = textColor;
-            sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
-            sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
-
-            sCtx.fillStyle = accent;
-            sCtx.font = '700 14px Montserrat, sans-serif';
-            sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
-        }
-
-        function downloadStudioDesign() {
-            const c = document.getElementById('studioPreviewCanvas');
-            const link = document.createElement('a');
-            link.download = `PixelPerfect-${currentStudioTpl}-${Date.now()}.png`;
-            link.href = c.toDataURL('image/png');
-            link.click();
-        }
-
-        function orderStudioDesign() {
-            const tplName = studioPresets[currentStudioTpl].name;
-            const title = document.getElementById('studioTitleInput').value;
-            const sub = document.getElementById('studioSubInput').value;
-            const bg = document.getElementById('studioBgColor').value;
-            const accent = document.getElementById('studioAccentColor').value;
-            const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
-            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n• نوع القالب: ${tplName}\n• العنوان: ${title}\n• الوصف: ${sub}\n• الألوان: خلفية (${bg}) / ذهبي (${accent})\n• شعار خاص: ${hasLogo}`;
-            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // تشغيل الاستوديو وجلب البيانات السحابية فور تحميل الصفحة
-        selectStudioTemplate('ad');
-
-        (async function loadAllAssets() {
-            const logoImg = document.getElementById('customLogoImg');
-            const logoLetter = document.getElementById('defaultLogoLetter');
-            const portraitImg = document.getElementById('heroPortraitImg');
-
-            try {
-                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
-                if (settings && settings.logo_url) {
-                    logoImg.onload = () => {
-                        logoLetter.classList.add('hidden');
-                        logoImg.classList.remove('hidden');
-                        logoImg.classList.add('loaded');
-                    };
-                    logoImg.src = settings.logo_url;
-                }
-                if (settings && settings.portrait_url) {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
-                    portraitImg.src = settings.portrait_url;
-                } else {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
-                    portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                }
-            } catch (e) {
-                portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                portraitImg.classList.add('loaded');
-            }
-
-            const { data: { session } } = await sb.auth.getSession();
-            const isAdmin = !!session;
-            const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-            if (items) {
-                const grid = document.getElementById('projectsGrid');
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
-                    card.innerHTML = `
-                        <div>
-                            <div class="relative h-52 overflow-hidden bg-neutral-900">
-                                <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
-                                ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
-                                <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
-                            </div>
+                <!-- التبويب 2: إحصائيات الغرف الصوتية والبلاغات والحظر -->
+                <div id="adminTabVoiceStats" class="hidden space-y-5">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
+                            <span class="text-xs text-neutral-400 block">الغرف النشطة</span>
+                            <strong id="statActiveRooms" class="text-2xl font-black gold-text">0</strong>
                         </div>
-                        <div class="px-6 pb-6">
-                            <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                                <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
-                            </a>
-                        </div>`;
-                    grid.prepend(card);
-                });
-            }
-        })();
-    </script>
-</body>
-</html>
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center">
+                            <span class="text-xs text-neutral-400 block">المتصلون بالصوت</span>
+                            <strong id="statOnlineUsers" class="text-2xl font-black text-emerald-400">0</strong>
+                        </div>
+                        <div class="bg-neutral-900/90 p-4 rounded-2xl border border-neutral-800 text-center col-span-2 sm:col-span-1">
+                            <span class="text-xs text-neutral-400 block">البلاغات المعلقة</span>
+                            <strong id="statPendingReports" class="text-2xl font-black text-red-400">0</strong>
+                        </div>
+                    </div>
+
+                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-3">
+                        <h4 class="text-xs font-bold text-amber-300">البلاغات الواردة من الغرف الصوتية</h4>
+                        <div id="adminReportsList" class="space-y-2 text-xs text-neutral-400">لا توجد بلاغات حالياً.</div>
+                    </div>
+
+                    <div class="bg-neutral-900/80 p-4 rounded-2xl border border-neutral-800 space-y-2.5">
+                        <h4 class="text-xs font-bold text-red-400">حظر مستخدم أو جلسة من الغرف الصوتية</h4>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="banIdentifierInput" placeholder="معرّف المستخدم (User ID / Guest ID)..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <input type="text" id="banReasonInput" placeholder="سبب الحظر..." class="flex-1 px-3 py-2 rounded-xl bg-black border border-neutral-700 text-xs text-white outline-none">
+                            <button type="button" onclick="banVoiceUser()" class="px-4 py-2 rounded-xl bg-red-600 text-white font-bold text-xs">تنفيذ الحظر</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- التبويب 3: إدارة اللوجو والصورة الشخصية والمعرض -->
+                <div id="adminTabAssets" class="hidden space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
+                            <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع</label>
+                            <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                            <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                                حفظ اللوجو في السحاب
