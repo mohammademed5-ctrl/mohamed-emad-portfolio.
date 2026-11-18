@@ -27,30 +27,70 @@
             background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
         .glass-panel {
-            background: rgba(16, 16, 16, 0.85);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            background: rgba(14, 14, 14, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
-            transition: all 0.35s ease;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .glass-panel:hover {
-            border-color: rgba(212, 175, 55, 0.75);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 45px -15px rgba(212, 175, 55, 0.22);
+            border-color: rgba(212, 175, 55, 0.8);
+            transform: translateY(-6px);
+            box-shadow: 0 22px 50px -15px rgba(212, 175, 55, 0.25);
         }
         .portrait-fade {
             -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
             mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
         }
-        .hero-radial {
-            background: radial-gradient(circle at 50% 25%, rgba(212, 175, 55, 0.18) 0%, rgba(5, 5, 5, 0) 65%);
+        /* خلفية تفاعلية متحركة */
+        #luxuryCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            z-index: -1;
+            pointer-events: none;
+            animation: driftOrb 16s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 340px;
+            height: 340px;
+            background: rgba(212, 175, 55, 0.14);
+            top: 10%;
+            right: -60px;
+        }
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(191, 149, 63, 0.11);
+            bottom: 12%;
+            left: -60px;
+            animation-delay: -6s;
+        }
+        @keyframes driftOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-35px, 40px) scale(1.12); }
+            100% { transform: translate(25px, -30px) scale(0.95); }
         }
     </style>
 </head>
 <body class="selection:bg-amber-500/30 selection:text-amber-200">
 
+    <!-- الخلفية المتحركة الفاخرة (جزيئات ذهبية مترابطة + هالات ضوئية) -->
+    <canvas id="luxuryCanvas"></canvas>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
     <!-- الشريط العلوي -->
-    <nav class="fixed top-0 w-full z-40 bg-black/85 backdrop-blur-xl border-b border-amber-500/20">
+    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-amber-500/20">
         <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3">
                 <div id="navLogoContainer" class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg shadow-amber-500/20 overflow-hidden">
@@ -63,33 +103,27 @@
                 </div>
             </a>
 
-            <div class="flex items-center gap-2.5">
-                <button onclick="openAdminModal()" id="adminTriggerBtn" class="px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/30 text-amber-300 hover:border-amber-400 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-lock"></i>
-                    <span id="adminBtnLabel">دخول الإدارة</span>
-                </button>
-                <a href="https://wa.me/201006102339" target="_blank" class="px-4 py-2 rounded-full text-xs font-bold gold-btn text-black hover:opacity-90 transition shadow-md flex items-center gap-1.5">
-                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>تواصل الآن</span>
-                </a>
-            </div>
+            <a href="https://wa.me/201006102339" target="_blank" class="px-4 py-2 rounded-full text-xs font-bold gold-btn text-black hover:opacity-90 transition shadow-md flex items-center gap-1.5">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>تواصل الآن</span>
+            </a>
         </div>
     </nav>
 
     <!-- الواجهة الرئيسية -->
-    <section class="relative pt-28 pb-16 px-5 hero-radial">
+    <section class="relative pt-28 pb-16 px-5">
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
             <div class="relative w-56 sm:w-64 h-64 sm:h-72 mb-4 flex items-end justify-center">
-                <div class="absolute inset-4 rounded-full bg-amber-500/20 blur-2xl"></div>
+                <div class="absolute inset-4 rounded-full bg-amber-500/25 blur-2xl animate-pulse"></div>
                 <img id="heroPortraitImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl">
             </div>
 
-            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
+            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4 backdrop-blur-md">
                 <i class="fa-solid fa-crown text-amber-400"></i>
                 <span>Founder of PixelPerfect Studio</span>
             </div>
 
-            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3">
+            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3 drop-shadow-lg">
                 MOHAMED EMAD
             </h1>
 
@@ -97,7 +131,7 @@
                 Creative Designer • 3D & AI Commercial Director • Brand Architect
             </p>
 
-            <p class="text-neutral-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
+            <p class="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
                 نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومنصات رقمية متكاملة تصنع الفارق لعلامتك التجارية.
             </p>
 
@@ -106,7 +140,7 @@
                     <span>معرض الأعمال والتصميمات</span>
                     <i class="fa-solid fa-sparkles"></i>
                 </a>
-                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-neutral-900 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2 backdrop-blur-md">
                     <i class="fa-brands fa-instagram text-base"></i>
                     <span>إنستجرام الرسمي</span>
                 </a>
@@ -115,7 +149,7 @@
     </section>
 
     <!-- قسم الأعمال الأساسية -->
-    <section id="portfolio" class="py-16 px-5 border-t border-neutral-900">
+    <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
             <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
                 <div class="text-center sm:text-right">
@@ -217,13 +251,17 @@
         </div>
     </section>
 
-    <!-- الفوتر -->
-    <footer class="py-8 px-5 border-t border-neutral-900 text-center text-neutral-500 text-xs">
+    <!-- الفوتر (يحتوي على أيقونة الإدارة المخفية في الأسفل) -->
+    <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
         <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
         <p>جميع الحقوق محفوظة &copy; 2026</p>
+        
+        <button onclick="openAdminModal()" class="absolute left-5 bottom-5 w-8 h-8 rounded-full bg-neutral-900/70 border border-neutral-800 text-neutral-600 hover:text-amber-400 hover:border-amber-500/40 flex items-center justify-center transition" title="إعدادات الإدارة">
+            <i class="fa-solid fa-lock text-[11px]"></i>
+        </button>
     </footer>
 
-    <!-- نافذة تسجيل الدخول ولوحة تحكم الصور واللوجو -->
+    <!-- نافذة تسجيل الدخول ولوحة التحكم -->
     <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
@@ -237,10 +275,10 @@
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white">تسجيل دخول الإدارة</h3>
-                    <p class="text-xs text-neutral-400 mt-1">أدخل الباسورد الخاص بك لتعديل الصور، اللوجو، ونشر الأعمال</p>
+                    <p class="text-xs text-neutral-400 mt-1">أدخل الباسورد الخاص بك للتحكم في الموقع</p>
                 </div>
-                <input type="password" id="adminPassInput" placeholder="أدخل الباسورد (الافتراضي: 1234)" class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-center">
-                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center">الباسورد غير صحيح، حاول مرة أخرى</p>
+                <input type="password" id="adminPassInput" placeholder="أدخل الباسورد..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-center">
+                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center">الباسورد غير صحيح</p>
                 <button onclick="handleAdminLogin()" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
                     دخول وحفظ الصلاحيات
                 </button>
@@ -285,9 +323,9 @@
 
                 <!-- 4. تغيير الباسورد الخاص بك -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2">
-                    <label class="block text-xs font-bold text-amber-300">4. تغيير باسورد الدخول الخاص بك</label>
+                    <label class="block text-xs font-bold text-amber-300">4. تعيين باسورد جديد خاص بك</label>
                     <div class="flex gap-2">
-                        <input type="text" id="newPasswordInput" placeholder="اكتب الباسورد الجديد..." class="flex-1 px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                        <input type="text" id="newPasswordInput" placeholder="اكتب الباسورد السري الجديد..." class="flex-1 px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
                         <button onclick="changeAdminPassword()" class="px-4 py-2 rounded-lg bg-amber-500 text-black text-xs font-bold">
                             حفظ
                         </button>
@@ -295,13 +333,85 @@
                 </div>
 
                 <button onclick="logoutAdmin()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
-                    تسجيل خروج (تبقى الصور واللوجو محفوظة)
+                    تسجيل خروج
                 </button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- كود الخلفية المتحركة الفاخرة (جزيئات ذهبية متصلة) ---
+        const canvas = document.getElementById('luxuryCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class GoldParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.radius = Math.random() * 1.8 + 0.6;
+                this.alpha = Math.random() * 0.55 + 0.2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const count = Math.min(55, Math.floor((canvas.width * canvas.height) / 18000));
+            for (let i = 0; i < count; i++) {
+                particles.push(new GoldParticle());
+            }
+        }
+        initParticles();
+        window.addEventListener('resize', initParticles);
+
+        function animateBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${(1 - dist / 130) * 0.16})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateBackground);
+        }
+        animateBackground();
+
+        // --- نظام الإدارة والباسورد والصور ---
         function getSavedPassword() {
             return localStorage.getItem('pp_admin_password') || "1234";
         }
@@ -342,7 +452,7 @@
         }
 
         function handleAdminLogin() {
-            const pass = document.getElementById('adminPassInput').value;
+            const pass = document.getElementById('adminPassInput').value.trim();
             if (pass === getSavedPassword()) {
                 localStorage.setItem('pp_is_admin', 'true');
                 document.getElementById('loginErrorMsg').classList.add('hidden');
@@ -358,23 +468,22 @@
 
         function changeAdminPassword() {
             const newPass = document.getElementById('newPasswordInput').value.trim();
-            if (newPass.length < 4) return alert("اكتب باسورد مكون من 4 حروف أو أرقام على الأقل");
+            if (newPass.length < 4) return alert("اكتب باسورد مكون من 4 رموز على الأقل");
             localStorage.setItem('pp_admin_password', newPass);
             document.getElementById('newPasswordInput').value = '';
-            alert("تم تغيير وحفظ الباسورد الجديد بنجاح: " + newPass);
+            alert("تم حفظ الباسورد السري الجديد بنجاح: " + newPass);
         }
 
         function updateUIForLoggedInAdmin() {
-            document.getElementById('adminBtnLabel').innerText = "لوحة التحكم";
             document.getElementById('addNewWorkBtn').classList.remove('hidden');
         }
 
         function logoutAdmin() {
             localStorage.removeItem('pp_is_admin');
-            document.getElementById('adminBtnLabel').innerText = "دخول الإدارة";
             document.getElementById('addNewWorkBtn').classList.add('hidden');
             renderSavedProjects();
             closeAdminModal();
+            alert("تم تسجيل الخروج. ستبقى الصور واللوجو والباسورد محفوظة.");
         }
 
         function compressAndConvertImage(file, maxWidth, callback) {
@@ -408,7 +517,7 @@
                 document.getElementById('customLogoImg').src = base64Data;
                 document.getElementById('customLogoImg').classList.remove('hidden');
                 document.getElementById('defaultLogoLetter').classList.add('hidden');
-                alert("تم حفظ اللوجو بنجاح! سيبقى ثابتاً حتى بعد تسجيل الخروج.");
+                alert("تم حفظ اللوجو نهائياً!");
             });
         }
 
@@ -418,7 +527,7 @@
             compressAndConvertImage(file, 700, (base64Data) => {
                 localStorage.setItem('pp_saved_portrait', base64Data);
                 document.getElementById('heroPortraitImg').src = base64Data;
-                alert("تم حفظ صورتك الشخصية بنجاح!");
+                alert("تم حفظ صورتك الشخصية نهائياً!");
             });
         }
 
