@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOHAMED EMAD | PixelPerfect</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -27,11 +28,11 @@
             background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
         }
         .glass-panel {
-            background: rgba(14, 14, 14, 0.78);
+            background: rgba(14, 14, 14, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(212, 175, 55, 0.25);
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: all 0.4s ease;
         }
         .glass-panel:hover {
             border-color: rgba(212, 175, 55, 0.8);
@@ -42,15 +43,10 @@
             -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
             mask-image: linear-gradient(to bottom, black 68%, transparent 100%);
         }
-        /* خلفية تفاعلية متحركة */
         #luxuryCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2; pointer-events: none;
         }
         .ambient-orb {
             position: fixed;
@@ -60,21 +56,8 @@
             pointer-events: none;
             animation: driftOrb 16s ease-in-out infinite alternate;
         }
-        .orb-1 {
-            width: 340px;
-            height: 340px;
-            background: rgba(212, 175, 55, 0.14);
-            top: 10%;
-            right: -60px;
-        }
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: rgba(191, 149, 63, 0.11);
-            bottom: 12%;
-            left: -60px;
-            animation-delay: -6s;
-        }
+        .orb-1 { width: 340px; height: 340px; background: rgba(212, 175, 55, 0.14); top: 10%; right: -60px; }
+        .orb-2 { width: 300px; height: 300px; background: rgba(191, 149, 63, 0.11); bottom: 12%; left: -60px; animation-delay: -6s; }
         @keyframes driftOrb {
             0% { transform: translate(0, 0) scale(1); }
             50% { transform: translate(-35px, 40px) scale(1.12); }
@@ -84,7 +67,7 @@
 </head>
 <body class="selection:bg-amber-500/30 selection:text-amber-200">
 
-    <!-- الخلفية المتحركة الفاخرة (جزيئات ذهبية مترابطة + هالات ضوئية) -->
+    <!-- الخلفية المتحركة الفاخرة -->
     <canvas id="luxuryCanvas"></canvas>
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
@@ -93,7 +76,7 @@
     <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-xl border-b border-amber-500/20">
         <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3">
-                <div id="navLogoContainer" class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg shadow-amber-500/20 overflow-hidden">
+                <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
                     <span id="defaultLogoLetter" class="font-luxury">P</span>
                     <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover">
                 </div>
@@ -118,12 +101,12 @@
                 <img id="heroPortraitImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl">
             </div>
 
-            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4 backdrop-blur-md">
+            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
                 <i class="fa-solid fa-crown text-amber-400"></i>
                 <span>Founder of PixelPerfect Studio</span>
             </div>
 
-            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3 drop-shadow-lg">
+            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3">
                 MOHAMED EMAD
             </h1>
 
@@ -136,11 +119,11 @@
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto">
-                <a href="#portfolio" class="w-full sm:w-auto px-8 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg shadow-amber-500/25 hover:scale-[1.02] transition flex items-center justify-center gap-2">
+                <a href="#portfolio" class="w-full sm:w-auto px-8 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
                     <span>معرض الأعمال والتصميمات</span>
                     <i class="fa-solid fa-sparkles"></i>
                 </a>
-                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2 backdrop-blur-md">
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-instagram text-base"></i>
                     <span>إنستجرام الرسمي</span>
                 </a>
@@ -148,34 +131,26 @@
         </div>
     </section>
 
-    <!-- قسم الأعمال الأساسية -->
+    <!-- قسم الأعمال -->
     <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-                <div class="text-center sm:text-right">
-                    <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
-                    <h2 class="text-3xl font-black mt-1 text-white">أبرز <span class="gold-text">المشاريع والتصميمات</span></h2>
-                </div>
-                <button id="addNewWorkBtn" onclick="openAdminModal()" class="hidden px-5 py-2.5 rounded-xl gold-btn text-black font-bold text-xs shadow-lg flex items-center gap-2">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>تعديل الصور / إضافة تصميم</span>
-                </button>
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
+                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span class="gold-text">المشاريع والتصميمات</span></h2>
             </div>
 
             <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
-                <!-- الكارت 1: منصة حلويات العميد -->
+                <!-- الكارت 1 -->
                 <div class="glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="منصة حلويات العميد" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="حلويات العميد" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                             <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">متجر إلكتروني وهوية</span>
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-white mb-2">منصة مصنع حلويات العميد</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">
-                                تصميم الهوية التجارية الكاملة، المنيو الفاخر، وتطوير المتجر الإلكتروني الرسمي ولوحة الإدارة لمصنع حلويات العميد.
-                            </p>
+                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الهوية التجارية الكاملة، المنيو الفاخر، وتطوير المتجر الإلكتروني الرسمي ولوحة الإدارة لمصنع حلويات العميد.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6">
@@ -186,7 +161,7 @@
                     </div>
                 </div>
 
-                <!-- الكارت 2: إنتاج إعلاني ثلاثي الأبعاد وأنيميشن -->
+                <!-- الكارت 2 -->
                 <div class="glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
@@ -196,9 +171,7 @@
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-white mb-2">إنتاج إعلاني ثلاثي الأبعاد وأنيميشن</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">
-                                إخراج وإنتاج الإعلانات التجارية الاحترافية بالذكاء الاصطناعي وسلاسل الأنيميشن ثلاثية الأبعاد بأعلى دقة بصرية.
-                            </p>
+                            <p class="text-neutral-400 text-sm leading-relaxed">إخراج وإنتاج الإعلانات التجارية الاحترافية بالذكاء الاصطناعي وسلاسل الأنيميشن ثلاثية الأبعاد بأعلى دقة بصرية.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6">
@@ -209,7 +182,7 @@
                     </div>
                 </div>
 
-                <!-- الكارت 3: هوية PixelPerfect البصرية -->
+                <!-- الكارت 3 -->
                 <div class="glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
@@ -219,9 +192,7 @@
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-white mb-2">هوية PixelPerfect البصرية</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">
-                                تصميم الشعارات الملكية ثلاثية الأبعاد، المطبوعات الفاخرة، والهويات البصرية المتكاملة للشركات والبراندات.
-                            </p>
+                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الشعارات الملكية ثلاثية الأبعاد، المطبوعات الفاخرة، والهويات البصرية المتكاملة للشركات والبراندات.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6">
@@ -241,98 +212,85 @@
             <h2 class="text-2xl sm:text-3xl font-black text-white mb-3">
                 جاهز لتنفيذ تصميمك <span class="gold-text">بمستوى عالمي؟</span>
             </h2>
-            <p class="text-neutral-400 text-sm mb-7">
-                تواصل مباشرة عبر واتساب لطلب تصميم لوجو، هوية بصرية، إعلان 3D، أو موقع إلكتروني.
-            </p>
-            <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl shadow-amber-500/20 hover:scale-[1.02] transition">
+            <p class="text-neutral-400 text-sm mb-7">تواصل مباشرة عبر واتساب لطلب تصميم لوجو، هوية بصرية، إعلان 3D، أو موقع إلكتروني.</p>
+            <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl hover:scale-[1.02] transition">
                 <i class="fa-brands fa-whatsapp text-xl"></i>
                 <span>01006102339 — تواصل واتساب</span>
             </a>
         </div>
     </section>
 
-    <!-- الفوتر (يحتوي على أيقونة الإدارة المخفية في الأسفل) -->
+    <!-- الفوتر (يحتوي على القفل المخفي في الزاوية) -->
     <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
         <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
         <p>جميع الحقوق محفوظة &copy; 2026</p>
-        
-        <button onclick="openAdminModal()" class="absolute left-5 bottom-5 w-8 h-8 rounded-full bg-neutral-900/70 border border-neutral-800 text-neutral-600 hover:text-amber-400 hover:border-amber-500/40 flex items-center justify-center transition" title="إعدادات الإدارة">
+        <button onclick="openAdminModal()" class="absolute left-5 bottom-5 w-8 h-8 rounded-full bg-neutral-900/70 border border-neutral-800 text-neutral-600 hover:text-amber-400 flex items-center justify-center transition">
             <i class="fa-solid fa-lock text-[11px]"></i>
         </button>
     </footer>
 
-    <!-- نافذة تسجيل الدخول ولوحة التحكم -->
+    <!-- نافذة الإدارة المحمية بحسابك في Supabase -->
     <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- شاشة تسجيل الدخول -->
+            <!-- تسجيل الدخول -->
             <div id="loginView">
                 <div class="text-center mb-6">
                     <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
                         <i class="fa-solid fa-shield-halved"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white">تسجيل دخول الإدارة</h3>
-                    <p class="text-xs text-neutral-400 mt-1">أدخل الباسورد الخاص بك للتحكم في الموقع</p>
+                    <h3 class="text-xl font-bold text-white">دخول المالك (حماية Supabase)</h3>
+                    <p class="text-xs text-neutral-400 mt-1">لن يتمكن أي زائر من الدخول أو التعديل بدون حسابك</p>
                 </div>
-                <input type="password" id="adminPassInput" placeholder="أدخل الباسورد..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-center">
-                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center">الباسورد غير صحيح</p>
-                <button onclick="handleAdminLogin()" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
-                    دخول وحفظ الصلاحيات
+                <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 focus:border-amber-400 outline-none text-left" dir="ltr">
+                <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 focus:border-amber-400 outline-none text-left" dir="ltr">
+                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
+                <button onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm">
+                    تسجيل الدخول الآمن
                 </button>
             </div>
 
-            <!-- لوحة التحكم بعد تسجيل الدخول -->
+            <!-- لوحة التحكم السحابية -->
             <div id="dashboardView" class="hidden space-y-4">
                 <div class="border-b border-neutral-800 pb-3">
-                    <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect</h3>
-                    <p class="text-[11px] text-neutral-400">كل ما تحفظه هنا يبقى ثابتاً في موقعك ولا يُحذف عند الخروج</p>
+                    <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect السحابية</h3>
+                    <p class="text-[11px] text-emerald-400">كل صورة ترفعها هنا ستظهر فوراً لكل زوار موقعك من أي هاتف</p>
                 </div>
 
-                <!-- 1. رفع وحفظ اللوجو -->
+                <!-- 1. رفع اللوجو -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (Logo)</label>
-                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:mr-0 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button onclick="saveLogoImage()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
-                        <i class="fa-solid fa-floppy-disk ml-1"></i> حفظ صورة اللوجو نهائياً
+                    <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (يظهر للجميع)</label>
+                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                    <button onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                        حفظ اللوجو في السحابة
                     </button>
                 </div>
 
-                <!-- 2. رفع وحفظ صورتك الشخصية -->
+                <!-- 2. رفع صورتك الشخصية -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">2. تحديث وحفظ صورتك الشخصية</label>
-                    <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:mr-0 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
-                    <button onclick="savePortraitImage()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
-                        <i class="fa-solid fa-user-check ml-1"></i> حفظ صورتي الشخصية
+                    <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية (تظهر للجميع)</label>
+                    <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
+                    <button onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+                        حفظ صورتي الشخصية في السحابة
                     </button>
                 </div>
 
-                <!-- 3. نشر وحفظ تصميم جديد -->
+                <!-- 3. إضافة عمل جديد -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
-                    <label class="block text-xs font-bold text-amber-300">3. نشر وحفظ تصميم جديد في المعرض</label>
-                    <input type="text" id="newWorkTitle" placeholder="عنوان التصميم (مثال: لوجو 3D فاخر)" class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <input type="text" id="newWorkCategory" placeholder="التصنيف (مثال: هوية بصرية / إعلان 3D)" class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <textarea id="newWorkDesc" rows="2" placeholder="وصف مختصر للتصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
-                    <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:mr-0 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
-                    <button onclick="addNewPortfolioItem()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
-                        <i class="fa-solid fa-cloud-arrow-up ml-1"></i> نشر وحفظ التصميم الآن
+                    <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد للمعرض</label>
+                    <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                    <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
+                    <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
+                    <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black w-full">
+                    <button onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black">
+                        نشر التصميم للزوار
                     </button>
                 </div>
 
-                <!-- 4. تغيير الباسورد الخاص بك -->
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2">
-                    <label class="block text-xs font-bold text-amber-300">4. تعيين باسورد جديد خاص بك</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="newPasswordInput" placeholder="اكتب الباسورد السري الجديد..." class="flex-1 px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                        <button onclick="changeAdminPassword()" class="px-4 py-2 rounded-lg bg-amber-500 text-black text-xs font-bold">
-                            حفظ
-                        </button>
-                    </div>
-                </div>
-
-                <button onclick="logoutAdmin()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
+                <button onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold">
                     تسجيل خروج
                 </button>
             </div>
@@ -340,55 +298,40 @@
     </div>
 
     <script>
-        // --- كود الخلفية المتحركة الفاخرة (جزيئات ذهبية متصلة) ---
+        const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // خلفية الجزيئات الذهبية المتحركة
         const canvas = document.getElementById('luxuryCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class GoldParticle {
             constructor() {
-                this.reset();
-            }
-            reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.vx = (Math.random() - 0.5) * 0.45;
                 this.vy = (Math.random() - 0.5) * 0.45;
                 this.radius = Math.random() * 1.8 + 0.6;
-                this.alpha = Math.random() * 0.55 + 0.2;
             }
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
+                this.x += this.vx; this.y += this.vy;
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(212, 175, 55, ${this.alpha})`;
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
                 ctx.fill();
             }
         }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.min(55, Math.floor((canvas.width * canvas.height) / 18000));
-            for (let i = 0; i < count; i++) {
-                particles.push(new GoldParticle());
-            }
-        }
-        initParticles();
-        window.addEventListener('resize', initParticles);
-
-        function animateBackground() {
+        for (let i = 0; i < 45; i++) particles.push(new GoldParticle());
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
@@ -407,196 +350,125 @@
                     }
                 }
             }
-            requestAnimationFrame(animateBackground);
+            requestAnimationFrame(animate);
         }
-        animateBackground();
+        animate();
 
-        // --- نظام الإدارة والباسورد والصور ---
-        function getSavedPassword() {
-            return localStorage.getItem('pp_admin_password') || "1234";
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedLogo = localStorage.getItem('pp_saved_logo');
-            if (savedLogo) {
-                document.getElementById('customLogoImg').src = savedLogo;
-                document.getElementById('customLogoImg').classList.remove('hidden');
-                document.getElementById('defaultLogoLetter').classList.add('hidden');
+        // جلب الصور والأعمال المحفوظة للجميع من Supabase
+        window.addEventListener('DOMContentLoaded', async () => {
+            const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
+            if (settings) {
+                if (settings.logo_url) {
+                    document.getElementById('customLogoImg').src = settings.logo_url;
+                    document.getElementById('customLogoImg').classList.remove('hidden');
+                    document.getElementById('defaultLogoLetter').classList.add('hidden');
+                }
+                if (settings.portrait_url) {
+                    document.getElementById('heroPortraitImg').src = settings.portrait_url;
+                }
             }
-
-            const savedPortrait = localStorage.getItem('pp_saved_portrait');
-            if (savedPortrait) {
-                document.getElementById('heroPortraitImg').src = savedPortrait;
-            }
-
-            renderSavedProjects();
-
-            if (localStorage.getItem('pp_is_admin') === 'true') {
-                updateUIForLoggedInAdmin();
-            }
+            loadPublicProjects();
         });
 
-        function openAdminModal() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            if (localStorage.getItem('pp_is_admin') === 'true') {
-                document.getElementById('loginView').classList.add('hidden');
-                document.getElementById('dashboardView').classList.remove('hidden');
-            } else {
-                document.getElementById('loginView').classList.remove('hidden');
-                document.getElementById('dashboardView').classList.add('hidden');
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        function handleAdminLogin() {
-            const pass = document.getElementById('adminPassInput').value.trim();
-            if (pass === getSavedPassword()) {
-                localStorage.setItem('pp_is_admin', 'true');
-                document.getElementById('loginErrorMsg').classList.add('hidden');
-                document.getElementById('adminPassInput').value = '';
-                updateUIForLoggedInAdmin();
-                renderSavedProjects();
-                document.getElementById('loginView').classList.add('hidden');
-                document.getElementById('dashboardView').classList.remove('hidden');
-            } else {
-                document.getElementById('loginErrorMsg').classList.remove('hidden');
-            }
-        }
-
-        function changeAdminPassword() {
-            const newPass = document.getElementById('newPasswordInput').value.trim();
-            if (newPass.length < 4) return alert("اكتب باسورد مكون من 4 رموز على الأقل");
-            localStorage.setItem('pp_admin_password', newPass);
-            document.getElementById('newPasswordInput').value = '';
-            alert("تم حفظ الباسورد السري الجديد بنجاح: " + newPass);
-        }
-
-        function updateUIForLoggedInAdmin() {
-            document.getElementById('addNewWorkBtn').classList.remove('hidden');
-        }
-
-        function logoutAdmin() {
-            localStorage.removeItem('pp_is_admin');
-            document.getElementById('addNewWorkBtn').classList.add('hidden');
-            renderSavedProjects();
-            closeAdminModal();
-            alert("تم تسجيل الخروج. ستبقى الصور واللوجو والباسورد محفوظة.");
-        }
-
-        function compressAndConvertImage(file, maxWidth, callback) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > maxWidth) {
-                        height = Math.round((height * maxWidth) / width);
-                        width = maxWidth;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/png', 0.85));
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function saveLogoImage() {
-            const file = document.getElementById('logoFileInput').files[0];
-            if (!file) return alert("اختر صورة اللوجو أولاً");
-            compressAndConvertImage(file, 300, (base64Data) => {
-                localStorage.setItem('pp_saved_logo', base64Data);
-                document.getElementById('customLogoImg').src = base64Data;
-                document.getElementById('customLogoImg').classList.remove('hidden');
-                document.getElementById('defaultLogoLetter').classList.add('hidden');
-                alert("تم حفظ اللوجو نهائياً!");
-            });
-        }
-
-        function savePortraitImage() {
-            const file = document.getElementById('portraitFileInput').files[0];
-            if (!file) return alert("اختر صورتك الشخصية أولاً");
-            compressAndConvertImage(file, 700, (base64Data) => {
-                localStorage.setItem('pp_saved_portrait', base64Data);
-                document.getElementById('heroPortraitImg').src = base64Data;
-                alert("تم حفظ صورتك الشخصية نهائياً!");
-            });
-        }
-
-        function addNewPortfolioItem() {
-            const title = document.getElementById('newWorkTitle').value.trim();
-            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
-            const desc = document.getElementById('newWorkDesc').value.trim();
-            const file = document.getElementById('newWorkImgInput').files[0];
-
-            if (!title || !file) return alert("اكتب عنوان التصميم واختر صورته أولاً");
-
-            compressAndConvertImage(file, 800, (base64Data) => {
-                const items = JSON.parse(localStorage.getItem('pp_custom_projects') || '[]');
-                items.unshift({
-                    id: Date.now(),
-                    title,
-                    category,
-                    desc,
-                    image: base64Data
-                });
-                localStorage.setItem('pp_custom_projects', JSON.stringify(items));
-                renderSavedProjects();
-                document.getElementById('newWorkTitle').value = '';
-                document.getElementById('newWorkCategory').value = '';
-                document.getElementById('newWorkDesc').value = '';
-                alert("تم نشر التصميم وحفظه في المعرض بنجاح!");
-                closeAdminModal();
-            });
-        }
-
-        function deletePortfolioItem(id) {
-            if (!confirm("هل تريد حذف هذا التصميم؟")) return;
-            let items = JSON.parse(localStorage.getItem('pp_custom_projects') || '[]');
-            items = items.filter(item => item.id !== id);
-            localStorage.setItem('pp_custom_projects', JSON.stringify(items));
-            renderSavedProjects();
-        }
-
-        function renderSavedProjects() {
+        async function loadPublicProjects() {
+            const { data: { session } } = await sb.auth.getSession();
+            const isAdmin = !!session;
+            const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
+            if (!items) return;
             const grid = document.getElementById('projectsGrid');
-            document.querySelectorAll('.custom-saved-card').forEach(el => el.remove());
-
-            const isAdmin = localStorage.getItem('pp_is_admin') === 'true';
-            const items = JSON.parse(localStorage.getItem('pp_custom_projects') || '[]');
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "custom-saved-card glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group";
+                card.className = "glass-panel rounded-2xl overflow-hidden flex flex-col justify-between group";
                 card.innerHTML = `
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
-                            ${isAdmin ? `<button onclick="deletePortfolioItem(${item.id})" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
                         </div>
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">${item.desc}</p>
+                            <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6">
                         <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                            <span>اطلب تصميم مماثل</span>
-                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
                         </a>
-                    </div>
-                `;
+                    </div>`;
                 grid.prepend(card);
             });
+        }
+
+        async function deleteProjectFromSupabase(id) {
+            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
+            await sb.from('portfolio_projects').delete().eq('id', id);
+            location.reload();
+        }
+
+        async function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+            const { data: { session } } = await sb.auth.getSession();
+            document.getElementById('loginView').classList.toggle('hidden', !!session);
+            document.getElementById('dashboardView').classList.toggle('hidden', !session);
+        }
+
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        async function handleSupabaseLogin() {
+            const email = document.getElementById('adminEmailInput').value.trim();
+            const password = document.getElementById('adminPassInput').value.trim();
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = "جاري التحقق...";
+            const { error } = await sb.auth.signInWithPassword({ email, password });
+            btn.innerText = "تسجيل الدخول الآمن";
+            if (error) {
+                const errEl = document.getElementById('loginErrorMsg');
+                errEl.innerText = "بيانات الدخول غير صحيحة";
+                errEl.classList.remove('hidden');
+            } else {
+                openAdminModal();
+            }
+        }
+
+        async function handleSupabaseLogout() {
+            await sb.auth.signOut();
+            location.reload();
+        }
+
+        async function uploadAsset(type, inputId) {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return alert("اختر الصورة أولاً");
+            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
+            const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+
+            alert("تم الحفظ في السحابة بنجاح وسيظهر لجميع الزوار!");
+            location.reload();
+        }
+
+        async function publishProjectToSupabase() {
+            const title = document.getElementById('newWorkTitle').value.trim();
+            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
+            const description = document.getElementById('newWorkDesc').value.trim();
+            const file = document.getElementById('newWorkImgInput').files[0];
+            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
+
+            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const { error: dbErr } = await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+
+            alert("تم نشر التصميم لجميع الزوار!");
+            location.reload();
         }
     </script>
 </body>
