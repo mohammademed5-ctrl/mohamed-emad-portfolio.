@@ -1,125 +1,61 @@
     <script>
         const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
-        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 1. خلفية الجزيئات الذهبية
-        (function initParticles() {
-            const canvas = document.getElementById('luxuryCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-            window.addEventListener('resize', resize);
-            resize();
-            for (let i = 0; i < 40; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    r: Math.random() * 1.8 + 0.6
-                });
-            }
-            function loop() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.x += p.vx; p.y += p.vy;
-                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
-                    ctx.fill();
-                });
-                requestAnimationFrame(loop);
-            }
-            loop();
-        })();
+        // خلفية الجزيئات الذهبية المتحركة
+        const canvas = document.getElementById('luxuryCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // 2. تشغيل نافذة القفل (Admin Modal)
-        async function openAdminModal() {
-            const modal = document.getElementById('adminModal');
-            if (!modal) return;
-            modal.classList.remove('hidden');
-            try {
-                const { data: { session } } = await sb.auth.getSession();
-                document.getElementById('loginView').classList.toggle('hidden', !!session);
-                document.getElementById('dashboardView').classList.toggle('hidden', !session);
-            } catch (e) {
-                document.getElementById('loginView').classList.remove('hidden');
-                document.getElementById('dashboardView').classList.add('hidden');
+        class GoldParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.45;
+                this.vy = (Math.random() - 0.5) * 0.45;
+                this.radius = Math.random() * 1.8 + 0.6;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.45)';
+                ctx.fill();
             }
         }
-
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-
-        async function handleSupabaseLogin() {
-            const email = document.getElementById('adminEmailInput').value.trim();
-            const password = document.getElementById('adminPassInput').value.trim();
-            const btn = document.getElementById('loginBtn');
-            const errEl = document.getElementById('loginErrorMsg');
-            errEl.classList.add('hidden');
-            btn.innerText = "جاري التحقق...";
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            btn.innerText = "تسجيل الدخول الآمن";
-            if (error) {
-                errEl.innerText = "بيانات الدخول غير صحيحة أو الحساب غير مفعل";
-                errEl.classList.remove('hidden');
-            } else {
-                openAdminModal();
+        for (let i = 0; i < 45; i++) particles.push(new GoldParticle());
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${(1 - dist / 130) * 0.16})`;
+                        ctx.lineWidth = 0.7;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
             }
+            requestAnimationFrame(animate);
         }
+        animate();
 
-        async function handleSupabaseLogout() {
-            await sb.auth.signOut();
-            location.reload();
-        }
-
-        async function uploadAsset(type, inputId) {
-            const file = document.getElementById(inputId).files[0];
-            if (!file) return alert("اختر الصورة أولاً");
-            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert("خطأ في الرفع: " + error.message);
-
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
-            const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
-            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
-
-            alert("تم الحفظ في السحابة بنجاح!");
-            location.reload();
-        }
-
-        async function publishProjectToSupabase() {
-            const title = document.getElementById('newWorkTitle').value.trim();
-            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
-            const description = document.getElementById('newWorkDesc').value.trim();
-            const file = document.getElementById('newWorkImgInput').files[0];
-            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
-
-            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert("خطأ في الرفع: " + error.message);
-
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            const { error: dbErr } = await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
-            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
-
-            alert("تم نشر التصميم لجميع الزوار!");
-            location.reload();
-        }
-
-        async function deleteProjectFromSupabase(id) {
-            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
-            await sb.from('portfolio_projects').delete().eq('id', id);
-            location.reload();
-        }
-
-        // 3. محرك استوديو التصميم التفاعلي
+        // --- محرك استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) ---
         const studioPresets = {
             ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
             logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
@@ -164,7 +100,10 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
-                img.onload = function() { studioUploadedImg = img; renderStudioCanvas(); };
+                img.onload = function() {
+                    studioUploadedImg = img;
+                    renderStudioCanvas();
+                };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
@@ -181,7 +120,8 @@
             if (!c) return;
             const sCtx = c.getContext('2d');
             const p = studioPresets[currentStudioTpl];
-            c.width = p.w; c.height = p.h;
+            c.width = p.w;
+            c.height = p.h;
 
             const bg = document.getElementById('studioBgColor').value || '#09090b';
             const accent = document.getElementById('studioAccentColor').value || '#D4AF37';
@@ -190,40 +130,68 @@
             const titleText = document.getElementById('studioTitleInput').value || '';
             const subText = document.getElementById('studioSubInput').value || '';
 
+            // 1. الخلفية
             sCtx.fillStyle = bg;
             sCtx.fillRect(0, 0, c.width, c.height);
 
+            // 2. هالة إضاءة ذهبية في المنتصف
+            sCtx.save();
+            sCtx.globalAlpha = 0.18;
+            const grad = sCtx.createRadialGradient(c.width / 2, c.height / 2, 20, c.width / 2, c.height / 2, c.width * 0.6);
+            grad.addColorStop(0, accent);
+            grad.addColorStop(1, 'transparent');
+            sCtx.fillStyle = grad;
+            sCtx.fillRect(0, 0, c.width, c.height);
+            sCtx.restore();
+
+            // 3. الإطار الخارجي والداخلي
             const pad = Math.round(Math.min(c.width, c.height) * 0.055);
+            sCtx.save();
             sCtx.strokeStyle = accent;
+            sCtx.globalAlpha = 0.65;
             sCtx.lineWidth = 3;
             sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
+
+            sCtx.globalAlpha = 0.25;
+            sCtx.lineWidth = 1;
+            sCtx.strokeRect(pad + 12, pad + 12, c.width - (pad + 12) * 2, c.height - (pad + 12) * 2);
+            sCtx.restore();
 
             const cx = c.width / 2;
             const isBanner = currentStudioTpl === 'banner';
             let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
 
+            // 4. الشعار أو الصورة المرفوعة
             if (studioUploadedImg) {
                 const maxImgSize = isBanner ? 115 : 210;
                 const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
                 const iw = studioUploadedImg.width * scale;
                 const ih = studioUploadedImg.height * scale;
+                sCtx.save();
+                sCtx.shadowColor = accent;
+                sCtx.shadowBlur = 20;
                 sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih);
+                sCtx.restore();
                 contentY += ih + 35;
             } else {
                 const emblemR = isBanner ? 34 : 58;
+                sCtx.save();
                 sCtx.beginPath();
                 sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
                 sCtx.strokeStyle = accent;
                 sCtx.lineWidth = 3;
                 sCtx.stroke();
+
                 sCtx.fillStyle = accent;
                 sCtx.font = `900 ${emblemR}px Cinzel, serif`;
                 sCtx.textAlign = 'center';
                 sCtx.textBaseline = 'middle';
                 sCtx.fillText('P', cx, contentY + emblemR * 0.55);
+                sCtx.restore();
                 contentY += emblemR * 2 + 30;
             }
 
+            // 5. الشارة العلوية
             if (badgeText) {
                 sCtx.fillStyle = accent;
                 sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
@@ -232,11 +200,13 @@
                 contentY += isBanner ? 44 : 60;
             }
 
+            // 6. العنوان الرئيسي
             sCtx.fillStyle = textColor;
             sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`;
             sCtx.textAlign = 'center';
             sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
 
+            // 7. خط فاصل ذهبي
             contentY += isBanner ? 24 : 36;
             sCtx.beginPath();
             sCtx.moveTo(cx - 80, contentY);
@@ -245,14 +215,22 @@
             sCtx.lineWidth = 3;
             sCtx.stroke();
 
+            // 8. الوصف الفرعي
             contentY += isBanner ? 36 : 50;
+            sCtx.save();
             sCtx.fillStyle = textColor;
+            sCtx.globalAlpha = 0.85;
             sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
             sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
+            sCtx.restore();
 
+            // 9. توقيع الاستوديو
+            sCtx.save();
             sCtx.fillStyle = accent;
+            sCtx.globalAlpha = 0.7;
             sCtx.font = '700 14px Montserrat, sans-serif';
             sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
+            sCtx.restore();
         }
 
         function downloadStudioDesign() {
@@ -270,18 +248,27 @@
             const bg = document.getElementById('studioBgColor').value;
             const accent = document.getElementById('studioAccentColor').value;
             const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
-            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n• نوع القالب: ${tplName}\n• العنوان: ${title}\n• الوصف: ${sub}\n• الألوان: خلفية (${bg}) / ذهبي (${accent})\n• شعار خاص: ${hasLogo}`;
+
+            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n` +
+                        `• نوع القالب: ${tplName}\n` +
+                        `• العنوان: ${title}\n` +
+                        `• الوصف: ${sub}\n` +
+                        `• الألوان المختارة: خلفية (${bg}) / ذهبي (${accent})\n` +
+                        `• شعار خاص: ${hasLogo}`;
+
             window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // 4. تشغيل فوري عند الفتح + جلب الصور من السيرفر
+        // تشغيل الاستوديو فوراً عند تحميل الصفحة
         selectStudioTemplate('ad');
 
-        (async function loadAllAssets() {
+        // جلب البيانات من Supabase
+        window.addEventListener('DOMContentLoaded', async () => {
             const logoImg = document.getElementById('customLogoImg');
             const logoLetter = document.getElementById('defaultLogoLetter');
             const portraitImg = document.getElementById('heroPortraitImg');
-            if (logoLetter) logoLetter.classList.add('loaded');
+
+            logoLetter.classList.add('loaded');
 
             try {
                 const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
@@ -289,12 +276,13 @@
                     logoImg.onload = () => {
                         logoLetter.classList.add('hidden');
                         logoImg.classList.remove('hidden');
-                        logoImg.classList.add('loaded');
+                        requestAnimationFrame(() => logoImg.classList.add('loaded'));
                     };
                     logoImg.src = settings.logo_url;
                 }
+
                 if (settings && settings.portrait_url) {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
+                    portraitImg.onload = () => requestAnimationFrame(() => portraitImg.classList.add('loaded'));
                     portraitImg.src = settings.portrait_url;
                 } else {
                     portraitImg.onload = () => portraitImg.classList.add('loaded');
@@ -305,35 +293,107 @@
                 portraitImg.classList.add('loaded');
             }
 
+            loadPublicProjects();
+        });
+
+        async function loadPublicProjects() {
             const { data: { session } } = await sb.auth.getSession();
             const isAdmin = !!session;
             const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-            if (items) {
-                const grid = document.getElementById('projectsGrid');
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
-                    card.innerHTML = `
-                        <div>
-                            <div class="relative h-52 overflow-hidden bg-neutral-900">
-                                <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
-                                ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
-                                <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
-                            </div>
+            if (!items) return;
+            const grid = document.getElementById('projectsGrid');
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-52 overflow-hidden bg-neutral-900">
+                            <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
+                            ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
                         </div>
-                        <div class="px-6 pb-6">
-                            <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                                <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
-                            </a>
-                        </div>`;
-                    grid.prepend(card);
-                });
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
+                            <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6">
+                        <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
+                            <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>`;
+                grid.prepend(card);
+            });
+        }
+
+        async function deleteProjectFromSupabase(id) {
+            if (!confirm("هل تريد حذف هذا التصميم نهائياً؟")) return;
+            await sb.from('portfolio_projects').delete().eq('id', id);
+            location.reload();
+        }
+
+        async function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+            const { data: { session } } = await sb.auth.getSession();
+            document.getElementById('loginView').classList.toggle('hidden', !!session);
+            document.getElementById('dashboardView').classList.toggle('hidden', !session);
+        }
+
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        async function handleSupabaseLogin() {
+            const email = document.getElementById('adminEmailInput').value.trim();
+            const password = document.getElementById('adminPassInput').value.trim();
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = "جاري التحقق...";
+            const { error } = await sb.auth.signInWithPassword({ email, password });
+            btn.innerText = "تسجيل الدخول الآمن";
+            if (error) {
+                const errEl = document.getElementById('loginErrorMsg');
+                errEl.innerText = "بيانات الدخول غير صحيحة";
+                errEl.classList.remove('hidden');
+            } else {
+                openAdminModal();
             }
-        })();
+        }
+
+        async function handleSupabaseLogout() {
+            await sb.auth.signOut();
+            location.reload();
+        }
+
+        async function uploadAsset(type, inputId) {
+            const file = document.getElementById(inputId).files[0];
+            if (!file) return alert("اختر الصورة أولاً");
+            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
+            const { error: dbErr } = await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+
+            alert("تم الحفظ في السحابة بنجاح وسيظهر لجميع الزوار!");
+            location.reload();
+        }
+
+        async function publishProjectToSupabase() {
+            const title = document.getElementById('newWorkTitle').value.trim();
+            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
+            const description = document.getElementById('newWorkDesc').value.trim();
+            const file = document.getElementById('newWorkImgInput').files[0];
+            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
+
+            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
+            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
+            if (error) return alert("خطأ في الرفع: " + error.message);
+
+            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
+            const { error: dbErr } = await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
+            if (dbErr) return alert("خطأ في الحفظ: " + dbErr.message);
+
+            alert("تم نشر التصميم لجميع الزوار!");
+            location.reload();
+        }
     </script>
-</body>
-</html>
