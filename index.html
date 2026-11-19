@@ -47,21 +47,29 @@
       box-shadow: 0 10px 25px rgba(212, 175, 55, 0.28);
     }
     .glass-card {
-      background: rgba(20, 20, 26, 0.85);
+      background: rgba(20, 20, 26, 0.88);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(212, 175, 55, 0.16);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+    }
+    .hero-banner-box {
+      background:
+        radial-gradient(circle at top right, rgba(212, 175, 55, 0.22), transparent 55%),
+        radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.12), transparent 50%),
+        linear-gradient(135deg, #0E0E12 0%, #171720 100%);
     }
   </style>
 </head>
 <body class="bg-obsidian text-gray-100 font-ar antialiased selection:bg-gold selection:text-obsidian">
 
   <!-- الشريط العلوي -->
-  <header class="sticky top-0 z-40 bg-obsidian/90 backdrop-blur-md border-b border-gold/15">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
-      <a href="#top" class="flex items-center gap-2.5 shrink-0">
-        <img id="brandLogoImg" src="https://pcnbtxcsumhoxtuhcoka.supabase.co/storage/v1/object/public/portfolio_assets/logo.png" alt="PixelPerfect Studio" class="w-9 h-9 rounded-lg object-cover border border-gold/40 bg-surface" onerror="this.style.display='none'" />
+  <header class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-gold/15">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+      <a href="#top" class="flex items-center gap-2 shrink-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-goldLight via-gold to-goldDark text-obsidian font-black flex items-center justify-center text-sm shadow">
+          PP
+        </div>
         <div>
-          <span class="font-extrabold text-base sm:text-lg tracking-tight gold-gradient-text block leading-none">PixelPerfect</span>
+          <span class="font-extrabold text-sm sm:text-lg tracking-tight gold-gradient-text block leading-none">PixelPerfect</span>
           <span class="text-[10px] text-gray-400 tracking-widest uppercase">Global Platform V3</span>
         </div>
       </a>
@@ -73,79 +81,107 @@
         <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">تواصل معنا</a>
       </nav>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2">
         <button type="button" onclick="toggleLanguage()" id="langToggleBtn" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-gold/30 text-gold hover:bg-gold/10 transition">
           EN
         </button>
-        <button type="button" onclick="openClientPortal()" id="clientPortalBtn" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold border border-gold/40 text-gold hover:bg-gold/10 transition">
+        <button type="button" onclick="openClientPortal()" id="clientPortalBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold border border-gold/40 text-gold hover:bg-gold/10 transition">
           حساب العملاء
         </button>
-        <button type="button" onclick="openAdminPortal()" id="adminPortalBtn" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold gold-btn">
-          الإدارة
+        <button type="button" onclick="openAdminPortal()" id="adminPortalBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-extrabold gold-btn flex items-center gap-1">
+          <span>🔒</span>
+          <span>الإدارة</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- القسم الرئيسي Hero -->
-  <section id="top" class="relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 border-b border-gold/10">
-    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[280px] bg-gold/10 blur-[120px] pointer-events-none"></div>
-    <div class="max-w-5xl mx-auto text-center relative z-10">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-gold/25 text-gold text-xs font-bold mb-6">
-        <span>PIXELPERFECT STUDIO</span>
-        <span>•</span>
-        <span>FOUNDER: MOHAMED EMAD</span>
+  <!-- القسم الرئيسي Hero + بانر -->
+  <section id="top" class="relative overflow-hidden py-12 sm:py-20 px-4 sm:px-6 border-b border-gold/10">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-7 text-center lg:text-start">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-gold/25 text-gold text-xs font-bold mb-5">
+          <span>PIXELPERFECT STUDIO</span>
+          <span>•</span>
+          <span>MOHAMED EMAD</span>
+        </div>
+
+        <h1 dir="ltr" class="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-4 gold-gradient-text text-center lg:text-left">
+          Your Vision. Our Intelligence. Unlimited Possibilities.
+        </h1>
+
+        <p id="heroSubtitle" class="max-w-2xl mx-auto lg:mx-0 text-gray-300 text-sm sm:text-base leading-relaxed mb-7">
+          منصة رقمية متكاملة تجمع الذكاء الاصطناعي، بناء العلامات التجارية، الخدمات الإبداعية، ومتابعة المشاريع للعملاء والمبدعين.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8">
+          <a href="#studio" data-i18n="cta_studio" class="px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm gold-btn">
+            ابدأ في الاستوديو التفاعلي
+          </a>
+          <button type="button" onclick="openClientPortal()" data-i18n="cta_workspace" class="px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-surface border border-gold/30 text-gray-100 hover:border-gold transition">
+            مساحة عمل العميل
+          </button>
+        </div>
+
+        <!-- إحصائيات حقيقية من قاعدة البيانات -->
+        <div class="grid grid-cols-3 gap-3 max-w-xl mx-auto lg:mx-0">
+          <div class="glass-card rounded-2xl p-3.5 text-center">
+            <div id="statServicesCount" class="text-xl sm:text-2xl font-black text-gold">7</div>
+            <div data-i18n="stat_services" class="text-[11px] sm:text-xs text-gray-400 mt-1">خدمات متخصصة</div>
+          </div>
+          <div class="glass-card rounded-2xl p-3.5 text-center">
+            <div id="statProductsCount" class="text-xl sm:text-2xl font-black text-gold">0</div>
+            <div data-i18n="stat_products" class="text-[11px] sm:text-xs text-gray-400 mt-1">منتجات رقمية</div>
+          </div>
+          <div class="glass-card rounded-2xl p-3.5 text-center">
+            <div id="statOrdersCount" class="text-xl sm:text-2xl font-black text-gold">0</div>
+            <div data-i18n="stat_orders" class="text-[11px] sm:text-xs text-gray-400 mt-1">طلبات مسجلة</div>
+          </div>
+        </div>
       </div>
 
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-5 gold-gradient-text">
-        Your Vision. Our Intelligence. Unlimited Possibilities.
-      </h1>
-
-      <p id="heroSubtitle" class="max-w-2xl mx-auto text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
-        منصة رقمية متكاملة تجمع الذكاء الاصطناعي، بناء العلامات التجارية، الخدمات الإبداعية، ومتابعة المشاريع للعملاء والمبدعين.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-3 mb-12">
-        <a href="#studio" data-i18n="cta_studio" class="px-6 py-3 rounded-xl font-extrabold text-sm gold-btn">
-          ابدأ في الاستوديو التفاعلي
-        </a>
-        <button type="button" onclick="openClientPortal()" data-i18n="cta_workspace" class="px-6 py-3 rounded-xl font-bold text-sm bg-surface border border-gold/30 text-gray-100 hover:border-gold transition">
-          مساحة عمل العميل
-        </button>
-      </div>
-
-      <!-- إحصائيات حقيقية من قاعدة البيانات -->
-      <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-2xl mx-auto">
-        <div class="glass-card rounded-2xl p-4">
-          <div id="statServicesCount" class="text-2xl sm:text-3xl font-black text-gold">7</div>
-          <div data-i18n="stat_services" class="text-xs sm:text-sm text-gray-400 mt-1">خدمات متخصصة</div>
-        </div>
-        <div class="glass-card rounded-2xl p-4">
-          <div id="statProductsCount" class="text-2xl sm:text-3xl font-black text-gold">0</div>
-          <div data-i18n="stat_products" class="text-xs sm:text-sm text-gray-400 mt-1">منتجات رقمية</div>
-        </div>
-        <div class="glass-card rounded-2xl p-4">
-          <div id="statOrdersCount" class="text-2xl sm:text-3xl font-black text-gold">0</div>
-          <div data-i18n="stat_orders" class="text-xs sm:text-sm text-gray-400 mt-1">طلبات مسجلة</div>
+      <!-- بانر بصري فاخر -->
+      <div class="lg:col-span-5">
+        <div class="hero-banner-box border border-gold/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between text-xs text-gold font-bold">
+            <span>V3 CREATIVE & AI SUITE</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30">LIVE</span>
+          </div>
+          <div class="p-4 rounded-2xl bg-obsidian/80 border border-gold/15 space-y-2">
+            <div class="text-xs text-gray-400">Brand Identity • 3D & AI • Web & Marketplace</div>
+            <div class="text-lg font-extrabold text-white">تجربة إنتاج وتصميم متكاملة</div>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              أنشئ تصاميمك فوراً، تابع طلباتك وملاحظاتك من مكان واحد، وأدر منتجاتك وخدماتك بسهولة.
+            </p>
+          </div>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-obsidian/70 border border-gold/15">
+              <div class="text-gold font-extrabold">Client Workspace</div>
+              <div class="text-gray-400 mt-0.5">متابعة ومرفقات مباشرة</div>
+            </div>
+            <div class="p-3 rounded-xl bg-obsidian/70 border border-gold/15">
+              <div class="text-gold font-extrabold">Admin Control</div>
+              <div class="text-gray-400 mt-0.5">إدارة الطلبات والمنتجات</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- قسم الخدمات -->
-  <section id="services" class="py-16 px-4 sm:px-6 max-w-7xl mx-auto">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-2">
+  <section id="services" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">
       <div>
         <span class="text-gold text-xs font-bold uppercase tracking-wider">Services</span>
         <h2 data-i18n="sec_services_title" class="text-2xl sm:text-3xl font-extrabold mt-1">الخدمات الإبداعية والرقمية</h2>
       </div>
       <p data-i18n="sec_services_sub" class="text-sm text-gray-400">حلول عملية قابلة للتنفيذ الفوري وطلبها مباشرة.</p>
     </div>
-    <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
   </section>
-
   <!-- قسم استوديو التصميم التفاعلي -->
-  <section id="studio" class="py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
+  <section id="studio" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
     <div class="mb-8">
       <span class="text-gold text-xs font-bold uppercase tracking-wider">Interactive Studio</span>
       <h2 data-i18n="sec_studio_title" class="text-2xl sm:text-3xl font-extrabold mt-1">استوديو التصميم السريع والمعاينة المباشرة</h2>
@@ -190,11 +226,582 @@
       <div class="lg:col-span-7 flex flex-col justify-between">
         <div class="w-full flex items-center justify-between mb-3">
           <span data-i18n="lbl_live_preview" class="text-xs font-bold text-gold">معاينة حية مباشرة</span>
-          <span id="studioFormatBadge" class="text-xs text-gray-400">1080 × 1080</span>
+          <span id="studioFormatBadge" class="text-xs text-gray-400">600 × 600</span>
         </div>
-        <div class="w-full flex items-center justify-center bg-obsidian rounded-2xl p-4 border border-gold/15 min-h-[300px]">
-          <canvas id="studioPreviewCanvas" width="600" height="600" class="max-w-full max-h-[380px] rounded-xl shadow-2xl"></canvas>
+        <div class="w-full flex items-center justify-center bg-obsidian rounded-2xl p-4 border border-gold/15 min-h-[280px]">
+          <canvas id="studioPreviewCanvas" width="600" height="600" class="max-w-full max-h-[360px] rounded-xl shadow-2xl"></canvas>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- قسم الأعمال المختارة -->
+  <section id="work" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
+    <div class="mb-8">
+      <span class="text-gold text-xs font-bold uppercase tracking-wider">Selected Work</span>
+      <h2 data-i18n="sec_work_title" class="text-2xl sm:text-3xl font-extrabold mt-1">أعمال مختارة وتجارب عملاء</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <div class="glass-card rounded-2xl p-5">
+        <span class="text-xs font-bold text-gold">01 • Branding & Identity</span>
+        <h3 class="text-lg font-extrabold mt-1 mb-2">هوية وتغليف علامات تجارية</h3>
+        <p class="text-sm text-gray-400">تصميم هويات بصرية، قوائم ومنتجات، ومواد عرض متكاملة بهوية واضحة.</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <span class="text-xs font-bold text-gold">02 • 3D & AI Creative</span>
+        <h3 class="text-lg font-extrabold mt-1 mb-2">إنتاج بصري وإعلانات رقمية</h3>
+        <p class="text-sm text-gray-400">مشاهد بصرية، بورتريهات عالية التفاصيل، ومحتوى قصير جذاب للمنصات.</p>
+      </div>
+      <div class="glass-card rounded-2xl p-5">
+        <span class="text-xs font-bold text-gold">03 • Web & Platforms</span>
+        <h3 class="text-lg font-extrabold mt-1 mb-2">واجهات ويب ومنصات تفاعلية</h3>
+        <p class="text-sm text-gray-400">تطوير مواقع متجاوبة مربوطة بقواعد بيانات وتجربة استخدام سريعة.</p>
+      </div>
+    </div>
+
+    <div class="glass-card rounded-2xl p-5 border border-gold/20">
+      <p class="text-sm text-gray-200 italic leading-relaxed">
+        "تنفيذ دقيق، التزام بالتفاصيل، وسرعة في تحويل الفكرة إلى نتيجة جاهزة للنشر والاستخدام الفعلي."
+      </p>
+      <div class="mt-2.5 text-xs font-bold text-gold">— عملاء PixelPerfect Studio</div>
+    </div>
+  </section>
+
+  <!-- قسم التواصل -->
+  <section id="contact" class="py-14 px-4 sm:px-6 max-w-4xl mx-auto border-t border-gold/10">
+    <div class="text-center mb-8">
+      <span class="text-gold text-xs font-bold uppercase tracking-wider">Contact</span>
+      <h2 data-i18n="sec_contact_title" class="text-2xl sm:text-3xl font-extrabold mt-1">ابدأ مشروعك الآن</h2>
+      <p data-i18n="sec_contact_sub" class="text-sm text-gray-400 mt-2">ابعت تفاصيل طلبك أو استفسارك وهيتسجل مباشرة في النظام.</p>
+    </div>
+
+    <form id="contactForm" onsubmit="submitContactInquiry(event)" class="glass-card rounded-2xl p-6 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input id="contactName" type="text" required placeholder="الاسم الكامل" class="w-full px-4 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+        <input id="contactEmail" type="email" required placeholder="البريد الإلكتروني" class="w-full px-4 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+      </div>
+      <input id="contactSubject" type="text" required placeholder="موضوع المشروع أو الخدمة المطلوبة" class="w-full px-4 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+      <textarea id="contactMessage" rows="4" required placeholder="اكتب تفاصيل مشروعك..." class="w-full px-4 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold"></textarea>
+      <button type="submit" id="contactSubmitBtn" class="w-full py-3 rounded-xl font-extrabold text-sm gold-btn">إرسال الطلب</button>
+      <p id="contactStatusMsg" class="text-xs text-center text-gold min-h-[18px]"></p>
+    </form>
+  </section>
+
+  <!-- الفوتر -->
+  <footer class="border-t border-gold/15 py-8 px-4 text-center text-xs text-gray-400">
+    <p>© <span id="footerYear">2026</span> PixelPerfect Studio — Founded by Mohamed Emad. All rights reserved.</p>
+  </footer>
+  <!-- نافذة حساب العملاء ومساحة العمل (Client Workspace) -->
+  <div id="clientModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-onyx border border-gold/30 rounded-2xl w-full max-w-2xl p-6 relative my-8">
+      <button type="button" onclick="closeClientPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-surface text-gray-300 hover:text-white font-bold">✕</button>
+
+      <div id="clientAuthView">
+        <h3 class="text-xl font-extrabold text-gold mb-1">حساب العملاء — Client Workspace</h3>
+        <p class="text-xs text-gray-400 mb-5">سجّل دخولك أو أنشئ حساباً لمتابعة طلباتك ومشاركة الملاحظات والمرفقات.</p>
+
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <button type="button" id="tabLoginBtn" onclick="switchAuthTab('login')" class="py-2 rounded-xl text-xs font-extrabold gold-btn">تسجيل الدخول</button>
+          <button type="button" id="tabSignupBtn" onclick="switchAuthTab('signup')" class="py-2 rounded-xl text-xs font-bold bg-surface text-gray-300 border border-gold/20">حساب جديد</button>
+        </div>
+
+        <form id="clientAuthForm" onsubmit="handleClientAuth(event)" class="space-y-3">
+          <div id="signupNameField" class="hidden">
+            <input id="authFullName" type="text" placeholder="الاسم الكامل" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+          </div>
+          <input id="authEmail" type="email" required placeholder="البريد الإلكتروني" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+          <input id="authPassword" type="password" required minlength="6" placeholder="كلمة المرور (6 أحرف فأكثر)" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+          <button type="submit" id="authSubmitBtn" class="w-full py-2.5 rounded-xl text-sm font-extrabold gold-btn">متابعة</button>
+          <p id="clientAuthError" class="text-xs text-red-400 text-center min-h-[18px]"></p>
+        </form>
+      </div>
+
+      <div id="clientDashboardView" class="hidden space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gold/15 pb-3">
+          <div>
+            <h3 id="clientWelcomeTitle" class="text-lg font-extrabold text-gold">مرحباً بك</h3>
+            <p id="clientEmailLabel" class="text-xs text-gray-400"></p>
+          </div>
+          <button type="button" onclick="handleClientLogout()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-surface border border-red-500/40 text-red-300">تسجيل الخروج</button>
+        </div>
+
+        <div>
+          <h4 class="text-sm font-bold text-gray-200 mb-2.5">طلباتي ومشاريعي</h4>
+          <div id="clientOrdersList" class="space-y-2.5 max-h-48 overflow-y-auto text-xs">
+            <p class="text-gray-400">جاري تحميل الطلبات...</p>
+          </div>
+        </div>
+
+        <form id="workspaceUpdateForm" onsubmit="submitWorkspaceUpdate(event)" class="bg-surface/80 border border-gold/20 rounded-xl p-4 space-y-3">
+          <h4 class="text-sm font-bold text-gold">إضافة ملاحظة أو مرفق للمشروع</h4>
+          <input id="workspaceOrderId" type="text" placeholder="رقم الطلب (اختياري أو اتركه فارغاً)" class="w-full px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+          <textarea id="workspaceNote" rows="2" required placeholder="اكتب ملاحظتك أو تحديثك هنا..." class="w-full px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold"></textarea>
+          <div>
+            <label class="block text-[11px] text-gray-400 mb-1">رفع مرفق آمن (اختياري)</label>
+            <input id="workspaceFileInput" type="file" class="w-full text-xs text-gray-400" />
+          </div>
+          <button type="submit" id="workspaceSubmitBtn" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">إرسال التحديث</button>
+          <p id="workspaceMsg" class="text-xs text-center text-gold min-h-[16px]"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة الإدارة -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-onyx border border-gold/30 rounded-2xl w-full max-w-3xl p-6 relative my-8">
+      <button type="button" onclick="closeAdminPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-surface text-gray-300 hover:text-white font-bold">✕</button>
+      <h3 class="text-xl font-extrabold text-gold mb-1">لوحة إدارة PixelPerfect Studio</h3>
+      <p class="text-xs text-gray-400 mb-4">أدخل رمز الإدارة لفتح التحكم في الطلبات والمنتجات الرقمية.</p>
+
+      <div id="adminLockBox" class="space-y-3 bg-surface/70 border border-gold/15 rounded-xl p-4">
+        <input id="adminPinInput" type="password" placeholder="أدخل رمز الإدارة (PP-ADMIN-2026)" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+        <button type="button" onclick="unlockAdminPanel()" class="w-full py-2.5 rounded-xl text-xs font-extrabold gold-btn">فتح لوحة الإدارة</button>
+        <p id="adminLockErr" class="text-xs text-red-400 text-center min-h-[16px]"></p>
+      </div>
+
+      <div id="adminWorkspaceBox" class="hidden space-y-5">
+        <form onsubmit="addDigitalProduct(event)" class="bg-surface/70 border border-gold/15 rounded-xl p-4 space-y-3">
+          <h4 class="text-sm font-bold text-gold">إضافة منتج رقمي جديد</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="prodTitleAr" type="text" required placeholder="اسم المنتج بالعربية" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <input id="prodTitleEn" type="text" required placeholder="Product Title in English" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <input id="prodCategory" type="text" required placeholder="التصنيف (مثال: Branding)" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <input id="prodPriceUsd" type="number" min="0" step="1" required placeholder="السعر بالدولار (مثال: 25)" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+          </div>
+          <button type="submit" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">حفظ المنتج في المتجر</button>
+          <p id="adminProdMsg" class="text-xs text-center text-gold min-h-[16px]"></p>
+        </form>
+
+        <div>
+          <h4 class="text-sm font-bold text-gray-200 mb-2">الطلبات المسجلة</h4>
+          <div id="adminOrdersBox" class="bg-surface/70 border border-gold/15 rounded-xl p-4 max-h-64 overflow-y-auto space-y-2 text-xs">
+            <p class="text-gray-400">جاري تحميل الطلبات...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const SUPABASE_URL = 'https://pcnbtxcsumhoxtuhcoka.supabase.co';
+    const SUPABASE_ANON_KEY = 'Sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf';
+    const ADMIN_PASSCODE = 'PP-ADMIN-2026';
+    const sb = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    const FALLBACK_SERVICES = [
+      { id: '1', title_ar: 'تصميم الهوية البصرية', title_en: 'Brand Identity Design', desc_ar: 'شعار متكامل، ألوان، خطوط، ودليل استخدام احترافي.', desc_en: 'Complete logo, color system, typography, and brand guidelines.' },
+      { id: '2', title_ar: 'إعلانات السوشيال ميديا', title_en: 'Social Media Ads', desc_ar: 'تصاميم حملات إعلانية جذابة ومهيأة لكل المنصات.', desc_en: 'High-converting ad creatives tailored for social channels.' },
+      { id: '3', title_ar: 'تصميم المنتجات والتغليف', title_en: 'Packaging & Product Design', desc_ar: 'إخراج بصري مميز للعبوات والمنتجات والمنشورات.', desc_en: 'Distinctive packaging visuals and product presentation.' },
+      { id: '4', title_ar: 'محتوى 3D والذكاء الاصطناعي', title_en: '3D & AI Visuals', desc_ar: 'مشاهد بصرية ومفاهيم إبداعية مبتكرة عالية الجودة.', desc_en: 'Creative 3D scenes and AI-assisted visual concepts.' },
+      { id: '5', title_ar: 'تصميم واجهات المواقع', title_en: 'UI & Web Design', desc_ar: 'واجهات عصرية وسريعة متوافقة مع الهواتف والكمبيوتر.', desc_en: 'Modern responsive web interfaces for mobile and desktop.' },
+      { id: '6', title_ar: 'قوائم وعروض الأعمال', title_en: 'Menus & Pitch Decks', desc_ar: 'تصميم قوائم وملفات تعريفية واضحة وسهلة التصفح.', desc_en: 'Clean menus, catalogs, and business presentation layouts.' },
+      { id: '7', title_ar: 'إدارة وتطوير المنصات', title_en: 'Platform & Feature Build', desc_ar: 'بناء صفحات ومنصات تفاعلية قابلة للتوسع.', desc_en: 'Scalable interactive web features and workflows.' }
+    ];
+
+    const I18N = {
+      ar: {
+        nav_services: 'الخدمات', nav_studio: 'استوديو التصميم', nav_work: 'أعمال مختارة', nav_contact: 'تواصل معنا',
+        cta_studio: 'ابدأ في الاستوديو التفاعلي', cta_workspace: 'مساحة عمل العميل',
+        stat_services: 'خدمات متخصصة', stat_products: 'منتجات رقمية', stat_orders: 'طلبات مسجلة',
+        sec_services_title: 'الخدمات الإبداعية والرقمية', sec_services_sub: 'حلول عملية قابلة للتنفيذ الفوري وطلبها مباشرة.',
+        sec_studio_title: 'استوديو التصميم السريع والمعاينة المباشرة',
+        lbl_headline: 'العنوان الرئيسي للتصميم', lbl_subline: 'نص فرعي أو شعار قصير',
+        lbl_bg_color: 'لون الخلفية', lbl_accent_color: 'لون التمييز',
+        lbl_upload_img: 'صورة داخل التصميم (اختياري)', btn_download_png: 'تحميل التصميم بصيغة PNG',
+        btn_order_design: 'طلب تنفيذ التصميم عبر واتساب', lbl_live_preview: 'معاينة حية مباشرة',
+        sec_work_title: 'أعمال مختارة وتجارب عملاء', sec_contact_title: 'ابدأ مشروعك الآن',
+        sec_contact_sub: 'ابعت تفاصيل طلبك أو استفسارك وهيتسجل مباشرة في النظام.'
+      },
+      en: {
+        nav_services: 'Services', nav_studio: 'Design Studio', nav_work: 'Selected Work', nav_contact: 'Contact',
+        cta_studio: 'Launch Interactive Studio', cta_workspace: 'Client Workspace',
+        stat_services: 'Core Services', stat_products: 'Digital Products', stat_orders: 'Recorded Orders',
+        sec_services_title: 'Creative & Digital Services', sec_services_sub: 'Practical solutions ready for immediate execution and ordering.',
+        sec_studio_title: 'Rapid Design Studio & Live Preview',
+        lbl_headline: 'Design Headline', lbl_subline: 'Subheadline or Tagline',
+        lbl_bg_color: 'Background Color', lbl_accent_color: 'Accent Color',
+        lbl_upload_img: 'Design Image (Optional)', btn_download_png: 'Download PNG Design',
+        btn_order_design: 'Order Design via WhatsApp', lbl_live_preview: 'Live Preview',
+        sec_work_title: 'Selected Work & Client Feedback', sec_contact_title: 'Start Your Project',
+        sec_contact_sub: 'Send your project details or inquiry and it will be recorded directly.'
+      }
+    };
+
+    let currentLang = 'ar';
+    let studioTemplate = 'ad';
+    let studioUploadedImg = null;
+    let authMode = 'login';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.body.classList.toggle('font-ar', currentLang === 'ar');
+      document.body.classList.toggle('font-en', currentLang === 'en');
+      document.getElementById('langToggleBtn').textContent = currentLang === 'ar' ? 'EN' : 'AR';
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
+      });
+      renderServicesCards(FALLBACK_SERVICES);
+    }
+
+    function renderServicesCards(items) {
+      const grid = document.getElementById('servicesGrid');
+      if (!grid) return;
+      grid.innerHTML = items.map((s, idx) => `
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between hover:border-gold/45 transition">
+          <div>
+            <span class="text-xs font-extrabold text-gold">0${idx + 1}</span>
+            <h3 class="text-base font-extrabold text-white mt-1 mb-2">${currentLang === 'ar' ? s.title_ar : s.title_en}</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">${currentLang === 'ar' ? s.desc_ar : s.desc_en}</p>
+          </div>
+          <a href="#contact" onclick="prefillServiceSubject('${(currentLang === 'ar' ? s.title_ar : s.title_en).replace(/'/g, '')}')" class="mt-4 inline-flex items-center text-xs font-bold text-gold hover:underline">
+            ${currentLang === 'ar' ? 'اطلب هذه الخدمة ←' : 'Request Service →'}
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function prefillServiceSubject(title) {
+      const inp = document.getElementById('contactSubject');
+      if (inp) inp.value = title;
+    }
+
+    function selectStudioTemplate(tpl) {
+      studioTemplate = tpl;
+      renderStudioCanvas();
+    }
+
+    function handleStudioImage(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          studioUploadedImg = img;
+          renderStudioCanvas();
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderStudioCanvas() {
+      const canvas = document.getElementById('studioPreviewCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const title = document.getElementById('studioTitleInput')?.value || 'PixelPerfect Studio';
+      const sub = document.getElementById('studioSubInput')?.value || '';
+      const bg = document.getElementById('studioBgColor')?.value || '#0E0E12';
+      const accent = document.getElementById('studioAccentColor')?.value || '#D4AF37';
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (studioUploadedImg) {
+        ctx.save();
+        ctx.globalAlpha = 0.25;
+        ctx.drawImage(studioUploadedImg, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = studioTemplate === 'brand' ? 6 : 3;
+      ctx.strokeRect(28, 28, canvas.width - 56, canvas.height - 56);
+
+      ctx.fillStyle = accent;
+      ctx.font = 'bold 18px Cairo, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(studioTemplate === 'brand' ? 'BRAND IDENTITY' : 'CREATIVE CAMPAIGN', canvas.width / 2, 110);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 42px Cairo, sans-serif';
+      ctx.fillText(title, canvas.width / 2, canvas.height / 2);
+
+      ctx.fillStyle = '#D1D5DB';
+      ctx.font = '22px Cairo, sans-serif';
+      ctx.fillText(sub, canvas.width / 2, canvas.height / 2 + 52);
+    }
+
+    function downloadStudioDesign() {
+      const canvas = document.getElementById('studioPreviewCanvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = 'PixelPerfect-Design.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function orderStudioDesign() {
+      const title = document.getElementById('studioTitleInput')?.value || 'تصميم مخصص';
+      const msg = encodeURIComponent(`مرحباً PixelPerfect Studio، أرغب في تنفيذ تصميم بعنوان: ${title}`);
+      window.open(`https://wa.me/201016552275?text=${msg}`, '_blank');
+    }
+
+    async function submitContactInquiry(e) {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const msgEl = document.getElementById('contactStatusMsg');
+      btn.disabled = true;
+      msgEl.textContent = 'جاري الإرسال...';
+
+      const payload = {
+        full_name: document.getElementById('contactName').value.trim(),
+        email: document.getElementById('contactEmail').value.trim(),
+        service_title: document.getElementById('contactSubject').value.trim(),
+        details: document.getElementById('contactMessage').value.trim(),
+        status: 'pending'
+      };
+
+      try {
+        if (sb) {
+          const { error } = await sb.from('service_orders').insert([payload]);
+          if (error) throw error;
+        }
+        msgEl.textContent = 'تم تسجيل طلبك بنجاح!';
+        e.target.reset();
+        loadLiveStats();
+      } catch (err) {
+        msgEl.textContent = err.message || 'تعذر الحفظ حالياً، حاول مرة أخرى.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function openClientPortal() {
+      const m = document.getElementById('clientModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      refreshClientSession();
+    }
+
+    function closeClientPortal() {
+      const m = document.getElementById('clientModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function switchAuthTab(mode) {
+      authMode = mode;
+      document.getElementById('signupNameField').classList.toggle('hidden', mode !== 'signup');
+      document.getElementById('tabLoginBtn').className = mode === 'login' ? 'py-2 rounded-xl text-xs font-extrabold gold-btn' : 'py-2 rounded-xl text-xs font-bold bg-surface text-gray-300 border border-gold/20';
+      document.getElementById('tabSignupBtn').className = mode === 'signup' ? 'py-2 rounded-xl text-xs font-extrabold gold-btn' : 'py-2 rounded-xl text-xs font-bold bg-surface text-gray-300 border border-gold/20';
+    }
+
+    async function handleClientAuth(e) {
+      e.preventDefault();
+      const errEl = document.getElementById('clientAuthError');
+      errEl.textContent = '';
+      const email = document.getElementById('authEmail').value.trim();
+      const password = document.getElementById('authPassword').value;
+      const fullName = document.getElementById('authFullName')?.value.trim() || '';
+
+      try {
+        if (authMode === 'signup') {
+          const { data, error } = await sb.auth.signUp({
+            email,
+            password,
+            options: { data: { full_name: fullName } }
+          });
+          if (error) throw error;
+          if (data?.user) {
+            await sb.from('client_profiles').upsert([{ id: data.user.id, email, full_name: fullName }]);
+          }
+        } else {
+          const { error } = await sb.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+        }
+        await refreshClientSession();
+      } catch (err) {
+        errEl.textContent = err.message || 'تعذر إتمام العملية';
+      }
+    }
+
+    async function handleClientLogout() {
+      if (sb) await sb.auth.signOut();
+      refreshClientSession();
+    }
+
+    async function refreshClientSession() {
+      if (!sb) return;
+      const { data: { user } } = await sb.auth.getUser();
+      const authView = document.getElementById('clientAuthView');
+      const dashView = document.getElementById('clientDashboardView');
+
+      if (!user) {
+        authView.classList.remove('hidden');
+        dashView.classList.add('hidden');
+        return;
+      }
+
+      authView.classList.add('hidden');
+      dashView.classList.remove('hidden');
+      document.getElementById('clientWelcomeTitle').textContent = `مرحباً ${user.user_metadata?.full_name || 'عميلنا'}`;
+      document.getElementById('clientEmailLabel').textContent = user.email || '';
+
+      const { data: orders } = await sb
+        .from('service_orders')
+        .select('id, service_title, status, created_at')
+        .eq('email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(15);
+
+      const listEl = document.getElementById('clientOrdersList');
+      if (!orders || orders.length === 0) {
+        listEl.innerHTML = '<p class="text-gray-400">لا توجد طلبات مسجلة بهذا البريد حتى الآن.</p>';
+      } else {
+        listEl.innerHTML = orders.map((o) => `
+          <div class="p-3 rounded-xl bg-obsidian border border-gold/15 flex items-center justify-between gap-2">
+            <div>
+              <div class="font-bold text-white">${o.service_title || 'طلب خدمة'}</div>
+              <div class="text-[11px] text-gray-500">${o.id}</div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-gold/15 text-gold">${o.status || 'pending'}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    async function submitWorkspaceUpdate(e) {
+      e.preventDefault();
+      if (!sb) return;
+      const msgEl = document.getElementById('workspaceMsg');
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) return;
+
+      msgEl.textContent = 'جاري حفظ التحديث...';
+      let attachmentUrl = null;
+      const file = document.getElementById('workspaceFileInput')?.files?.[0];
+      const rawOrderId = document.getElementById('workspaceOrderId')?.value.trim() || null;
+      const note = document.getElementById('workspaceNote')?.value.trim();
+
+      try {
+        if (file) {
+          const safeName = `${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+          const { error: upErr } = await sb.storage.from('workspace_attachments').upload(safeName, file);
+          if (upErr) throw upErr;
+          attachmentUrl = safeName;
+        }
+
+        const insertRow = {
+          author_id: user.id,
+          stage: 'Client Note',
+          note,
+          attachment_url: attachmentUrl
+        };
+        if (rawOrderId) insertRow.order_id = rawOrderId;
+
+        const { error } = await sb.from('order_updates').insert([insertRow]);
+        if (error) throw error;
+
+        msgEl.textContent = 'تم إرسال ملاحظتك بنجاح!';
+        e.target.reset();
+      } catch (err) {
+        msgEl.textContent = err.message || 'حدث خطأ أثناء الحفظ.';
+      }
+    }
+
+    function openAdminPortal() {
+      const m = document.getElementById('adminModal');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeAdminPortal() {
+      const m = document.getElementById('adminModal');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    async function unlockAdminPanel() {
+      const pin = document.getElementById('adminPinInput')?.value.trim();
+      const errEl = document.getElementById('adminLockErr');
+      if (pin !== ADMIN_PASSCODE) {
+        errEl.textContent = 'رمز الإدارة غير صحيح.';
+        return;
+      }
+      errEl.textContent = '';
+      document.getElementById('adminLockBox').classList.add('hidden');
+      document.getElementById('adminWorkspaceBox').classList.remove('hidden');
+      await loadAdminOrders();
+    }
+
+    async function addDigitalProduct(e) {
+      e.preventDefault();
+      const msgEl = document.getElementById('adminProdMsg');
+      if (!sb) return;
+      msgEl.textContent = 'جاري إضافة المنتج...';
+      const priceUsd = Number(document.getElementById('prodPriceUsd').value || 0);
+
+      const row = {
+        title_ar: document.getElementById('prodTitleAr').value.trim(),
+        title_en: document.getElementById('prodTitleEn').value.trim(),
+        category: document.getElementById('prodCategory').value.trim(),
+        price_cents: Math.round(priceUsd * 100),
+        currency: 'USD',
+        is_active: true
+      };
+
+      const { error } = await sb.from('digital_products').insert([row]);
+      if (error) {
+        msgEl.textContent = error.message || 'تعذر إضافة المنتج.';
+        return;
+      }
+      msgEl.textContent = 'تمت إضافة المنتج بنجاح!';
+      e.target.reset();
+      loadLiveStats();
+    }
+
+    async function loadAdminOrders() {
+      const box = document.getElementById('adminOrdersBox');
+      if (!sb) return;
+
+      const { data, error } = await sb
+        .from('service_orders')
+        .select('id, full_name, email, service_title, status, created_at')
+        .order('created_at', { ascending: false })
+        .limit(25);
+
+      if (error || !data) {
+        box.innerHTML = '<p class="text-gray-400">تعذر جلب الطلبات.</p>';
+        return;
+      }
+
+      box.innerHTML = data.length
+        ? data.map((r) => `
+            <div class="p-3 rounded-xl bg-obsidian border border-gold/15 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div class="font-bold text-white">${r.full_name || 'عميل'} — <span class="text-gold">${r.service_title || ''}</span></div>
+                <div class="text-[11px] text-gray-400">${r.email || ''}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-gold/15 text-gold">${r.status || 'pending'}</span>
+            </div>
+          `).join('')
+        : '<p class="text-gray-400">لا توجد طلبات مسجلة حالياً.</p>';
+    }
+
+    async function loadLiveStats() {
+      if (!sb) return;
+      try {
+        const [{ count: prodCount }, { count: ordCount }] = await Promise.all([
+          sb.from('digital_products').select('*', { count: 'exact', head: true }).eq('is_active', true),
+          sb.from('service_orders').select('*', { count: 'exact', head: true })
+        ]);
+        if (typeof prodCount === 'number') document.getElementById('statProductsCount').textContent = prodCount;
+        if (typeof ordCount === 'number') document.getElementById('statOrdersCount').textContent = ordCount;
+      } catch (_) {}
+    }
+
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+    renderServicesCards(FALLBACK_SERVICES);
+    renderStudioCanvas();
+    loadLiveStats();
+  </script>
+</body>
+</html>
