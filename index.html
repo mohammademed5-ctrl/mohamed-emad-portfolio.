@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PixelPerfect Studio — Global Platform V3</title>
-  <meta name="description" content="Your Vision. Our Intelligence. Unlimited Possibilities. AI business building, brand identity lab, creative marketplace, client workspace, and global community by Mohamed Emad." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -47,48 +46,51 @@
       box-shadow: 0 10px 25px rgba(212, 175, 55, 0.28);
     }
     .glass-card {
-      background: rgba(20, 20, 26, 0.88);
+      background: rgba(20, 20, 26, 0.9);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(212, 175, 55, 0.18);
     }
-    .hero-banner-box {
-      background:
-        radial-gradient(circle at top right, rgba(212, 175, 55, 0.22), transparent 55%),
-        radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.12), transparent 50%),
-        linear-gradient(135deg, #0E0E12 0%, #171720 100%);
+    @keyframes floatCell {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-7px) scale(1.012); }
+    }
+    .light-platform-cell {
+      background: linear-gradient(145deg, #FFFFFF 0%, #F7F4EC 55%, #EFE7D2 100%);
+      color: #14141A;
+      border: 1px solid rgba(212, 175, 55, 0.55);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      animation: floatCell 4.5s ease-in-out infinite;
     }
   </style>
 </head>
 <body class="bg-obsidian text-gray-100 font-ar antialiased selection:bg-gold selection:text-obsidian">
 
-  <!-- الشريط العلوي -->
+  <!-- الشريط العلوي مع زر الـ 3 شرط -->
   <header class="sticky top-0 z-40 bg-obsidian/95 backdrop-blur-md border-b border-gold/15">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
-      <a href="#top" class="flex items-center gap-2 shrink-0">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-goldLight via-gold to-goldDark text-obsidian font-black flex items-center justify-center text-sm shadow">
-          PP
-        </div>
-        <div>
-          <span class="font-extrabold text-sm sm:text-lg tracking-tight gold-gradient-text block leading-none">PixelPerfect</span>
-          <span class="text-[10px] text-gray-400 tracking-widest uppercase">Global Platform V3</span>
-        </div>
-      </a>
-
-      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-300">
-        <a href="#services" data-i18n="nav_services" class="hover:text-gold transition">الخدمات</a>
-        <a href="#studio" data-i18n="nav_studio" class="hover:text-gold transition">استوديو التصميم</a>
-        <a href="#work" data-i18n="nav_work" class="hover:text-gold transition">أعمال مختارة</a>
-        <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">تواصل معنا</a>
-      </nav>
+      <div class="flex items-center gap-2.5">
+        <button type="button" onclick="toggleSideDrawer()" aria-label="القائمة" class="w-9 h-9 rounded-xl bg-surface border border-gold/30 text-gold flex items-center justify-center text-lg font-black hover:bg-gold/10 transition">
+          ☰
+        </button>
+        <a href="#top" class="flex items-center gap-2 shrink-0">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-goldLight via-gold to-goldDark text-obsidian font-black flex items-center justify-center text-sm shadow">
+            PP
+          </div>
+          <div>
+            <span class="font-extrabold text-sm sm:text-lg tracking-tight gold-gradient-text block leading-none">PixelPerfect</span>
+            <span class="text-[10px] text-gray-400 tracking-widest uppercase">Global Platform V3</span>
+          </div>
+        </a>
+      </div>
 
       <div class="flex items-center gap-1.5 sm:gap-2">
         <button type="button" onclick="toggleLanguage()" id="langToggleBtn" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-gold/30 text-gold hover:bg-gold/10 transition">
           EN
         </button>
-        <button type="button" onclick="openClientPortal()" id="clientPortalBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold border border-gold/40 text-gold hover:bg-gold/10 transition">
-          حساب العملاء
+        <button type="button" onclick="openClientPortal()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-bold border border-gold/40 text-gold hover:bg-gold/10 transition">
+          تسجيل الدخول
         </button>
-        <button type="button" onclick="openAdminPortal()" id="adminPortalBtn" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-extrabold gold-btn flex items-center gap-1">
+        <button type="button" onclick="openAdminPortal()" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-extrabold gold-btn flex items-center gap-1">
           <span>🔒</span>
           <span>الإدارة</span>
         </button>
@@ -96,8 +98,38 @@
     </div>
   </header>
 
-  <!-- القسم الرئيسي Hero + بانر -->
-  <section id="top" class="relative overflow-hidden py-12 sm:py-20 px-4 sm:px-6 border-b border-gold/10">
+  <!-- القائمة الجانبية (الـ 3 شرط) -->
+  <aside id="sideDrawer" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm">
+    <div class="w-72 max-w-[85vw] h-full bg-onyx border-l border-gold/30 p-5 flex flex-col justify-between overflow-y-auto">
+      <div class="space-y-4">
+        <div class="flex items-center justify-between border-b border-gold/15 pb-3">
+          <span class="font-extrabold text-gold text-sm">قائمة PixelPerfect V3</span>
+          <button type="button" onclick="toggleSideDrawer()" class="w-8 h-8 rounded-lg bg-surface text-gray-300 font-bold">✕</button>
+        </div>
+
+        <button type="button" onclick="toggleSideDrawer(); openClientPortal();" class="w-full py-2.5 px-3 rounded-xl text-xs font-extrabold gold-btn text-right">
+          👤 تسجيل الدخول / حساب العملاء
+        </button>
+        <button type="button" onclick="toggleSideDrawer(); openAdminPortal();" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold bg-surface border border-gold/30 text-gold text-right">
+          🔒 لوحة تحكم الإدارة والبانر
+        </button>
+
+        <div class="pt-2 border-t border-gold/10 space-y-2 text-xs font-bold text-gray-200">
+          <a href="#top" onclick="toggleSideDrawer()" class="block py-2 px-3 rounded-lg hover:bg-surface">الرئيسية والبانر</a>
+          <a href="#services" onclick="toggleSideDrawer()" class="block py-2 px-3 rounded-lg hover:bg-surface">الخدمات الإبداعية</a>
+          <a href="#studio" onclick="toggleSideDrawer()" class="block py-2 px-3 rounded-lg hover:bg-surface">استوديو التصميم</a>
+          <a href="#contact" onclick="toggleSideDrawer()" class="block py-2 px-3 rounded-lg hover:bg-surface">طلب خدمة / تواصل</a>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-gray-500 pt-4 border-t border-gold/10">
+        PixelPerfect Studio • Global Platform V3
+      </div>
+    </div>
+  </aside>
+
+  <!-- القسم الرئيسي Hero + بانر قابل للتحكم + خلية متحركة بلون فاتح -->
+  <section id="top" class="relative overflow-hidden py-12 sm:py-16 px-4 sm:px-6 border-b border-gold/10">
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       <div class="lg:col-span-7 text-center lg:text-start">
         <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-gold/25 text-gold text-xs font-bold mb-5">
@@ -110,15 +142,31 @@
           Your Vision. Our Intelligence. Unlimited Possibilities.
         </h1>
 
-        <p id="heroSubtitle" class="max-w-2xl mx-auto lg:mx-0 text-gray-300 text-sm sm:text-base leading-relaxed mb-7">
+        <p id="heroSubtitle" class="max-w-2xl mx-auto lg:mx-0 text-gray-300 text-sm sm:text-base leading-relaxed mb-6">
           منصة رقمية متكاملة تجمع الذكاء الاصطناعي، بناء العلامات التجارية، الخدمات الإبداعية، ومتابعة المشاريع للعملاء والمبدعين.
         </p>
 
-        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8">
-          <a href="#studio" data-i18n="cta_studio" class="px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm gold-btn">
+        <!-- خلية متحركة للمنصة بلون فاتح -->
+        <div class="light-platform-cell rounded-2xl p-4 sm:p-5 mb-7 text-right">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <span class="text-[11px] font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
+              LIGHT PLATFORM CELL
+            </span>
+            <span class="text-[11px] font-bold text-amber-900">V3 LIVE</span>
+          </div>
+          <div id="lightCellTitle" class="text-base sm:text-lg font-black text-gray-900">
+            منصة PixelPerfect الذكية للمبدعين والشركات
+          </div>
+          <p id="lightCellDesc" class="text-xs text-gray-700 mt-1 leading-relaxed">
+            إدارة المشاريع، استوديو التصميم الفوري، الهويات التجارية، ومتابعة العملاء في واجهة سريعة ومشرقة.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-7">
+          <a href="#studio" class="px-5 py-3 rounded-xl font-extrabold text-xs sm:text-sm gold-btn">
             ابدأ في الاستوديو التفاعلي
           </a>
-          <button type="button" onclick="openClientPortal()" data-i18n="cta_workspace" class="px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-surface border border-gold/30 text-gray-100 hover:border-gold transition">
+          <button type="button" onclick="openClientPortal()" class="px-5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-surface border border-gold/30 text-gray-100 hover:border-gold transition">
             مساحة عمل العميل
           </button>
         </div>
@@ -127,42 +175,35 @@
         <div class="grid grid-cols-3 gap-3 max-w-xl mx-auto lg:mx-0">
           <div class="glass-card rounded-2xl p-3.5 text-center">
             <div id="statServicesCount" class="text-xl sm:text-2xl font-black text-gold">7</div>
-            <div data-i18n="stat_services" class="text-[11px] sm:text-xs text-gray-400 mt-1">خدمات متخصصة</div>
+            <div class="text-[11px] sm:text-xs text-gray-400 mt-1">خدمات متخصصة</div>
           </div>
           <div class="glass-card rounded-2xl p-3.5 text-center">
             <div id="statProductsCount" class="text-xl sm:text-2xl font-black text-gold">0</div>
-            <div data-i18n="stat_products" class="text-[11px] sm:text-xs text-gray-400 mt-1">منتجات رقمية</div>
+            <div class="text-[11px] sm:text-xs text-gray-400 mt-1">منتجات رقمية</div>
           </div>
           <div class="glass-card rounded-2xl p-3.5 text-center">
             <div id="statOrdersCount" class="text-xl sm:text-2xl font-black text-gold">0</div>
-            <div data-i18n="stat_orders" class="text-[11px] sm:text-xs text-gray-400 mt-1">طلبات مسجلة</div>
+            <div class="text-[11px] sm:text-xs text-gray-400 mt-1">طلبات مسجلة</div>
           </div>
         </div>
       </div>
 
-      <!-- بانر بصري فاخر -->
+      <!-- بانر بصري وصورة قابلة للتحكم الكامل من لوحة الإدارة -->
       <div class="lg:col-span-5">
-        <div class="hero-banner-box border border-gold/30 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between text-xs text-gold font-bold">
-            <span>V3 CREATIVE & AI SUITE</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-gold/15 border border-gold/30">LIVE</span>
-          </div>
-          <div class="p-4 rounded-2xl bg-obsidian/80 border border-gold/15 space-y-2">
-            <div class="text-xs text-gray-400">Brand Identity • 3D & AI • Web & Marketplace</div>
-            <div class="text-lg font-extrabold text-white">تجربة إنتاج وتصميم متكاملة</div>
-            <p class="text-xs text-gray-400 leading-relaxed">
-              أنشئ تصاميمك فوراً، تابع طلباتك وملاحظاتك من مكان واحد، وأدر منتجاتك وخدماتك بسهولة.
-            </p>
-          </div>
-          <div class="grid grid-cols-2 gap-3 text-xs">
-            <div class="p-3 rounded-xl bg-obsidian/70 border border-gold/15">
-              <div class="text-gold font-extrabold">Client Workspace</div>
-              <div class="text-gray-400 mt-0.5">متابعة ومرفقات مباشرة</div>
+        <div class="glass-card border border-gold/30 rounded-3xl overflow-hidden shadow-2xl">
+          <div class="relative h-56 sm:h-64 bg-surface flex items-center justify-center overflow-hidden">
+            <img id="bannerImageEl" src="" alt="Banner" class="w-full h-full object-cover hidden" />
+            <div id="bannerFallbackBox" class="p-6 text-center space-y-2">
+              <span class="text-xs font-extrabold text-gold tracking-widest uppercase">PixelPerfect Banner</span>
+              <div id="bannerTitleEl" class="text-xl font-black text-white">إنتاج بصري وهويات رقمية</div>
+              <p id="bannerSubEl" class="text-xs text-gray-400">يمكنك تعديل الصورة والعنوان والوصف من لوحة الإدارة.</p>
             </div>
-            <div class="p-3 rounded-xl bg-obsidian/70 border border-gold/15">
-              <div class="text-gold font-extrabold">Admin Control</div>
-              <div class="text-gray-400 mt-0.5">إدارة الطلبات والمنتجات</div>
-            </div>
+          </div>
+          <div class="p-4 bg-onyx/90 flex items-center justify-between gap-2 border-t border-gold/15">
+            <span class="text-xs text-gray-300 font-bold">تحكم كامل في البانر والصورة</span>
+            <button type="button" onclick="openAdminPortal()" class="px-3 py-1.5 rounded-lg text-xs font-extrabold gold-btn">
+              تعديل البانر
+            </button>
           </div>
         </div>
       </div>
@@ -171,12 +212,9 @@
 
   <!-- قسم الخدمات -->
   <section id="services" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">
-      <div>
-        <span class="text-gold text-xs font-bold uppercase tracking-wider">Services</span>
-        <h2 data-i18n="sec_services_title" class="text-2xl sm:text-3xl font-extrabold mt-1">الخدمات الإبداعية والرقمية</h2>
-      </div>
-      <p data-i18n="sec_services_sub" class="text-sm text-gray-400">حلول عملية قابلة للتنفيذ الفوري وطلبها مباشرة.</p>
+    <div class="mb-8">
+      <span class="text-gold text-xs font-bold uppercase tracking-wider">Services</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">الخدمات الإبداعية والرقمية</h2>
     </div>
     <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
   </section>
@@ -184,49 +222,49 @@
   <section id="studio" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
     <div class="mb-8">
       <span class="text-gold text-xs font-bold uppercase tracking-wider">Interactive Studio</span>
-      <h2 data-i18n="sec_studio_title" class="text-2xl sm:text-3xl font-extrabold mt-1">استوديو التصميم السريع والمعاينة المباشرة</h2>
+      <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">استوديو التصميم السريع والمعاينة المباشرة</h2>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 glass-card rounded-2xl p-5 sm:p-7">
       <div class="lg:col-span-5 space-y-4">
         <div>
-          <label data-i18n="lbl_headline" class="block text-xs font-bold text-gray-300 mb-1.5">العنوان الرئيسي للتصميم</label>
+          <label class="block text-xs font-bold text-gray-300 mb-1.5">العنوان الرئيسي للتصميم</label>
           <input id="studioTitleInput" type="text" value="PixelPerfect Studio" oninput="renderStudioCanvas()" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm focus:border-gold outline-none" />
         </div>
         <div>
-          <label data-i18n="lbl_subline" class="block text-xs font-bold text-gray-300 mb-1.5">نص فرعي أو شعار قصير</label>
+          <label class="block text-xs font-bold text-gray-300 mb-1.5">نص فرعي أو شعار قصير</label>
           <input id="studioSubInput" type="text" value="Creative Direction & Digital Craft" oninput="renderStudioCanvas()" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm focus:border-gold outline-none" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label data-i18n="lbl_bg_color" class="block text-xs font-bold text-gray-300 mb-1.5">لون الخلفية</label>
+            <label class="block text-xs font-bold text-gray-300 mb-1.5">لون الخلفية</label>
             <input id="studioBgColor" type="color" value="#0E0E12" oninput="renderStudioCanvas()" class="w-full h-10 rounded-lg bg-obsidian border border-gold/25 cursor-pointer" />
           </div>
           <div>
-            <label data-i18n="lbl_accent_color" class="block text-xs font-bold text-gray-300 mb-1.5">لون التمييز</label>
+            <label class="block text-xs font-bold text-gray-300 mb-1.5">لون التمييز</label>
             <input id="studioAccentColor" type="color" value="#D4AF37" oninput="renderStudioCanvas()" class="w-full h-10 rounded-lg bg-obsidian border border-gold/25 cursor-pointer" />
           </div>
         </div>
         <div class="border-t border-gold/15 pt-3">
-          <label data-i18n="lbl_upload_img" class="block text-xs font-bold text-gray-300 mb-1.5">صورة داخل التصميم (اختياري)</label>
+          <label class="block text-xs font-bold text-gray-300 mb-1.5">صورة داخل التصميم (اختياري)</label>
           <input id="studioImageInput" type="file" accept="image/*" onchange="handleStudioImage(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-gold/15 file:text-gold file:font-bold" />
         </div>
         <div class="grid grid-cols-2 gap-2.5 pt-2">
           <button type="button" onclick="selectStudioTemplate('ad')" class="py-2 px-3 rounded-xl text-xs font-bold bg-obsidian border border-gold/25 hover:border-gold">قالب إعلاني</button>
           <button type="button" onclick="selectStudioTemplate('brand')" class="py-2 px-3 rounded-xl text-xs font-bold bg-obsidian border border-gold/25 hover:border-gold">بطاقة هوية</button>
         </div>
-        <button type="button" onclick="downloadStudioDesign()" data-i18n="btn_download_png" class="w-full py-2.5 rounded-xl text-xs font-extrabold gold-btn">
+        <button type="button" onclick="downloadStudioDesign()" class="w-full py-2.5 rounded-xl text-xs font-extrabold gold-btn">
           تحميل التصميم بصيغة PNG
         </button>
-        <button type="button" onclick="orderStudioDesign()" data-i18n="btn_order_design" class="w-full py-2.5 rounded-xl text-xs font-bold bg-surface border border-gold/40 text-gold hover:bg-gold/10">
+        <button type="button" onclick="orderStudioDesign()" class="w-full py-2.5 rounded-xl text-xs font-bold bg-surface border border-gold/40 text-gold hover:bg-gold/10">
           طلب تنفيذ التصميم عبر واتساب
         </button>
       </div>
 
       <div class="lg:col-span-7 flex flex-col justify-between">
         <div class="w-full flex items-center justify-between mb-3">
-          <span data-i18n="lbl_live_preview" class="text-xs font-bold text-gold">معاينة حية مباشرة</span>
-          <span id="studioFormatBadge" class="text-xs text-gray-400">600 × 600</span>
+          <span class="text-xs font-bold text-gold">معاينة حية مباشرة</span>
+          <span class="text-xs text-gray-400">600 × 600</span>
         </div>
         <div class="w-full flex items-center justify-center bg-obsidian rounded-2xl p-4 border border-gold/15 min-h-[280px]">
           <canvas id="studioPreviewCanvas" width="600" height="600" class="max-w-full max-h-[360px] rounded-xl shadow-2xl"></canvas>
@@ -235,45 +273,12 @@
     </div>
   </section>
 
-  <!-- قسم الأعمال المختارة -->
-  <section id="work" class="py-14 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
-    <div class="mb-8">
-      <span class="text-gold text-xs font-bold uppercase tracking-wider">Selected Work</span>
-      <h2 data-i18n="sec_work_title" class="text-2xl sm:text-3xl font-extrabold mt-1">أعمال مختارة وتجارب عملاء</h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-      <div class="glass-card rounded-2xl p-5">
-        <span class="text-xs font-bold text-gold">01 • Branding & Identity</span>
-        <h3 class="text-lg font-extrabold mt-1 mb-2">هوية وتغليف علامات تجارية</h3>
-        <p class="text-sm text-gray-400">تصميم هويات بصرية، قوائم ومنتجات، ومواد عرض متكاملة بهوية واضحة.</p>
-      </div>
-      <div class="glass-card rounded-2xl p-5">
-        <span class="text-xs font-bold text-gold">02 • 3D & AI Creative</span>
-        <h3 class="text-lg font-extrabold mt-1 mb-2">إنتاج بصري وإعلانات رقمية</h3>
-        <p class="text-sm text-gray-400">مشاهد بصرية، بورتريهات عالية التفاصيل، ومحتوى قصير جذاب للمنصات.</p>
-      </div>
-      <div class="glass-card rounded-2xl p-5">
-        <span class="text-xs font-bold text-gold">03 • Web & Platforms</span>
-        <h3 class="text-lg font-extrabold mt-1 mb-2">واجهات ويب ومنصات تفاعلية</h3>
-        <p class="text-sm text-gray-400">تطوير مواقع متجاوبة مربوطة بقواعد بيانات وتجربة استخدام سريعة.</p>
-      </div>
-    </div>
-
-    <div class="glass-card rounded-2xl p-5 border border-gold/20">
-      <p class="text-sm text-gray-200 italic leading-relaxed">
-        "تنفيذ دقيق، التزام بالتفاصيل، وسرعة في تحويل الفكرة إلى نتيجة جاهزة للنشر والاستخدام الفعلي."
-      </p>
-      <div class="mt-2.5 text-xs font-bold text-gold">— عملاء PixelPerfect Studio</div>
-    </div>
-  </section>
-
   <!-- قسم التواصل -->
   <section id="contact" class="py-14 px-4 sm:px-6 max-w-4xl mx-auto border-t border-gold/10">
     <div class="text-center mb-8">
       <span class="text-gold text-xs font-bold uppercase tracking-wider">Contact</span>
-      <h2 data-i18n="sec_contact_title" class="text-2xl sm:text-3xl font-extrabold mt-1">ابدأ مشروعك الآن</h2>
-      <p data-i18n="sec_contact_sub" class="text-sm text-gray-400 mt-2">ابعت تفاصيل طلبك أو استفسارك وهيتسجل مباشرة في النظام.</p>
+      <h2 class="text-2xl sm:text-3xl font-extrabold mt-1">ابدأ مشروعك الآن</h2>
+      <p class="text-sm text-gray-400 mt-2">ابعت تفاصيل طلبك أو استفسارك وهيتسجل مباشرة في النظام.</p>
     </div>
 
     <form id="contactForm" onsubmit="submitContactInquiry(event)" class="glass-card rounded-2xl p-6 space-y-4">
@@ -292,14 +297,15 @@
   <footer class="border-t border-gold/15 py-8 px-4 text-center text-xs text-gray-400">
     <p>© <span id="footerYear">2026</span> PixelPerfect Studio — Founded by Mohamed Emad. All rights reserved.</p>
   </footer>
-  <!-- نافذة حساب العملاء ومساحة العمل (Client Workspace) -->
+
+  <!-- نافذة تسجيل الدخول وحساب العملاء -->
   <div id="clientModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
     <div class="bg-onyx border border-gold/30 rounded-2xl w-full max-w-2xl p-6 relative my-8">
       <button type="button" onclick="closeClientPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-surface text-gray-300 hover:text-white font-bold">✕</button>
 
       <div id="clientAuthView">
-        <h3 class="text-xl font-extrabold text-gold mb-1">حساب العملاء — Client Workspace</h3>
-        <p class="text-xs text-gray-400 mb-5">سجّل دخولك أو أنشئ حساباً لمتابعة طلباتك ومشاركة الملاحظات والمرفقات.</p>
+        <h3 class="text-xl font-extrabold text-gold mb-1">تسجيل الدخول — Client Workspace</h3>
+        <p class="text-xs text-gray-400 mb-5">سجّل دخولك أو أنشئ حساباً لمتابعة طلباتك وإضافة الملاحظات والمرفقات.</p>
 
         <div class="grid grid-cols-2 gap-2 mb-4">
           <button type="button" id="tabLoginBtn" onclick="switchAuthTab('login')" class="py-2 rounded-xl text-xs font-extrabold gold-btn">تسجيل الدخول</button>
@@ -312,7 +318,7 @@
           </div>
           <input id="authEmail" type="email" required placeholder="البريد الإلكتروني" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
           <input id="authPassword" type="password" required minlength="6" placeholder="كلمة المرور (6 أحرف فأكثر)" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
-          <button type="submit" id="authSubmitBtn" class="w-full py-2.5 rounded-xl text-sm font-extrabold gold-btn">متابعة</button>
+          <button type="submit" class="w-full py-2.5 rounded-xl text-sm font-extrabold gold-btn">متابعة</button>
           <p id="clientAuthError" class="text-xs text-red-400 text-center min-h-[18px]"></p>
         </form>
       </div>
@@ -335,33 +341,49 @@
 
         <form id="workspaceUpdateForm" onsubmit="submitWorkspaceUpdate(event)" class="bg-surface/80 border border-gold/20 rounded-xl p-4 space-y-3">
           <h4 class="text-sm font-bold text-gold">إضافة ملاحظة أو مرفق للمشروع</h4>
-          <input id="workspaceOrderId" type="text" placeholder="رقم الطلب (اختياري أو اتركه فارغاً)" class="w-full px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
           <textarea id="workspaceNote" rows="2" required placeholder="اكتب ملاحظتك أو تحديثك هنا..." class="w-full px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold"></textarea>
-          <div>
-            <label class="block text-[11px] text-gray-400 mb-1">رفع مرفق آمن (اختياري)</label>
-            <input id="workspaceFileInput" type="file" class="w-full text-xs text-gray-400" />
-          </div>
-          <button type="submit" id="workspaceSubmitBtn" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">إرسال التحديث</button>
+          <input id="workspaceFileInput" type="file" class="w-full text-xs text-gray-400" />
+          <button type="submit" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">إرسال التحديث</button>
           <p id="workspaceMsg" class="text-xs text-center text-gold min-h-[16px]"></p>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- نافذة الإدارة -->
+  <!-- نافذة لوحة تحكم الإدارة الكاملة -->
   <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
     <div class="bg-onyx border border-gold/30 rounded-2xl w-full max-w-3xl p-6 relative my-8">
       <button type="button" onclick="closeAdminPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-surface text-gray-300 hover:text-white font-bold">✕</button>
-      <h3 class="text-xl font-extrabold text-gold mb-1">لوحة إدارة PixelPerfect Studio</h3>
-      <p class="text-xs text-gray-400 mb-4">أدخل رمز الإدارة لفتح التحكم في الطلبات والمنتجات الرقمية.</p>
+      <h3 class="text-xl font-extrabold text-gold mb-1">لوحة تحكم إدارة PixelPerfect Studio</h3>
+      <p class="text-xs text-gray-400 mb-4">أدخل كلمة السر لفتح التحكم في البانر، الصورة، الخلية الفاتحة، والطلبات.</p>
 
       <div id="adminLockBox" class="space-y-3 bg-surface/70 border border-gold/15 rounded-xl p-4">
-        <input id="adminPinInput" type="password" placeholder="أدخل رمز الإدارة (PP-ADMIN-2026)" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
+        <input id="adminPinInput" type="password" placeholder="أدخل كلمة سر الإدارة" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm outline-none focus:border-gold" />
         <button type="button" onclick="unlockAdminPanel()" class="w-full py-2.5 rounded-xl text-xs font-extrabold gold-btn">فتح لوحة الإدارة</button>
         <p id="adminLockErr" class="text-xs text-red-400 text-center min-h-[16px]"></p>
       </div>
 
       <div id="adminWorkspaceBox" class="hidden space-y-5">
+        <!-- تحكم كامل في البانر والصورة والخلية الفاتحة -->
+        <div class="bg-surface/70 border border-gold/20 rounded-xl p-4 space-y-3">
+          <h4 class="text-sm font-bold text-gold">تحكم البانر والصورة والخلية الفاتحة</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="adminBannerTitleInput" type="text" placeholder="عنوان البانر" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <input id="adminBannerSubInput" type="text" placeholder="وصف البانر" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input id="adminBannerImgUrl" type="url" placeholder="رابط صورة البانر (https://...)" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <div>
+              <label class="block text-[11px] text-gray-400 mb-1">أو ارفع صورة من جهازك للبانر</label>
+              <input id="adminBannerImgFile" type="file" accept="image/*" onchange="handleAdminBannerFile(event)" class="w-full text-xs text-gray-400" />
+            </div>
+          </div>
+          <input id="adminLightCellInput" type="text" placeholder="نص الخلية الفاتحة المتحركة" class="w-full px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+          <button type="button" onclick="saveBannerAndCellSettings()" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">حفظ إعدادات البانر والخلية</button>
+          <p id="adminBannerMsg" class="text-xs text-center text-gold min-h-[16px]"></p>
+        </div>
+
+        <!-- إضافة منتج رقمي -->
         <form onsubmit="addDigitalProduct(event)" class="bg-surface/70 border border-gold/15 rounded-xl p-4 space-y-3">
           <h4 class="text-sm font-bold text-gold">إضافة منتج رقمي جديد</h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -369,15 +391,16 @@
             <input id="prodTitleEn" type="text" required placeholder="Product Title in English" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
           </div>
           <div class="grid grid-cols-2 gap-3">
-            <input id="prodCategory" type="text" required placeholder="التصنيف (مثال: Branding)" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
-            <input id="prodPriceUsd" type="number" min="0" step="1" required placeholder="السعر بالدولار (مثال: 25)" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <input id="prodCategory" type="text" required placeholder="التصنيف" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
+            <input id="prodPriceUsd" type="number" min="0" step="1" required placeholder="السعر بالدولار" class="px-3 py-2 rounded-lg bg-obsidian border border-gold/20 text-xs outline-none focus:border-gold" />
           </div>
-          <button type="submit" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">حفظ المنتج في المتجر</button>
+          <button type="submit" class="w-full py-2 rounded-xl text-xs font-extrabold gold-btn">حفظ المنتج</button>
           <p id="adminProdMsg" class="text-xs text-center text-gold min-h-[16px]"></p>
         </form>
 
+        <!-- إدارة الطلبات -->
         <div>
-          <h4 class="text-sm font-bold text-gray-200 mb-2">الطلبات المسجلة</h4>
+          <h4 class="text-sm font-bold text-gray-200 mb-2">الطلبات المسجلة والتحكم في حالتها</h4>
           <div id="adminOrdersBox" class="bg-surface/70 border border-gold/15 rounded-xl p-4 max-h-64 overflow-y-auto space-y-2 text-xs">
             <p class="text-gray-400">جاري تحميل الطلبات...</p>
           </div>
@@ -388,7 +411,7 @@
   <script>
     const SUPABASE_URL = 'https://pcnbtxcsumhoxtuhcoka.supabase.co';
     const SUPABASE_ANON_KEY = 'Sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf';
-    const ADMIN_PASSCODE = 'PP-ADMIN-2026';
+    const ADMIN_PASSCODE = 'M@mohmed_emad__3';
     const sb = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
     const FALLBACK_SERVICES = [
@@ -403,30 +426,10 @@
 
     const I18N = {
       ar: {
-        nav_services: 'الخدمات', nav_studio: 'استوديو التصميم', nav_work: 'أعمال مختارة', nav_contact: 'تواصل معنا',
-        cta_studio: 'ابدأ في الاستوديو التفاعلي', cta_workspace: 'مساحة عمل العميل',
-        stat_services: 'خدمات متخصصة', stat_products: 'منتجات رقمية', stat_orders: 'طلبات مسجلة',
-        sec_services_title: 'الخدمات الإبداعية والرقمية', sec_services_sub: 'حلول عملية قابلة للتنفيذ الفوري وطلبها مباشرة.',
-        sec_studio_title: 'استوديو التصميم السريع والمعاينة المباشرة',
-        lbl_headline: 'العنوان الرئيسي للتصميم', lbl_subline: 'نص فرعي أو شعار قصير',
-        lbl_bg_color: 'لون الخلفية', lbl_accent_color: 'لون التمييز',
-        lbl_upload_img: 'صورة داخل التصميم (اختياري)', btn_download_png: 'تحميل التصميم بصيغة PNG',
-        btn_order_design: 'طلب تنفيذ التصميم عبر واتساب', lbl_live_preview: 'معاينة حية مباشرة',
-        sec_work_title: 'أعمال مختارة وتجارب عملاء', sec_contact_title: 'ابدأ مشروعك الآن',
-        sec_contact_sub: 'ابعت تفاصيل طلبك أو استفسارك وهيتسجل مباشرة في النظام.'
+        btn_lang: 'EN'
       },
       en: {
-        nav_services: 'Services', nav_studio: 'Design Studio', nav_work: 'Selected Work', nav_contact: 'Contact',
-        cta_studio: 'Launch Interactive Studio', cta_workspace: 'Client Workspace',
-        stat_services: 'Core Services', stat_products: 'Digital Products', stat_orders: 'Recorded Orders',
-        sec_services_title: 'Creative & Digital Services', sec_services_sub: 'Practical solutions ready for immediate execution and ordering.',
-        sec_studio_title: 'Rapid Design Studio & Live Preview',
-        lbl_headline: 'Design Headline', lbl_subline: 'Subheadline or Tagline',
-        lbl_bg_color: 'Background Color', lbl_accent_color: 'Accent Color',
-        lbl_upload_img: 'Design Image (Optional)', btn_download_png: 'Download PNG Design',
-        btn_order_design: 'Order Design via WhatsApp', lbl_live_preview: 'Live Preview',
-        sec_work_title: 'Selected Work & Client Feedback', sec_contact_title: 'Start Your Project',
-        sec_contact_sub: 'Send your project details or inquiry and it will be recorded directly.'
+        btn_lang: 'AR'
       }
     };
 
@@ -434,6 +437,13 @@
     let studioTemplate = 'ad';
     let studioUploadedImg = null;
     let authMode = 'login';
+    let uploadedBannerDataUrl = '';
+
+    function toggleSideDrawer() {
+      const d = document.getElementById('sideDrawer');
+      if (!d) return;
+      d.classList.toggle('hidden');
+    }
 
     function toggleLanguage() {
       currentLang = currentLang === 'ar' ? 'en' : 'ar';
@@ -441,11 +451,7 @@
       document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
       document.body.classList.toggle('font-ar', currentLang === 'ar');
       document.body.classList.toggle('font-en', currentLang === 'en');
-      document.getElementById('langToggleBtn').textContent = currentLang === 'ar' ? 'EN' : 'AR';
-      document.querySelectorAll('[data-i18n]').forEach((el) => {
-        const key = el.getAttribute('data-i18n');
-        if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
-      });
+      document.getElementById('langToggleBtn').textContent = I18N[currentLang].btn_lang;
       renderServicesCards(FALLBACK_SERVICES);
     }
 
@@ -560,10 +566,9 @@
       };
 
       try {
-        if (sb) {
-          const { error } = await sb.from('service_orders').insert([payload]);
-          if (error) throw error;
-        }
+        if (!sb) throw new Error('Supabase client not initialized');
+        const { error } = await sb.from('service_orders').insert([payload]);
+        if (error) throw error;
         msgEl.textContent = 'تم تسجيل طلبك بنجاح!';
         e.target.reset();
         loadLiveStats();
@@ -603,6 +608,7 @@
       const fullName = document.getElementById('authFullName')?.value.trim() || '';
 
       try {
+        if (!sb) throw new Error('Supabase client not initialized');
         if (authMode === 'signup') {
           const { data, error } = await sb.auth.signUp({
             email,
@@ -678,7 +684,6 @@
       msgEl.textContent = 'جاري حفظ التحديث...';
       let attachmentUrl = null;
       const file = document.getElementById('workspaceFileInput')?.files?.[0];
-      const rawOrderId = document.getElementById('workspaceOrderId')?.value.trim() || null;
       const note = document.getElementById('workspaceNote')?.value.trim();
 
       try {
@@ -689,15 +694,12 @@
           attachmentUrl = safeName;
         }
 
-        const insertRow = {
+        const { error } = await sb.from('order_updates').insert([{
           author_id: user.id,
           stage: 'Client Note',
           note,
           attachment_url: attachmentUrl
-        };
-        if (rawOrderId) insertRow.order_id = rawOrderId;
-
-        const { error } = await sb.from('order_updates').insert([insertRow]);
+        }]);
         if (error) throw error;
 
         msgEl.textContent = 'تم إرسال ملاحظتك بنجاح!';
@@ -723,13 +725,78 @@
       const pin = document.getElementById('adminPinInput')?.value.trim();
       const errEl = document.getElementById('adminLockErr');
       if (pin !== ADMIN_PASSCODE) {
-        errEl.textContent = 'رمز الإدارة غير صحيح.';
+        errEl.textContent = 'كلمة سر الإدارة غير صحيحة.';
         return;
       }
       errEl.textContent = '';
       document.getElementById('adminLockBox').classList.add('hidden');
       document.getElementById('adminWorkspaceBox').classList.remove('hidden');
+
+      document.getElementById('adminBannerTitleInput').value = document.getElementById('bannerTitleEl').textContent.trim();
+      document.getElementById('adminBannerSubInput').value = document.getElementById('bannerSubEl').textContent.trim();
+      document.getElementById('adminLightCellInput').value = document.getElementById('lightCellTitle').textContent.trim();
       await loadAdminOrders();
+    }
+
+    function handleAdminBannerFile(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        uploadedBannerDataUrl = ev.target.result;
+        document.getElementById('adminBannerImgUrl').value = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function saveBannerAndCellSettings() {
+      const title = document.getElementById('adminBannerTitleInput').value.trim();
+      const sub = document.getElementById('adminBannerSubInput').value.trim();
+      const urlInput = document.getElementById('adminBannerImgUrl').value.trim();
+      const lightTitle = document.getElementById('adminLightCellInput').value.trim();
+
+      if (title) document.getElementById('bannerTitleEl').textContent = title;
+      if (sub) document.getElementById('bannerSubEl').textContent = sub;
+      if (lightTitle) document.getElementById('lightCellTitle').textContent = lightTitle;
+
+      const finalImgSrc = urlInput || uploadedBannerDataUrl;
+      const imgEl = document.getElementById('bannerImageEl');
+      const fallbackEl = document.getElementById('bannerFallbackBox');
+
+      if (finalImgSrc) {
+        imgEl.src = finalImgSrc;
+        imgEl.classList.remove('hidden');
+        fallbackEl.classList.add('hidden');
+      }
+
+      const savedConfig = {
+        bannerTitle: title,
+        bannerSub: sub,
+        bannerImg: urlInput || (uploadedBannerDataUrl ? 'uploaded_local' : ''),
+        lightTitle
+      };
+      try {
+        localStorage.setItem('pp_v3_banner_cfg', JSON.stringify(savedConfig));
+      } catch (_) {}
+
+      document.getElementById('adminBannerMsg').textContent = 'تم تحديث البانر والخلية الفاتحة بنجاح!';
+    }
+
+    function applySavedBannerConfig() {
+      try {
+        const raw = localStorage.getItem('pp_v3_banner_cfg');
+        if (!raw) return;
+        const cfg = JSON.parse(raw);
+        if (cfg.bannerTitle) document.getElementById('bannerTitleEl').textContent = cfg.bannerTitle;
+        if (cfg.bannerSub) document.getElementById('bannerSubEl').textContent = cfg.bannerSub;
+        if (cfg.lightTitle) document.getElementById('lightCellTitle').textContent = cfg.lightTitle;
+        if (cfg.bannerImg && cfg.bannerImg.startsWith('http')) {
+          const imgEl = document.getElementById('bannerImageEl');
+          imgEl.src = cfg.bannerImg;
+          imgEl.classList.remove('hidden');
+          document.getElementById('bannerFallbackBox').classList.add('hidden');
+        }
+      } catch (_) {}
     }
 
     async function addDigitalProduct(e) {
@@ -758,6 +825,19 @@
       loadLiveStats();
     }
 
+    async function updateOrderStatus(orderId, status) {
+      if (!sb || !orderId || !status) return;
+      await sb.from('service_orders').update({ status }).eq('id', orderId);
+      await loadAdminOrders();
+    }
+
+    async function deleteOrderRow(orderId) {
+      if (!sb || !orderId) return;
+      await sb.from('service_orders').delete().eq('id', orderId);
+      await loadAdminOrders();
+      loadLiveStats();
+    }
+
     async function loadAdminOrders() {
       const box = document.getElementById('adminOrdersBox');
       if (!sb) return;
@@ -766,10 +846,10 @@
         .from('service_orders')
         .select('id, full_name, email, service_title, status, created_at')
         .order('created_at', { ascending: false })
-        .limit(25);
+        .limit(30);
 
       if (error || !data) {
-        box.innerHTML = '<p class="text-gray-400">تعذر جلب الطلبات.</p>';
+        box.innerHTML = `<p class="text-red-400">تعذر جلب الطلبات: ${error?.message || ''}</p>`;
         return;
       }
 
@@ -780,7 +860,14 @@
                 <div class="font-bold text-white">${r.full_name || 'عميل'} — <span class="text-gold">${r.service_title || ''}</span></div>
                 <div class="text-[11px] text-gray-400">${r.email || ''}</div>
               </div>
-              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-gold/15 text-gold">${r.status || 'pending'}</span>
+              <div class="flex items-center gap-1.5">
+                <select onchange="updateOrderStatus('${r.id}', this.value)" class="px-2 py-1 rounded bg-surface border border-gold/25 text-[11px] text-gold">
+                  <option value="pending" ${r.status === 'pending' ? 'selected' : ''}>pending</option>
+                  <option value="in_progress" ${r.status === 'in_progress' ? 'selected' : ''}>in_progress</option>
+                  <option value="completed" ${r.status === 'completed' ? 'selected' : ''}>completed</option>
+                </select>
+                <button type="button" onclick="deleteOrderRow('${r.id}')" class="px-2 py-1 rounded bg-red-950/60 border border-red-500/40 text-red-300 text-[11px] font-bold">حذف</button>
+              </div>
             </div>
           `).join('')
         : '<p class="text-gray-400">لا توجد طلبات مسجلة حالياً.</p>';
@@ -799,6 +886,7 @@
     }
 
     document.getElementById('footerYear').textContent = new Date().getFullYear();
+    applySavedBannerConfig();
     renderServicesCards(FALLBACK_SERVICES);
     renderStudioCanvas();
     loadLiveStats();
