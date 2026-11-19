@@ -486,6 +486,165 @@
       }
       animate();
     })();
+        // --- بداية كود AI Cartoon Generator ---
+    const CARTOON_FREE_LIMIT = 3;
+    const CARTOON_USED_KEY = 'pp_v3_cartoon_used_count';
+    let cartoonSourceDataUrl = '';
+    let cartoonSourceMime = 'image/jpeg';
+    let cartoonOutputDataUrl = '';
+
+    function getCartoonUsedCount() {
+      const n = Number(localStorage.getItem(CARTOON_USED_KEY) || '0');
+      return Number.isFinite(n) && n >= 0 ? n : 0;
+    }
+
+    function updateCartoonQuotaUI() {
+      const remaining = Math.max(0, CARTOON_FREE_LIMIT - getCartoonUsedCount());
+      const el1 = document.getElementById('cartoonRemainingCount');
+      const el2 = document.getElementById('cartoonModalRemaining');
+      const btn = document.getElementById('cartoonConvertBtn');
+      if (el1) el1.textContent = remaining;
+      if (el2) el2.textContent = remaining;
+      if (btn && !btn.dataset.busy) {
+        btn.disabled = remaining <= 0;
+      }
+    }
+
+    function openCartoonGeneratorModal() {
+      updateCartoonQuotaUI();
+      const m = document.getElementById('cartoonModal');
+      if (!m) return;
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+    }
+
+    function closeCartoonGeneratorModal() {
+      const m = document.getElementById('cartoonModal');
+      if (!m) return;
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    function handleCartoonFileSelect(e) {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      cartoonSourceMime = file.type || 'image/jpeg';
+      cartoonOutputDataUrl = '';
+
+      const resImg = document.getElementById('cartoonResultPreview');
+      const resPh = document.getElementById('cartoonResultPlaceholder');
+      const dlBtn = document.getElementById('cartoonDownloadBtn');
+      if (resImg) { resImg.src = ''; resImg.classList.add('hidden'); }
+      if (resPh) resPh.classList.remove('hidden');
+      if (dlBtn) dlBtn.disabled = true;
+
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        cartoonSourceDataUrl = ev.target.result;
+        const origImg = document.getElementById('cartoonOriginalPreview');
+        const origPh = document.getElementById('cartoonOriginalPlaceholder');
+        if (origImg) {
+          origImg.src = cartoonSourceDataUrl;
+          origImg.classList.remove('hidden');
+        }
+        if (origPh) origPh.classList.add('hidden');
+        document.getElementById('cartoonStatusText').textContent = '';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function convertImageTo3DCartoon() {
+      const statusEl = document.getElementById('cartoonStatusText');
+      const btn = document.getElementById('cartoonConvertBtn');
+      const used = getCartoonUsedCount();
+
+      if (used >= CARTOON_FREE_LIMIT) {
+        statusEl.textContent = 'تم استهلاك المحاولات المجانية المتاحة على هذا المتصفح.';
+        updateCartoonQuotaUI();
+        return;
+      }
+
+      if (!cartoonSourceDataUrl) {
+        statusEl.textContent = 'يرجى اختيار صورة أولاً قبل التحويل.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.dataset.busy = '1';
+      statusEl.textContent = 'جاري تحويل الصورة إلى 3D Cartoon مع الحفاظ على الملامح...';
+
+      try {
+        const res = await fetch('/api/cartoon-generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imageBase64: cartoonSourceDataUrl,
+            mimeType: cartoonSourceMime
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data?.imageDataUrl) {
+          throw new Error(data?.error || 'تعذر إتمام التحويل حالياً.');
+        }
+
+        cartoonOutputDataUrl = data.imageDataUrl;
+        const resImg = document.getElementById('cartoonResultPreview');
+        const resPh = document.getElementById('cartoonResultPlaceholder');
+        const dlBtn = document.getElementById('cartoonDownloadBtn');
+
+        if (resImg) {
+          resImg.src = cartoonOutputDataUrl;
+          resImg.classList.remove('hidden');
+        }
+        if (resPh) resPh.classList.add('hidden');
+        if (dlBtn) dlBtn.disabled = false;
+
+        localStorage.setItem(CARTOON_USED_KEY, String(used + 1));
+        statusEl.textContent = 'تم التحويل بنجاح إلى 3D Cartoon!';
+      } catch (err) {
+        statusEl.textContent = err.message || 'حدث خطأ أثناء التحويل.';
+      } finally {
+        delete btn.dataset.busy;
+        btn.disabled = false;
+        updateCartoonQuotaUI();
+      }
+    }
+
+    function downloadCartoonResult() {
+      if (!cartoonOutputDataUrl) return;
+      const link = document.createElement('a');
+      link.href = cartoonOutputDataUrl;
+      link.download = 'PixelPerfect-3D-Cartoon.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function resetCartoonTool() {
+      cartoonSourceDataUrl = '';
+      cartoonOutputDataUrl = '';
+      const inp = document.getElementById('cartoonFileInput');
+      const origImg = document.getElementById('cartoonOriginalPreview');
+      const origPh = document.getElementById('cartoonOriginalPlaceholder');
+      const resImg = document.getElementById('cartoonResultPreview');
+      const resPh = document.getElementById('cartoonResultPlaceholder');
+      const dlBtn = document.getElementById('cartoonDownloadBtn');
+      const statusEl = document.getElementById('cartoonStatusText');
+
+      if (inp) inp.value = '';
+      if (origImg) { origImg.src = ''; origImg.classList.add('hidden'); }
+      if (origPh) origPh.classList.remove('hidden');
+      if (resImg) { resImg.src = ''; resImg.classList.add('hidden'); }
+      if (resPh) resPh.classList.remove('hidden');
+      if (dlBtn) dlBtn.disabled = true;
+      if (statusEl) statusEl.textContent = '';
+      updateCartoonQuotaUI();
+    }
+
+    updateCartoonQuotaUI();
+    // --- نهاية كود AI Cartoon Generator ---
+
 
     const FALLBACK_SERVICES = [
       { id: '1', title_ar: 'هوية بصرية', title_en: 'Brand Identity', desc_ar: 'شعار وألوان وهوية كاملة.', desc_en: 'Logo, colors, and brand system.' },
