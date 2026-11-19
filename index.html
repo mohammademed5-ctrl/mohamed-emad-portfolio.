@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOHAMED EMAD | PixelPerfect</title>
+    <title>MOHAMED EMAD | PixelPerfect Studio — V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,7 +83,7 @@
 
     <!-- الشريط العلوي -->
     <nav class="fixed top-0 w-full z-40 bg-black/85 backdrop-blur-xl border-b border-amber-500/20">
-        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center gap-2">
             <a href="#" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
                     <span id="defaultLogoLetter" class="font-luxury">P</span>
@@ -95,7 +95,10 @@
                 </div>
             </a>
 
-            <div class="flex items-center gap-2.5">
+            <div class="flex items-center gap-2 sm:gap-2.5">
+                <a href="#services" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/25 text-neutral-200 hover:border-amber-400 transition">
+                    <span>الخدمات</span>
+                </a>
                 <a href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                     <span>استوديو التصميم</span>
@@ -118,29 +121,29 @@
 
             <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
                 <i class="fa-solid fa-crown text-amber-400"></i>
-                <span>Founder of PixelPerfect Studio</span>
+                <span>PixelPerfect Studio • Mohamed Emad</span>
             </div>
 
-            <h1 dir="ltr" class="font-luxury text-4xl sm:text-6xl font-black tracking-wider gold-text mb-3">
-                MOHAMED EMAD
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight gold-text mb-3 leading-tight">
+                نحوّل أفكارك إلى إبداع رقمي
             </h1>
 
-            <p dir="ltr" class="font-en text-sm sm:text-lg font-semibold text-neutral-200 tracking-wide mb-4">
-                Creative Designer • 3D & AI Commercial Director • Brand Architect
+            <p dir="ltr" class="font-en text-xs sm:text-base font-semibold text-neutral-300 tracking-wide mb-4">
+                MOHAMED EMAD • Creative Designer • 3D & AI Commercial Director • Brand Architect
             </p>
 
             <p class="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
-                نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومنصات رقمية متكاملة تصنع الفارق لعلامتك التجارية.
+                نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومواقع رقمية متكاملة تحوّل رؤيتك إلى حضور بصري لا يُنسى.
             </p>
 
             <div class="flex flex-col sm:flex-row justify-center items-center gap-3.5 w-full sm:w-auto">
-                <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
-                    <span>معرض الأعمال والتصميمات</span>
-                    <i class="fa-solid fa-sparkles"></i>
+                <a href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2">
+                    <span>ابدأ مشروعك</span>
+                    <i class="fa-solid fa-rocket"></i>
                 </a>
-                <a href="#design-studio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>جرّب التصميم بنفسك</span>
+                <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
+                    <span>استكشف أعمالنا</span>
+                    <i class="fa-solid fa-sparkles"></i>
                 </a>
                 <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-instagram text-base"></i>
@@ -150,16 +153,28 @@
         </div>
     </section>
 
+    <!-- قسم الخدمات الـ 7 -->
+    <section id="services" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">حلول إبداعية متكاملة</span>
+                <h2 class="text-3xl font-black mt-1 text-white">خدمات <span class="gold-text">PixelPerfect Studio</span></h2>
+                <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر الخدمة المناسبة لمشروعك واطلبها مباشرة أو اطلب عرض سعر مخصص</p>
+            </div>
+
+            <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </section>
+
     <!-- قسم الأعمال -->
     <section id="portfolio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
-                <h2 class="text-3xl font-black mt-1 text-white">أبرز <span class="gold-text">المشاريع والتصميمات</span></h2>
+                <h2 class="text-3xl font-black mt-1 text-white">معرض <span class="gold-text">أحدث التصميمات</span></h2>
             </div>
 
             <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
-                <!-- الكارت 1 -->
                 <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
@@ -180,7 +195,6 @@
                     </div>
                 </div>
 
-                <!-- الكارت 2 -->
                 <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
@@ -201,7 +215,6 @@
                     </div>
                 </div>
 
-                <!-- الكارت 3 -->
                 <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <div class="relative h-52 overflow-hidden bg-neutral-900">
@@ -225,6 +238,61 @@
         </div>
     </section>
 
+    <!-- لماذا تختارنا وآراء العملاء -->
+    <section id="why-us" class="py-16 px-5 border-t border-amber-500/10">
+        <div class="max-w-6xl mx-auto space-y-14">
+            <div>
+                <div class="text-center mb-10">
+                    <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">قيمتنا المضافة</span>
+                    <h2 class="text-3xl font-black mt-1 text-white">لماذا <span class="gold-text">تختارنا؟</span></h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-crown"></i></div>
+                        <h3 class="font-bold text-white mb-1.5">هوية فاخرة ومتميزة</h3>
+                        <p class="text-xs text-neutral-400 leading-relaxed">تصميمات مصممة خصيصاً لتبرز علامتك وتمنحها حضوراً قوياً.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h3 class="font-bold text-white mb-1.5">إبداع مدعوم بالـ AI و3D</h3>
+                        <p class="text-xs text-neutral-400 leading-relaxed">دمج أحدث أدوات الذكاء الاصطناعي والـ 3D لإنتاج سريع وعالي الجودة.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-bolt"></i></div>
+                        <h3 class="font-bold text-white mb-1.5">سرعة ودقة في التنفيذ</h3>
+                        <p class="text-xs text-neutral-400 leading-relaxed">التزام واضح بالمواعيد ومتابعة دقيقة لكل مرحلة من مراحل العمل.</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6 text-center">
+                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-headset"></i></div>
+                        <h3 class="font-bold text-white mb-1.5">تواصل مباشر ومتابعة</h3>
+                        <p class="text-xs text-neutral-400 leading-relaxed">متابعة حالة طلبك خطوة بخطوة وتواصل مباشر مع فريق العمل.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-center mb-8">
+                    <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">ثقة العملاء</span>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-1 text-white">آراء <span class="gold-text">العملاء</span></h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel rounded-2xl p-6">
+                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"الهوية البصرية والموقع طلعوا أفخم مما تخيلنا، وتفاصيل الشغل واضحة جداً من أول مسودة لحد التسليم."</p>
+                        <div class="text-xs font-bold text-amber-300">إدارة مصنع حلويات العميد</div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6">
+                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"إعلانات السوشيال ميديا والفيديوهات الإبداعية فرّقت جداً في شكل الحملات وجذب العملاء."</p>
+                        <div class="text-xs font-bold text-amber-300">كريم عادل — صاحب براند أزياء</div>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-6">
+                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"احترافية في التعامل وسرعة في التعديلات وتنفيذ الأفكار بدقة عالية."</p>
+                        <div class="text-xs font-bold text-amber-300">سارة منصور — مؤسسة مشروع رقمي</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- قسم استوديو التصميم التفاعلي (INTERACTIVE DESIGN STUDIO) -->
     <section id="design-studio" class="py-16 px-5 border-t border-amber-500/10">
         <div class="max-w-6xl mx-auto">
@@ -238,7 +306,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <!-- لوحة الأدوات والتحكم -->
                 <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-5">
                     <div>
                         <label class="block text-xs font-bold text-amber-300 mb-2.5">1. اختر قالب التصميم الجاهز</label>
@@ -306,7 +373,6 @@
                     </div>
                 </div>
 
-                <!-- منطقة المعاينة المباشرة -->
                 <div class="lg:col-span-7 glass-panel rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center">
                     <div class="w-full flex justify-between items-center mb-4 text-xs text-neutral-400">
                         <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> معاينة حية مباشرة</span>
@@ -327,10 +393,16 @@
                 جاهز لتنفيذ تصميمك <span class="gold-text">بمستوى عالمي؟</span>
             </h2>
             <p class="text-neutral-400 text-sm mb-7">تواصل مباشرة عبر واتساب لطلب تصميم لوجو، هوية بصرية، إعلان 3D، أو موقع إلكتروني.</p>
-            <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl hover:scale-[1.02] transition">
-                <i class="fa-brands fa-whatsapp text-xl"></i>
-                <span>01006102339 — تواصل واتساب</span>
-            </a>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+                <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl hover:scale-[1.02] transition">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>01006102339 — تواصل واتساب</span>
+                </a>
+                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-neutral-900 border border-amber-500/35 text-amber-200 font-bold text-sm hover:border-amber-400 transition">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                    <span>@mohmed_emad__3</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -350,7 +422,6 @@
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- تسجيل الدخول -->
             <div id="loginView">
                 <div class="text-center mb-6">
                     <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
@@ -367,14 +438,12 @@
                 </button>
             </div>
 
-            <!-- لوحة التحكم السحابية -->
             <div id="dashboardView" class="hidden space-y-4">
                 <div class="border-b border-neutral-800 pb-3">
                     <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect السحابية</h3>
                     <p class="text-[11px] text-emerald-400">كل صورة ترفعها هنا ستظهر فوراً لكل زوار موقعك من أي هاتف</p>
                 </div>
 
-                <!-- 1. رفع اللوجو -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                     <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع (يظهر للجميع)</label>
                     <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
@@ -383,7 +452,6 @@
                     </button>
                 </div>
 
-                <!-- 2. رفع صورتك الشخصية -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
                     <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية (تظهر للجميع)</label>
                     <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 file:ml-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-black mb-2 w-full">
@@ -392,7 +460,6 @@
                     </button>
                 </div>
 
-                <!-- 3. إضافة عمل جديد -->
                 <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2.5">
                     <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد للمعرض</label>
                     <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
@@ -415,6 +482,44 @@
         const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
         const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const FALLBACK_SERVICES = [
+            { slug: 'social-media-ads', title_ar: 'تصميم إعلانات السوشيال ميديا', title_en: 'Social Media Ads Design', description_ar: 'تصميم إعلانات سوشيال ميديا جذابة واحترافية مخصصة لزيادة التفاعل والمبيعات.', price_label: 'تبدأ من 500 ج.م', icon: 'fa-bullhorn' },
+            { slug: 'banners-logos', title_ar: 'تصميم البنرات واللوجوهات', title_en: 'Banners & Logos Design', description_ar: 'تصميم شعارات مميزة وبنرات إعلانية عالية الجودة تعبر عن قوة علامتك التجارية.', price_label: 'تبدأ من 750 ج.م', icon: 'fa-bezier-curve' },
+            { slug: 'brand-identity', title_ar: 'تصميم الهويات التجارية', title_en: 'Brand Identity Design', description_ar: 'بناء هوية بصرية متكاملة تشمل الألوان، الخطوط، الشعار، ودليل الاستخدام الكامل.', price_label: 'حسب الطلب / عرض سعر', icon: 'fa-gem' },
+            { slug: 'ai-videos', title_ar: 'إنتاج فيديوهات الذكاء الاصطناعي', title_en: 'AI Video Production', description_ar: 'إنتاج فيديوهات إبداعية وإعلانية حديثة بالذكاء الاصطناعي بأسلوب سريع ومبتكر.', price_label: 'تبدأ من 1200 ج.م', icon: 'fa-film' },
+            { slug: 'web-design', title_ar: 'تصميم مواقع الإنترنت', title_en: 'Web Design', description_ar: 'تصميم مواقع إلكترونية عصرية متجاوبة وسريعة تناسب الشركات والمشاريع والأفراد.', price_label: 'حسب الطلب / عرض سعر', icon: 'fa-globe' },
+            { slug: 'product-ads', title_ar: 'تصميم إعلانات المنتجات', title_en: 'Product Ads Design', description_ar: 'إبراز منتجاتك بأسلوب بصري احترافي يشجع العملاء على الشراء فوراً.', price_label: 'تبدأ من 600 ج.م', icon: 'fa-box-open' },
+            { slug: 'ad-copywriting', title_ar: 'كتابة المحتوى الإعلاني', title_en: 'Ad Copywriting', description_ar: 'صياغة نصوص إعلانية وعناوين مقنعة ومؤثرة تخدم حملاتك التسويقية.', price_label: 'تبدأ من 350 ج.م', icon: 'fa-feather-pointed' }
+        ];
+
+        function renderServicesCards(list) {
+            const grid = document.getElementById('servicesGrid');
+            if (!grid || !list || !list.length) return;
+            grid.innerHTML = list.map(srv => {
+                const iconClass = srv.icon || 'fa-sparkles';
+                const waText = encodeURIComponent(`مرحباً محمد عماد، أرغب في طلب خدمة: ${srv.title_ar} (${srv.price_label})`);
+                return `
+                    <div class="glass-panel project-card rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center text-lg">
+                                    <i class="fa-solid ${iconClass}"></i>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">${srv.price_label}</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-white mb-1">${srv.title_ar}</h3>
+                            <p dir="ltr" class="font-en text-[11px] text-neutral-500 mb-2.5 text-right">${srv.title_en || ''}</p>
+                            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-5">${srv.description_ar}</p>
+                        </div>
+                        <a href="https://wa.me/201006102339?text=${waText}" target="_blank" class="w-full py-2.5 rounded-xl gold-btn text-black text-xs font-black hover:opacity-95 transition flex items-center justify-center gap-2">
+                            <span>اطلب الخدمة الآن</span>
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
 
         // خلفية الجزيئات الذهبية
         (function initParticles() {
@@ -450,7 +555,6 @@
             loop();
         })();
 
-        // نظام الإدارة والحماية
         async function openAdminModal() {
             const modal = document.getElementById('adminModal');
             if (!modal) return;
@@ -601,151 +705,4 @@
             const textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
             const badgeText = document.getElementById('studioBadgeInput').value || '';
             const titleText = document.getElementById('studioTitleInput').value || '';
-            const subText = document.getElementById('studioSubInput').value || '';
-
-            sCtx.fillStyle = bg;
-            sCtx.fillRect(0, 0, c.width, c.height);
-
-            const pad = Math.round(Math.min(c.width, c.height) * 0.055);
-            sCtx.strokeStyle = accent;
-            sCtx.lineWidth = 3;
-            sCtx.strokeRect(pad, pad, c.width - pad * 2, c.height - pad * 2);
-
-            const cx = c.width / 2;
-            const isBanner = currentStudioTpl === 'banner';
-            let contentY = isBanner ? c.height * 0.22 : c.height * 0.20;
-
-            if (studioUploadedImg) {
-                const maxImgSize = isBanner ? 115 : 210;
-                const scale = Math.min(maxImgSize / studioUploadedImg.width, maxImgSize / studioUploadedImg.height);
-                const iw = studioUploadedImg.width * scale;
-                const ih = studioUploadedImg.height * scale;
-                sCtx.drawImage(studioUploadedImg, cx - iw / 2, contentY - 10, iw, ih);
-                contentY += ih + 35;
-            } else {
-                const emblemR = isBanner ? 34 : 58;
-                sCtx.beginPath();
-                sCtx.arc(cx, contentY + emblemR * 0.5, emblemR, 0, Math.PI * 2);
-                sCtx.strokeStyle = accent;
-                sCtx.lineWidth = 3;
-                sCtx.stroke();
-                sCtx.fillStyle = accent;
-                sCtx.font = `900 ${emblemR}px Cinzel, serif`;
-                sCtx.textAlign = 'center';
-                sCtx.textBaseline = 'middle';
-                sCtx.fillText('P', cx, contentY + emblemR * 0.55);
-                contentY += emblemR * 2 + 30;
-            }
-
-            if (badgeText) {
-                sCtx.fillStyle = accent;
-                sCtx.font = `700 ${isBanner ? 16 : 22}px Montserrat, Cairo, sans-serif`;
-                sCtx.textAlign = 'center';
-                sCtx.fillText(badgeText.toUpperCase(), cx, contentY);
-                contentY += isBanner ? 44 : 60;
-            }
-
-            sCtx.fillStyle = textColor;
-            sCtx.font = `900 ${isBanner ? 44 : 58}px Cinzel, Cairo, sans-serif`;
-            sCtx.textAlign = 'center';
-            sCtx.fillText(titleText, cx, contentY, c.width - pad * 3);
-
-            contentY += isBanner ? 24 : 36;
-            sCtx.beginPath();
-            sCtx.moveTo(cx - 80, contentY);
-            sCtx.lineTo(cx + 80, contentY);
-            sCtx.strokeStyle = accent;
-            sCtx.lineWidth = 3;
-            sCtx.stroke();
-
-            contentY += isBanner ? 36 : 50;
-            sCtx.fillStyle = textColor;
-            sCtx.font = `600 ${isBanner ? 20 : 26}px Cairo, Montserrat, sans-serif`;
-            sCtx.fillText(subText, cx, contentY, c.width - pad * 3);
-
-            sCtx.fillStyle = accent;
-            sCtx.font = '700 14px Montserrat, sans-serif';
-            sCtx.fillText('PIXELPERFECT STUDIO • PREVIEW', cx, c.height - pad - 18);
-        }
-
-        function downloadStudioDesign() {
-            const c = document.getElementById('studioPreviewCanvas');
-            const link = document.createElement('a');
-            link.download = `PixelPerfect-${currentStudioTpl}-${Date.now()}.png`;
-            link.href = c.toDataURL('image/png');
-            link.click();
-        }
-
-        function orderStudioDesign() {
-            const tplName = studioPresets[currentStudioTpl].name;
-            const title = document.getElementById('studioTitleInput').value;
-            const sub = document.getElementById('studioSubInput').value;
-            const bg = document.getElementById('studioBgColor').value;
-            const accent = document.getElementById('studioAccentColor').value;
-            const hasLogo = studioUploadedImg ? 'نعم (تم إرفاق شعار/صورة)' : 'بدون شعار مرفق';
-            const msg = `مرحباً مهندس محمد عماد، قمت بتجربة تصميم في INTERACTIVE DESIGN STUDIO وأرغب في طلبه:\n• نوع القالب: ${tplName}\n• العنوان: ${title}\n• الوصف: ${sub}\n• الألوان: خلفية (${bg}) / ذهبي (${accent})\n• شعار خاص: ${hasLogo}`;
-            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        // تشغيل الاستوديو وجلب البيانات السحابية فور تحميل الصفحة
-        selectStudioTemplate('ad');
-
-        (async function loadAllAssets() {
-            const logoImg = document.getElementById('customLogoImg');
-            const logoLetter = document.getElementById('defaultLogoLetter');
-            const portraitImg = document.getElementById('heroPortraitImg');
-
-            try {
-                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
-                if (settings && settings.logo_url) {
-                    logoImg.onload = () => {
-                        logoLetter.classList.add('hidden');
-                        logoImg.classList.remove('hidden');
-                        logoImg.classList.add('loaded');
-                    };
-                    logoImg.src = settings.logo_url;
-                }
-                if (settings && settings.portrait_url) {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
-                    portraitImg.src = settings.portrait_url;
-                } else {
-                    portraitImg.onload = () => portraitImg.classList.add('loaded');
-                    portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                }
-            } catch (e) {
-                portraitImg.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80";
-                portraitImg.classList.add('loaded');
-            }
-
-            const { data: { session } } = await sb.auth.getSession();
-            const isAdmin = !!session;
-            const { data: items } = await sb.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-            if (items) {
-                const grid = document.getElementById('projectsGrid');
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group";
-                    card.innerHTML = `
-                        <div>
-                            <div class="relative h-52 overflow-hidden bg-neutral-900">
-                                <img src="${item.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">${item.category}</span>
-                                ${isAdmin ? `<button onclick="deleteProjectFromSupabase('${item.id}')" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-red-600 text-white text-xs flex items-center justify-center shadow-lg"><i class="fa-solid fa-trash"></i></button>` : ''}
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
-                                <p class="text-neutral-400 text-sm leading-relaxed">${item.description}</p>
-                            </div>
-                        </div>
-                        <div class="px-6 pb-6">
-                            <a href="https://wa.me/201006102339" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                                <span>اطلب تصميم مماثل</span><i class="fa-brands fa-whatsapp"></i>
-                            </a>
-                        </div>`;
-                    grid.prepend(card);
-                });
-            }
-        })();
-    </script>
-</body>
-</html>
+           
