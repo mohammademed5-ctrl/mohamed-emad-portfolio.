@@ -1,831 +1,200 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOHAMED EMAD | PixelPerfect Studio — V2</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #050505;
-            color: #f5f5f5;
-            overflow-x: hidden;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PixelPerfect Studio — Global Platform V3</title>
+  <meta name="description" content="Your Vision. Our Intelligence. Unlimited Possibilities. AI business building, brand identity lab, creative marketplace, client workspace, and global community by Mohamed Emad." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#070709',
+            onyx: '#0E0E12',
+            surface: '#14141A',
+            gold: '#D4AF37',
+            goldLight: '#F3D26B',
+            goldDark: '#9A7B1C'
+          },
+          fontFamily: {
+            ar: ['Cairo', 'sans-serif'],
+            en: ['Plus Jakarta Sans', 'sans-serif']
+          }
         }
-        .font-en { font-family: 'Montserrat', sans-serif; }
-        .font-luxury { font-family: 'Cinzel', serif; }
-        .gold-text {
-            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 45%, #B38728 75%, #FBF5B7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .gold-btn {
-            background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #AA771C 100%);
-        }
-        .glass-panel {
-            background: rgba(14, 14, 14, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            transition: all 0.35s ease;
-        }
-        .glass-panel:hover {
-            border-color: rgba(212, 175, 55, 0.72);
-            box-shadow: 0 20px 45px -15px rgba(212, 175, 55, 0.2);
-        }
-        .project-card:hover { transform: translateY(-5px); }
-        .portrait-fade {
-            -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-        }
-        #luxuryCanvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2; pointer-events: none;
-        }
-        .ambient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(95px);
-            z-index: -1;
-            pointer-events: none;
-            animation: driftOrb 16s ease-in-out infinite alternate;
-        }
-        .orb-1 { width: 320px; height: 320px; background: rgba(212, 175, 55, 0.14); top: 10%; right: -60px; }
-        .orb-2 { width: 280px; height: 280px; background: rgba(191, 149, 63, 0.11); bottom: 12%; left: -60px; animation-delay: -6s; }
-        @keyframes driftOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-30px, 35px) scale(1.1); }
-            100% { transform: translate(20px, -25px) scale(0.95); }
-        }
-    </style>
+      }
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; background-color: #070709; color: #F9FAFB; }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #F9E28A 0%, #D4AF37 50%, #A37E18 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-btn {
+      background: linear-gradient(135deg, #E8C54C 0%, #C89F24 100%);
+      color: #070709;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .gold-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.28);
+    }
+    .glass-card {
+      background: rgba(20, 20, 26, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+    }
+  </style>
 </head>
-<body class="selection:bg-amber-500/30 selection:text-amber-200">
+<body class="bg-obsidian text-gray-100 font-ar antialiased selection:bg-gold selection:text-obsidian">
 
-    <canvas id="luxuryCanvas"></canvas>
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-
-    <!-- الشريط العلوي -->
-    <nav class="fixed top-0 w-full z-40 bg-black/90 backdrop-blur-xl border-b border-amber-500/20">
-        <div class="max-w-6xl mx-auto px-4 sm:px-5 py-3 flex justify-between items-center gap-2">
-            <a href="#" class="flex items-center gap-2.5 shrink-0">
-                <div class="w-10 h-10 rounded-xl gold-btn flex items-center justify-center text-black font-black text-xl shadow-lg overflow-hidden">
-                    <span id="defaultLogoLetter" class="font-luxury">P</span>
-                    <img id="customLogoImg" src="" alt="PixelPerfect Logo" class="hidden w-full h-full object-cover">
-                </div>
-                <div dir="ltr" class="text-left">
-                    <span class="font-en font-black text-sm sm:text-lg tracking-wider gold-text block leading-none">PIXELPERFECT</span>
-                    <span class="font-en text-[10px] text-neutral-400 tracking-widest uppercase">MOHAMED EMAD</span>
-                </div>
-            </a>
-
-            <div class="flex items-center gap-2 flex-wrap justify-end">
-                <a href="#services" class="hidden md:inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/25 text-neutral-200 hover:border-amber-400 transition">
-                    <span>الخدمات</span>
-                </a>
-                <a href="#design-studio" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/35 text-amber-300 hover:border-amber-400 transition">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>استوديو التصميم</span>
-                </a>
-                <button type="button" onclick="openClientPortal()" class="px-3.5 py-2 rounded-full text-xs font-bold bg-neutral-900 border border-amber-500/40 text-amber-200 hover:border-amber-400 transition flex items-center gap-1.5 cursor-pointer">
-                    <i class="fa-solid fa-user text-amber-400"></i>
-                    <span>حساب العملاء</span>
-                </button>
-                <a href="https://wa.me/201006102339" target="_blank" class="px-3.5 py-2 rounded-full text-xs font-bold gold-btn text-black hover:opacity-90 transition shadow-md flex items-center gap-1.5">
-                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>تواصل الآن</span>
-                </a>
-            </div>
+  <!-- الشريط العلوي -->
+  <header class="sticky top-0 z-40 bg-obsidian/90 backdrop-blur-md border-b border-gold/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <a href="#top" class="flex items-center gap-2.5 shrink-0">
+        <img id="brandLogoImg" src="https://pcnbtxcsumhoxtuhcoka.supabase.co/storage/v1/object/public/portfolio_assets/logo.png" alt="PixelPerfect Studio" class="w-9 h-9 rounded-lg object-cover border border-gold/40 bg-surface" onerror="this.style.display='none'" />
+        <div>
+          <span class="font-extrabold text-base sm:text-lg tracking-tight gold-gradient-text block leading-none">PixelPerfect</span>
+          <span class="text-[10px] text-gray-400 tracking-widest uppercase">Global Platform V3</span>
         </div>
-    </nav>
+      </a>
 
-    <!-- الواجهة الرئيسية -->
-    <section class="relative pt-28 pb-14 px-5">
-        <div class="max-w-5xl mx-auto flex flex-col items-center text-center">
-            <div class="relative w-48 sm:w-60 h-48 sm:h-64 mb-4 flex items-end justify-center">
-                <div class="absolute inset-4 rounded-full bg-amber-500/25 blur-2xl animate-pulse"></div>
-                <img id="heroPortraitImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Mohamed Emad" class="relative z-10 w-full h-full object-cover object-top portrait-fade rounded-t-3xl border border-amber-500/25">
-            </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-300">
+        <a href="#services" data-i18n="nav_services" class="hover:text-gold transition">الخدمات</a>
+        <a href="#studio" data-i18n="nav_studio" class="hover:text-gold transition">استوديو التصميم</a>
+        <a href="#work" data-i18n="nav_work" class="hover:text-gold transition">أعمال مختارة</a>
+        <a href="#contact" data-i18n="nav_contact" class="hover:text-gold transition">تواصل معنا</a>
+      </nav>
 
-            <div dir="ltr" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-en font-semibold tracking-wider uppercase mb-4">
-                <i class="fa-solid fa-crown text-amber-400"></i>
-                <span>PixelPerfect Studio • Mohamed Emad</span>
-            </div>
-
-            <h1 class="text-3xl sm:text-5xl font-black tracking-tight gold-text mb-3 leading-tight">
-                نحوّل أفكارك إلى إبداع رقمي
-            </h1>
-
-            <p dir="ltr" class="font-en text-xs sm:text-base font-semibold text-neutral-300 tracking-wide mb-4">
-                MOHAMED EMAD • Creative Designer • 3D & AI Commercial Director • Brand Architect
-            </p>
-
-            <p class="text-neutral-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed mb-8">
-                نبتكر هويات بصرية ملكية، إعلانات تجارية بتقنيات الـ 3D والذكاء الاصطناعي، ومواقع رقمية متكاملة تحوّل رؤيتك إلى حضور بصري لا يُنسى.
-            </p>
-
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3 w-full sm:w-auto">
-                <button type="button" onclick="openOrderModal()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl gold-btn text-black font-bold text-sm shadow-lg hover:scale-[1.02] transition flex items-center justify-center gap-2 cursor-pointer">
-                    <span>ابدأ مشروعك</span>
-                    <i class="fa-solid fa-rocket"></i>
-                </button>
-                <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/40 text-amber-300 font-bold text-sm hover:border-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-2">
-                    <span>استكشف أعمالنا</span>
-                    <i class="fa-solid fa-sparkles"></i>
-                </a>
-                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-neutral-900/90 border border-amber-500/30 text-amber-200 font-bold text-sm hover:border-amber-400 transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-instagram text-base"></i>
-                    <span>إنستجرام الرسمي</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- بنر إعلاني سريع -->
-    <section class="px-5 pb-10">
-        <div class="max-w-6xl mx-auto glass-panel rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-amber-500/40">
-            <div class="text-center sm:text-right">
-                <span class="text-[11px] font-bold text-amber-300 uppercase">عرض إبداعي متكامل</span>
-                <h2 class="text-lg sm:text-xl font-black text-white mt-0.5">اطلب هويتك البصرية أو إعلانك التجاري وتابع التنفيذ لحظة بلحظة</h2>
-            </div>
-            <button type="button" onclick="openOrderModal()" class="px-6 py-3 rounded-xl gold-btn text-black font-black text-xs shrink-0 cursor-pointer">
-                اطلب الآن
-            </button>
-        </div>
-    </section>
-
-    <!-- قسم الخدمات الـ 7 -->
-    <section id="services" class="py-14 px-5 border-t border-amber-500/10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-10">
-                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">حلول إبداعية متكاملة</span>
-                <h2 class="text-3xl font-black mt-1 text-white">خدمات <span class="gold-text">PixelPerfect Studio</span></h2>
-                <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر الخدمة المناسبة لمشروعك واطلبها مباشرة لمتابعتها من حسابك</p>
-            </div>
-            <div id="servicesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
-    </section>
-
-    <!-- قسم الأعمال -->
-    <section id="portfolio" class="py-14 px-5 border-t border-amber-500/10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-10">
-                <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">إبداعات مختارة</span>
-                <h2 class="text-3xl font-black mt-1 text-white">معرض <span class="gold-text">أحدث التصميمات</span></h2>
-            </div>
-
-            <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-7">
-                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
-                    <div>
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80" alt="حلويات العميد" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">متجر إلكتروني وهوية</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">منصة مصنع حلويات العميد</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الهوية التجارية الكاملة، المنيو الفاخر، وتطوير المتجر الإلكتروني الرسمي ولوحة الإدارة لمصنع حلويات العميد.</p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6">
-                        <a href="https://al-ameed-sweets.vercel.app" target="_blank" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2">
-                            <span>زيارة الموقع المباشر</span>
-                            <i class="fa-solid fa-arrow-up-left-from-square"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
-                    <div>
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="إنتاج إعلاني 3D" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">3D & AI Animation</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">إنتاج إعلاني ثلاثي الأبعاد وأنيميشن</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">إخراج وإنتاج الإعلانات التجارية الاحترافية بالذكاء الاصطناعي وسلاسل الأنيميشن ثلاثية الأبعاد بأعلى دقة بصرية.</p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6">
-                        <button type="button" onclick="openOrderModal('إنتاج فيديوهات الذكاء الاصطناعي')" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2 cursor-pointer">
-                            <span>اطلب إعلانك التجاري</span>
-                            <i class="fa-solid fa-clapperboard"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="glass-panel project-card rounded-2xl overflow-hidden flex flex-col justify-between group">
-                    <div>
-                        <div class="relative h-52 overflow-hidden bg-neutral-900">
-                            <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80" alt="هوية PixelPerfect" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                            <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/75 text-amber-300 border border-amber-500/40">Brand Identity</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2">هوية PixelPerfect البصرية</h3>
-                            <p class="text-neutral-400 text-sm leading-relaxed">تصميم الشعارات الملكية ثلاثية الأبعاد، المطبوعات الفاخرة، والهويات البصرية المتكاملة للشركات والبراندات.</p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6">
-                        <button type="button" onclick="openOrderModal('تصميم الهويات التجارية')" class="w-full py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold hover:bg-amber-500 hover:text-black transition flex items-center justify-center gap-2 cursor-pointer">
-                            <span>ابدأ تصميم هويتك</span>
-                            <i class="fa-solid fa-pen-nib"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- لماذا تختارنا وآراء العملاء -->
-    <section id="why-us" class="py-14 px-5 border-t border-amber-500/10">
-        <div class="max-w-6xl mx-auto space-y-12">
-            <div>
-                <div class="text-center mb-8">
-                    <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">قيمتنا المضافة</span>
-                    <h2 class="text-3xl font-black mt-1 text-white">لماذا <span class="gold-text">تختارنا؟</span></h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-crown"></i></div>
-                        <h3 class="font-bold text-white mb-1.5">هوية فاخرة ومتميزة</h3>
-                        <p class="text-xs text-neutral-400 leading-relaxed">تصميمات مصممة خصيصاً لتبرز علامتك وتمنحها حضوراً قوياً.</p>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                        <h3 class="font-bold text-white mb-1.5">إبداع مدعوم بالـ AI و3D</h3>
-                        <p class="text-xs text-neutral-400 leading-relaxed">دمج أحدث أدوات الذكاء الاصطناعي والـ 3D لإنتاج سريع وعالي الجودة.</p>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-bolt"></i></div>
-                        <h3 class="font-bold text-white mb-1.5">سرعة ودقة في التنفيذ</h3>
-                        <p class="text-xs text-neutral-400 leading-relaxed">التزام واضح بالمواعيد ومتابعة دقيقة لكل مرحلة من مراحل العمل.</p>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 text-center">
-                        <div class="w-11 h-11 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-lg"><i class="fa-solid fa-headset"></i></div>
-                        <h3 class="font-bold text-white mb-1.5">تواصل مباشر ومتابعة</h3>
-                        <p class="text-xs text-neutral-400 leading-relaxed">متابعة حالة طلبك خطوة بخطوة وتواصل مباشر مع فريق العمل.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div class="text-center mb-8">
-                    <span class="text-amber-400 text-xs font-bold tracking-widest uppercase">ثقة العملاء</span>
-                    <h2 class="text-2xl sm:text-3xl font-black mt-1 text-white">آراء <span class="gold-text">العملاء</span></h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="glass-panel rounded-2xl p-6">
-                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"الهوية البصرية والموقع طلعوا أفخم مما تخيلنا، وتفاصيل الشغل واضحة جداً من أول مسودة لحد التسليم."</p>
-                        <div class="text-xs font-bold text-amber-300">إدارة مصنع حلويات العميد</div>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6">
-                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"إعلانات السوشيال ميديا والفيديوهات الإبداعية فرّقت جداً في شكل الحملات وجذب العملاء."</p>
-                        <div class="text-xs font-bold text-amber-300">كريم عادل — صاحب براند أزياء</div>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6">
-                        <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed mb-4">"احترافية في التعامل وسرعة في التعديلات وتنفيذ الأفكار بدقة عالية."</p>
-                        <div class="text-xs font-bold text-amber-300">سارة منصور — مؤسسة مشروع رقمي</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- استوديو التصميم التفاعلي -->
-    <section id="design-studio" class="py-14 px-5 border-t border-amber-500/10">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-10">
-                <div dir="ltr" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-en font-bold tracking-widest uppercase mb-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-                    <span>LIVE CUSTOMIZATION ENGINE</span>
-                </div>
-                <h2 dir="ltr" class="font-luxury text-3xl sm:text-5xl font-black mt-1 gold-text tracking-wide">INTERACTIVE DESIGN STUDIO</h2>
-                <p class="text-neutral-400 text-sm mt-2 max-w-xl mx-auto">اختر قالبك، خصّص الألوان والنصوص وارفع شعارك وشاهد النتيجة مباشرة</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div class="lg:col-span-5 glass-panel rounded-3xl p-6 space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-amber-300 mb-2">1. اختر القالب</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                            <button type="button" onclick="selectStudioTemplate('ad')" data-tpl="ad" class="studio-tpl-btn px-3 py-2 rounded-xl text-xs font-bold border border-amber-500 bg-amber-500/20 text-amber-200 cursor-pointer">إعلان تجاري</button>
-                            <button type="button" onclick="selectStudioTemplate('logo')" data-tpl="logo" class="studio-tpl-btn px-3 py-2 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900 text-neutral-300 cursor-pointer">هوية وشعار</button>
-                            <button type="button" onclick="selectStudioTemplate('banner')" data-tpl="banner" class="studio-tpl-btn px-3 py-2 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900 text-neutral-300 cursor-pointer">بانر احترافي</button>
-                            <button type="button" onclick="selectStudioTemplate('social')" data-tpl="social" class="studio-tpl-btn px-3 py-2 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900 text-neutral-300 cursor-pointer">سوشيال ميديا</button>
-                            <button type="button" onclick="selectStudioTemplate('product')" data-tpl="product" class="studio-tpl-btn px-3 py-2 rounded-xl text-xs font-bold border border-neutral-800 bg-neutral-900 text-neutral-300 col-span-2 cursor-pointer">إعلان منتج فاخر</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-2 border-t border-neutral-800 pt-3">
-                        <label class="block text-xs font-bold text-amber-300">2. النصوص</label>
-                        <input type="text" id="studioBadgeInput" oninput="renderStudioCanvas()" value="EXCLUSIVE COMMERCIAL" class="w-full px-3.5 py-2 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
-                        <input type="text" id="studioTitleInput" oninput="renderStudioCanvas()" value="ROYAL COLLECTION" class="w-full px-3.5 py-2 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
-                        <input type="text" id="studioSubInput" oninput="renderStudioCanvas()" value="ارتقِ بهوية علامتك التجارية إلى مستوى عالمي" class="w-full px-3.5 py-2 rounded-xl bg-black/80 border border-neutral-700 text-xs text-white outline-none">
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2 border-t border-neutral-800 pt-3">
-                        <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
-                            <span class="text-[10px] text-neutral-400 mb-1">الخلفية</span>
-                            <input type="color" id="studioBgColor" oninput="renderStudioCanvas()" value="#09090b" class="w-full h-7 bg-transparent border-0 cursor-pointer">
-                        </div>
-                        <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
-                            <span class="text-[10px] text-neutral-400 mb-1">الذهبي</span>
-                            <input type="color" id="studioAccentColor" oninput="renderStudioCanvas()" value="#D4AF37" class="w-full h-7 bg-transparent border-0 cursor-pointer">
-                        </div>
-                        <div class="bg-black/70 p-2 rounded-xl border border-neutral-800 flex flex-col items-center">
-                            <span class="text-[10px] text-neutral-400 mb-1">النص</span>
-                            <input type="color" id="studioTextColor" oninput="renderStudioCanvas()" value="#FFFFFF" class="w-full h-7 bg-transparent border-0 cursor-pointer">
-                        </div>
-                    </div>
-
-                    <div class="border-t border-neutral-800 pt-3">
-                        <label class="block text-xs font-bold text-amber-300 mb-1.5">3. شعار أو صورة خاصة</label>
-                        <input type="file" id="studioAssetInput" accept="image/*" onchange="handleStudioImageUpload(event)" class="w-full text-xs text-neutral-300 file:ml-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:font-bold file:bg-amber-500 file:text-black cursor-pointer">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 pt-2">
-                        <button type="button" onclick="resetStudioDesign()" class="py-2.5 px-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-200 font-bold text-xs cursor-pointer">إعادة ضبط</button>
-                        <button type="button" onclick="downloadStudioDesign()" class="py-2.5 px-3 rounded-xl bg-neutral-900 border border-amber-500/40 text-amber-300 font-bold text-xs cursor-pointer">تحميل التصميم</button>
-                    </div>
-                    <button type="button" onclick="orderStudioDesign()" class="w-full py-3 rounded-xl gold-btn text-black font-black text-xs cursor-pointer">اطلب هذا التصميم الآن</button>
-                </div>
-
-                <div class="lg:col-span-7 glass-panel rounded-3xl p-5 sm:p-8 flex flex-col items-center justify-center">
-                    <div class="w-full flex justify-between items-center mb-4 text-xs text-neutral-400">
-                        <span>معاينة حية مباشرة</span>
-                        <span id="studioFormatLabel" dir="ltr" class="font-en text-[11px] text-amber-400 font-semibold">1080 × 1080 PX</span>
-                    </div>
-                    <div class="w-full flex items-center justify-center bg-black/70 rounded-2xl p-3 sm:p-6 border border-amber-500/20">
-                        <canvas id="studioPreviewCanvas" width="900" height="900" class="w-full max-w-[440px] h-auto rounded-xl shadow-2xl"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- قسم التواصل -->
-    <section class="py-14 px-5">
-        <div class="max-w-3xl mx-auto glass-panel rounded-3xl p-8 sm:p-10 text-center">
-            <h2 class="text-2xl sm:text-3xl font-black text-white mb-3">
-                جاهز لتنفيذ تصميمك <span class="gold-text">بمستوى عالمي؟</span>
-            </h2>
-            <p class="text-neutral-400 text-sm mb-7">تواصل مباشرة عبر واتساب أو ابدأ طلبك من حسابك لمتابعة كل خطوة.</p>
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
-                <a href="https://wa.me/201006102339" target="_blank" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl gold-btn text-black font-black text-base shadow-xl hover:scale-[1.02] transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>01006102339 — تواصل واتساب</span>
-                </a>
-                <a href="https://instagram.com/mohmed_emad__3" target="_blank" class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-neutral-900 border border-amber-500/35 text-amber-200 font-bold text-sm hover:border-amber-400 transition">
-                    <i class="fa-brands fa-instagram text-lg"></i>
-                    <span>@mohmed_emad__3</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- الفوتر -->
-    <footer class="py-10 px-5 border-t border-amber-500/10 text-center text-neutral-500 text-xs relative">
-        <p dir="ltr" class="font-en font-bold text-amber-400/80 mb-1">PIXELPERFECT STUDIO — MOHAMED EMAD</p>
-        <p>جميع الحقوق محفوظة &copy; 2026</p>
-        <button type="button" onclick="openAdminModal()" class="absolute left-5 bottom-5 w-9 h-9 rounded-full bg-neutral-900 border border-amber-500/30 text-amber-400 hover:scale-110 flex items-center justify-center transition z-30 cursor-pointer">
-            <i class="fa-solid fa-lock text-xs"></i>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="toggleLanguage()" id="langToggleBtn" class="px-2.5 py-1.5 rounded-lg text-xs font-bold border border-gold/30 text-gold hover:bg-gold/10 transition">
+          EN
         </button>
-    </footer>
+        <button type="button" onclick="openClientPortal()" id="clientPortalBtn" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold border border-gold/40 text-gold hover:bg-gold/10 transition">
+          حساب العملاء
+        </button>
+        <button type="button" onclick="openAdminPortal()" id="adminPortalBtn" class="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold gold-btn">
+          الإدارة
+        </button>
+      </div>
+    </div>
+  </header>
 
-    <!-- مودال حساب العملاء -->
-    <div id="clientPortalModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
-            <button type="button" onclick="closeClientPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+  <!-- القسم الرئيسي Hero -->
+  <section id="top" class="relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 border-b border-gold/10">
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[280px] bg-gold/10 blur-[120px] pointer-events-none"></div>
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-gold/25 text-gold text-xs font-bold mb-6">
+        <span>PIXELPERFECT STUDIO</span>
+        <span>•</span>
+        <span>FOUNDER: MOHAMED EMAD</span>
+      </div>
 
-            <div id="clientAuthBox" class="max-w-md mx-auto space-y-4 py-2">
-                <div class="text-center mb-4">
-                    <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
-                        <i class="fa-solid fa-user-check"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">حساب العملاء — PixelPerfect</h3>
-                    <p class="text-xs text-neutral-400 mt-1">سجّل دخولك لمتابعة طلباتك وتحميل الملفات النهائية</p>
-                </div>
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-5 gold-gradient-text">
+        Your Vision. Our Intelligence. Unlimited Possibilities.
+      </h1>
 
-                <div class="grid grid-cols-2 gap-2 p-1 rounded-xl bg-neutral-900 border border-neutral-800">
-                    <button type="button" id="clientModeLoginBtn" onclick="setClientAuthMode('login')" class="py-2 rounded-lg text-xs font-bold gold-btn text-black cursor-pointer">تسجيل الدخول</button>
-                    <button type="button" id="clientModeRegisterBtn" onclick="setClientAuthMode('register')" class="py-2 rounded-lg text-xs font-bold text-neutral-300 cursor-pointer">حساب جديد</button>
-                </div>
+      <p id="heroSubtitle" class="max-w-2xl mx-auto text-gray-300 text-base sm:text-lg leading-relaxed mb-8">
+        منصة رقمية متكاملة تجمع الذكاء الاصطناعي، بناء العلامات التجارية، الخدمات الإبداعية، ومتابعة المشاريع للعملاء والمبدعين.
+      </p>
 
-                <div id="clientRegisterFields" class="hidden space-y-3">
-                    <input type="text" id="clientFullNameInput" placeholder="الاسم الكامل..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm outline-none focus:border-amber-400">
-                    <input type="text" id="clientPhoneInput" placeholder="رقم الهاتف / واتساب (اختياري)..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm outline-none focus:border-amber-400 text-left" dir="ltr">
-                </div>
+      <div class="flex flex-wrap items-center justify-center gap-3 mb-12">
+        <a href="#studio" data-i18n="cta_studio" class="px-6 py-3 rounded-xl font-extrabold text-sm gold-btn">
+          ابدأ في الاستوديو التفاعلي
+        </a>
+        <button type="button" onclick="openClientPortal()" data-i18n="cta_workspace" class="px-6 py-3 rounded-xl font-bold text-sm bg-surface border border-gold/30 text-gray-100 hover:border-gold transition">
+          مساحة عمل العميل
+        </button>
+      </div>
 
-                <input type="email" id="clientEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm outline-none focus:border-amber-400 text-left" dir="ltr">
-                <input type="password" id="clientPasswordInput" placeholder="كلمة المرور (6 أحرف فأكثر)..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm outline-none focus:border-amber-400 text-left" dir="ltr">
-                <p id="clientAuthError" class="hidden text-xs text-red-400 text-center"></p>
-
-                <button type="button" id="clientAuthSubmitBtn" onclick="submitClientAuth()" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm cursor-pointer">
-                    تسجيل الدخول
-                </button>
-            </div>
-
-            <div id="clientDashboardBox" class="hidden space-y-5">
-                <div class="flex flex-wrap justify-between items-center gap-3 border-b border-neutral-800 pb-4">
-                    <div>
-                        <span class="text-[11px] text-amber-400 font-bold">الملف الشخصي للعميل</span>
-                        <h3 id="clientDisplayName" class="text-xl font-black text-white"></h3>
-                        <p id="clientDisplayEmail" class="text-xs text-neutral-400" dir="ltr"></p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="openOrderModal()" class="px-4 py-2 rounded-xl gold-btn text-black text-xs font-black cursor-pointer">+ طلب خدمة جديدة</button>
-                        <button type="button" onclick="logoutClient()" class="px-3.5 py-2 rounded-xl bg-red-950/70 border border-red-500/30 text-red-300 text-xs font-bold cursor-pointer">خروج</button>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-amber-300 mb-3">طلباتي وحالة التنفيذ</h4>
-                    <div id="clientOrdersList" class="space-y-3 text-xs text-neutral-400">جاري تحميل الطلبات...</div>
-                </div>
-            </div>
+      <!-- إحصائيات حقيقية من قاعدة البيانات -->
+      <div class="grid grid-cols-3 gap-3 sm:gap-6 max-w-2xl mx-auto">
+        <div class="glass-card rounded-2xl p-4">
+          <div id="statServicesCount" class="text-2xl sm:text-3xl font-black text-gold">7</div>
+          <div data-i18n="stat_services" class="text-xs sm:text-sm text-gray-400 mt-1">خدمات متخصصة</div>
         </div>
+        <div class="glass-card rounded-2xl p-4">
+          <div id="statProductsCount" class="text-2xl sm:text-3xl font-black text-gold">0</div>
+          <div data-i18n="stat_products" class="text-xs sm:text-sm text-gray-400 mt-1">منتجات رقمية</div>
+        </div>
+        <div class="glass-card rounded-2xl p-4">
+          <div id="statOrdersCount" class="text-2xl sm:text-3xl font-black text-gold">0</div>
+          <div data-i18n="stat_orders" class="text-xs sm:text-sm text-gray-400 mt-1">طلبات مسجلة</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم الخدمات -->
+  <section id="services" class="py-16 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-2">
+      <div>
+        <span class="text-gold text-xs font-bold uppercase tracking-wider">Services</span>
+        <h2 data-i18n="sec_services_title" class="text-2xl sm:text-3xl font-extrabold mt-1">الخدمات الإبداعية والرقمية</h2>
+      </div>
+      <p data-i18n="sec_services_sub" class="text-sm text-gray-400">حلول عملية قابلة للتنفيذ الفوري وطلبها مباشرة.</p>
+    </div>
+    <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+  </section>
+
+  <!-- قسم استوديو التصميم التفاعلي -->
+  <section id="studio" class="py-16 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/10">
+    <div class="mb-8">
+      <span class="text-gold text-xs font-bold uppercase tracking-wider">Interactive Studio</span>
+      <h2 data-i18n="sec_studio_title" class="text-2xl sm:text-3xl font-extrabold mt-1">استوديو التصميم السريع والمعاينة المباشرة</h2>
     </div>
 
-    <!-- مودال إنشاء طلب خدمة جديد -->
-    <div id="serviceOrderModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 relative my-8">
-            <button type="button" onclick="closeOrderModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h3 class="text-xl font-black gold-text mb-1">إرسال طلب مشروع جديد</h3>
-            <p class="text-xs text-neutral-400 mb-4">سيتم تسجيل طلبك برقم فريد لمتابعته خطوة بخطوة</p>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold text-amber-300 mb-1">الخدمة المطلوبة</label>
-                    <select id="orderServiceSelect" class="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-xs text-white outline-none focus:border-amber-400"></select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-amber-300 mb-1">المقاس المناسب (اختياري)</label>
-                    <select id="orderRatioSelect" class="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-xs text-white outline-none focus:border-amber-400">
-                        <option value="">غير محدد / حسب الاتفاق</option>
-                        <option value="1:1">مربع (1:1)</option>
-                        <option value="9:16">طولي ريلز / ستوري (9:16)</option>
-                        <option value="16:9">عرضي بانر / يوتيوب (16:9)</option>
-                        <option value="4:5">سوشيال ميديا (4:5)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-amber-300 mb-1">تفاصيل المشروع والمطلوب</label>
-                    <textarea id="orderBriefInput" rows="3" placeholder="اكتب فكرتك، الألوان المفضلة، والنصوص المطلوبة..." class="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-xs text-white outline-none focus:border-amber-400"></textarea>
-                </div>
-                <p id="orderFormMsg" class="hidden text-xs text-center"></p>
-                <button type="button" onclick="submitServiceOrder()" class="w-full py-3 rounded-xl gold-btn text-black font-black text-sm cursor-pointer">تأكيد وإرسال الطلب</button>
-            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 glass-card rounded-2xl p-5 sm:p-7">
+      <div class="lg:col-span-5 space-y-4">
+        <div>
+          <label data-i18n="lbl_headline" class="block text-xs font-bold text-gray-300 mb-1.5">العنوان الرئيسي للتصميم</label>
+          <input id="studioTitleInput" type="text" value="PixelPerfect Studio" oninput="renderStudioCanvas()" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm focus:border-gold outline-none" />
         </div>
-    </div>
-
-    <!-- نافذة الإدارة -->
-    <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
-            <button type="button" onclick="closeAdminModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div id="loginView">
-                <div class="text-center mb-6">
-                    <div class="w-12 h-12 rounded-xl gold-btn text-black flex items-center justify-center mx-auto mb-3 text-xl">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white">دخول المالك (حماية Supabase)</h3>
-                    <p class="text-xs text-neutral-400 mt-1">لن يتمكن أي زائر من الدخول أو التعديل بدون حسابك</p>
-                </div>
-                <input type="email" id="adminEmailInput" placeholder="البريد الإلكتروني..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-3 outline-none text-left" dir="ltr">
-                <input type="password" id="adminPassInput" placeholder="الباسورد الخاص بك..." class="w-full px-4 py-3 rounded-xl bg-neutral-900 border border-neutral-700 text-white text-sm mb-4 outline-none text-left" dir="ltr">
-                <p id="loginErrorMsg" class="hidden text-red-400 text-xs mb-3 text-center"></p>
-                <button type="button" onclick="handleSupabaseLogin()" id="loginBtn" class="w-full py-3 rounded-xl gold-btn text-black font-bold text-sm cursor-pointer">تسجيل الدخول الآمن</button>
-            </div>
-            <div id="dashboardView" class="hidden space-y-4">
-                <div class="border-b border-neutral-800 pb-3">
-                    <h3 class="text-lg font-bold gold-text">لوحة تحكم PixelPerfect السحابية</h3>
-                </div>
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">1. رفع وحفظ لوجو الموقع</label>
-                    <input type="file" id="logoFileInput" accept="image/*" class="text-xs text-neutral-300 mb-2 w-full">
-                    <button type="button" onclick="uploadAsset('logo', 'logoFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold cursor-pointer">حفظ اللوجو</button>
-                </div>
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800">
-                    <label class="block text-xs font-bold text-amber-300 mb-2">2. رفع وحفظ صورتك الشخصية</label>
-                    <input type="file" id="portraitFileInput" accept="image/*" class="text-xs text-neutral-300 mb-2 w-full">
-                    <button type="button" onclick="uploadAsset('portrait', 'portraitFileInput')" class="w-full py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold cursor-pointer">حفظ الصورة</button>
-                </div>
-                <div class="bg-neutral-900/80 p-4 rounded-xl border border-neutral-800 space-y-2">
-                    <label class="block text-xs font-bold text-amber-300">3. إضافة تصميم جديد</label>
-                    <input type="text" id="newWorkTitle" placeholder="عنوان التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <input type="text" id="newWorkCategory" placeholder="التصنيف..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none">
-                    <textarea id="newWorkDesc" rows="2" placeholder="وصف التصميم..." class="w-full px-3 py-2 rounded-lg bg-black border border-neutral-700 text-xs text-white outline-none"></textarea>
-                    <input type="file" id="newWorkImgInput" accept="image/*" class="text-xs text-neutral-300 w-full">
-                    <button type="button" onclick="publishProjectToSupabase()" class="w-full py-2.5 rounded-lg gold-btn text-black text-xs font-black cursor-pointer">نشر التصميم</button>
-                </div>
-                <button type="button" onclick="handleSupabaseLogout()" class="w-full py-2.5 rounded-lg bg-red-950/60 border border-red-500/30 text-red-300 text-xs font-bold cursor-pointer">تسجيل خروج</button>
-            </div>
+        <div>
+          <label data-i18n="lbl_subline" class="block text-xs font-bold text-gray-300 mb-1.5">نص فرعي أو شعار قصير</label>
+          <input id="studioSubInput" type="text" value="Creative Direction & Digital Craft" oninput="renderStudioCanvas()" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-gold/25 text-sm focus:border-gold outline-none" />
         </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label data-i18n="lbl_bg_color" class="block text-xs font-bold text-gray-300 mb-1.5">لون الخلفية</label>
+            <input id="studioBgColor" type="color" value="#0E0E12" oninput="renderStudioCanvas()" class="w-full h-10 rounded-lg bg-obsidian border border-gold/25 cursor-pointer" />
+          </div>
+          <div>
+            <label data-i18n="lbl_accent_color" class="block text-xs font-bold text-gray-300 mb-1.5">لون التمييز</label>
+            <input id="studioAccentColor" type="color" value="#D4AF37" oninput="renderStudioCanvas()" class="w-full h-10 rounded-lg bg-obsidian border border-gold/25 cursor-pointer" />
+          </div>
+        </div>
+        <div class="border-t border-gold/15 pt-3">
+          <label data-i18n="lbl_upload_img" class="block text-xs font-bold text-gray-300 mb-1.5">صورة داخل التصميم (اختياري)</label>
+          <input id="studioImageInput" type="file" accept="image/*" onchange="handleStudioImage(event)" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-gold/15 file:text-gold file:font-bold" />
+        </div>
+        <div class="grid grid-cols-2 gap-2.5 pt-2">
+          <button type="button" onclick="selectStudioTemplate('ad')" class="py-2 px-3 rounded-xl text-xs font-bold bg-obsidian border border-gold/25 hover:border-gold">قالب إعلاني</button>
+          <button type="button" onclick="selectStudioTemplate('brand')" class="py-2 px-3 rounded-xl text-xs font-bold bg-obsidian border border-gold/25 hover:border-gold">بطاقة هوية</button>
+        </div>
+        <button type="button" onclick="downloadStudioDesign()" data-i18n="btn_download_png" class="w-full py-2.5 rounded-xl text-xs font-extrabold gold-btn">
+          تحميل التصميم بصيغة PNG
+        </button>
+        <button type="button" onclick="orderStudioDesign()" data-i18n="btn_order_design" class="w-full py-2.5 rounded-xl text-xs font-bold bg-surface border border-gold/40 text-gold hover:bg-gold/10">
+          طلب تنفيذ التصميم عبر واتساب
+        </button>
+      </div>
+
+      <div class="lg:col-span-7 flex flex-col justify-between">
+        <div class="w-full flex items-center justify-between mb-3">
+          <span data-i18n="lbl_live_preview" class="text-xs font-bold text-gold">معاينة حية مباشرة</span>
+          <span id="studioFormatBadge" class="text-xs text-gray-400">1080 × 1080</span>
+        </div>
+        <div class="w-full flex items-center justify-center bg-obsidian rounded-2xl p-4 border border-gold/15 min-h-[300px]">
+          <canvas id="studioPreviewCanvas" width="600" height="600" class="max-w-full max-h-[380px] rounded-xl shadow-2xl"></canvas>
+        </div>
+      </div>
     </div>
-
-    <script>
-        const SUPABASE_URL = "https://pcnbtxcsumhoxtuhcoka.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf";
-        const sb = (window.supabase && window.supabase.createClient)
-            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-            : null;
-
-        const FALLBACK_SERVICES = [
-            { slug: 'social-media-ads', title_ar: 'تصميم إعلانات السوشيال ميديا', title_en: 'Social Media Ads Design', description_ar: 'تصميم إعلانات سوشيال ميديا جذابة واحترافية مخصصة لزيادة التفاعل والمبيعات.', price_label: 'تبدأ من 500 ج.م', icon: 'fa-bullhorn' },
-            { slug: 'banners-logos', title_ar: 'تصميم البنرات واللوجوهات', title_en: 'Banners & Logos Design', description_ar: 'تصميم شعارات مميزة وبنرات إعلانية عالية الجودة تعبر عن قوة علامتك التجارية.', price_label: 'تبدأ من 750 ج.م', icon: 'fa-bezier-curve' },
-            { slug: 'brand-identity', title_ar: 'تصميم الهويات التجارية', title_en: 'Brand Identity Design', description_ar: 'بناء هوية بصرية متكاملة تشمل الألوان، الخطوط، الشعار، ودليل الاستخدام الكامل.', price_label: 'حسب الطلب / عرض سعر', icon: 'fa-gem' },
-            { slug: 'ai-videos', title_ar: 'إنتاج فيديوهات الذكاء الاصطناعي', title_en: 'AI Video Production', description_ar: 'إنتاج فيديوهات إبداعية وإعلانية حديثة بالذكاء الاصطناعي بأسلوب سريع ومبتكر.', price_label: 'تبدأ من 1200 ج.م', icon: 'fa-film' },
-            { slug: 'web-design', title_ar: 'تصميم مواقع الإنترنت', title_en: 'Web Design', description_ar: 'تصميم مواقع إلكترونية عصرية متجاوبة وسريعة تناسب الشركات والمشاريع والأفراد.', price_label: 'حسب الطلب / عرض سعر', icon: 'fa-globe' },
-            { slug: 'product-ads', title_ar: 'تصميم إعلانات المنتجات', title_en: 'Product Ads Design', description_ar: 'إبراز منتجاتك بأسلوب بصري احترافي يشجع العملاء على الشراء فوراً.', price_label: 'تبدأ من 600 ج.م', icon: 'fa-box-open' },
-            { slug: 'ad-copywriting', title_ar: 'كتابة المحتوى الإعلاني', title_en: 'Ad Copywriting', description_ar: 'صياغة نصوص إعلانية وعناوين مقنعة ومؤثرة تخدم حملاتك التسويقية.', price_label: 'تبدأ من 350 ج.م', icon: 'fa-feather-pointed' }
-        ];
-
-        function renderServicesCards(list) {
-            const grid = document.getElementById('servicesGrid');
-            if (!grid || !list || !list.length) return;
-            grid.innerHTML = list.map(srv => {
-                const iconClass = srv.icon || 'fa-sparkles';
-                const safeTitle = srv.title_ar.replace(/'/g, "\\'");
-                return `
-                    <div class="glass-panel project-card rounded-2xl p-6 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between gap-2 mb-4">
-                                <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 flex items-center justify-center text-lg">
-                                    <i class="fa-solid ${iconClass}"></i>
-                                </div>
-                                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">${srv.price_label}</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-white mb-1">${srv.title_ar}</h3>
-                            <p dir="ltr" class="font-en text-[11px] text-neutral-500 mb-2.5 text-right">${srv.title_en || ''}</p>
-                            <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-5">${srv.description_ar}</p>
-                        </div>
-                        <button type="button" onclick="openOrderModal('${safeTitle}')" class="w-full py-2.5 rounded-xl gold-btn text-black text-xs font-black hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer">
-                            <span>اطلب الخدمة الآن</span>
-                            <i class="fa-solid fa-paper-plane text-xs"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        let clientAuthMode = 'login';
-        function setClientAuthMode(mode) {
-            clientAuthMode = mode;
-            const isReg = mode === 'register';
-            document.getElementById('clientRegisterFields').classList.toggle('hidden', !isReg);
-            document.getElementById('clientAuthSubmitBtn').innerText = isReg ? 'إنشاء حساب عميل' : 'تسجيل الدخول';
-            document.getElementById('clientModeLoginBtn').className = !isReg ? 'py-2 rounded-lg text-xs font-bold gold-btn text-black cursor-pointer' : 'py-2 rounded-lg text-xs font-bold text-neutral-300 cursor-pointer';
-            document.getElementById('clientModeRegisterBtn').className = isReg ? 'py-2 rounded-lg text-xs font-bold gold-btn text-black cursor-pointer' : 'py-2 rounded-lg text-xs font-bold text-neutral-300 cursor-pointer';
-        }
-
-        async function openClientPortal() {
-            document.getElementById('clientPortalModal').classList.remove('hidden');
-            if (!sb) return;
-            const { data: { session } } = await sb.auth.getSession();
-            if (!session || !session.user) {
-                document.getElementById('clientAuthBox').classList.remove('hidden');
-                document.getElementById('clientDashboardBox').classList.add('hidden');
-                return;
-            }
-            document.getElementById('clientAuthBox').classList.add('hidden');
-            document.getElementById('clientDashboardBox').classList.remove('hidden');
-            document.getElementById('clientDisplayEmail').innerText = session.user.email;
-            const { data: prof } = await sb.from('client_profiles').select('*').eq('id', session.user.id).maybeSingle();
-            document.getElementById('clientDisplayName').innerText = prof?.full_name || session.user.email.split('@')[0];
-            await loadClientOrders(session.user.id);
-        }
-
-        function closeClientPortal() { document.getElementById('clientPortalModal').classList.add('hidden'); }
-
-        async function submitClientAuth() {
-            if (!sb) return;
-            const email = document.getElementById('clientEmailInput').value.trim();
-            const password = document.getElementById('clientPasswordInput').value.trim();
-            const errEl = document.getElementById('clientAuthError');
-            errEl.classList.add('hidden');
-            if (!email || !password) { errEl.innerText = 'يرجى إدخال البريد الإلكتروني وكلمة المرور'; errEl.classList.remove('hidden'); return; }
-
-            if (clientAuthMode === 'register') {
-                const fullName = document.getElementById('clientFullNameInput').value.trim() || email.split('@')[0];
-                const phone = document.getElementById('clientPhoneInput').value.trim();
-                const { data, error } = await sb.auth.signUp({ email, password });
-                if (error) { errEl.innerText = error.message; errEl.classList.remove('hidden'); return; }
-                if (data?.user) await sb.from('client_profiles').upsert({ id: data.user.id, full_name: fullName, phone });
-                alert('تم إنشاء حسابك بنجاح!');
-                await openClientPortal();
-            } else {
-                const { error } = await sb.auth.signInWithPassword({ email, password });
-                if (error) { errEl.innerText = 'بيانات الدخول غير صحيحة'; errEl.classList.remove('hidden'); return; }
-                await openClientPortal();
-            }
-        }
-
-        async function logoutClient() { if (sb) await sb.auth.signOut(); closeClientPortal(); }
-
-        function populateOrderServicesDropdown(selectedTitle = '') {
-            const sel = document.getElementById('orderServiceSelect');
-            if (!sel) return;
-            sel.innerHTML = FALLBACK_SERVICES.map(s => `<option value="${s.title_ar}">${s.title_ar} (${s.price_label})</option>`).join('');
-            if (selectedTitle) sel.value = selectedTitle;
-        }
-
-        async function openOrderModal(preselectedServiceTitle = '') {
-            if (!sb) return;
-            const { data: { session } } = await sb.auth.getSession();
-            if (!session || !session.user) {
-                alert('يرجى تسجيل الدخول أو إنشاء حساب عميل أولاً لتتمكن من إرسال طلب ومتابعته.');
-                return openClientPortal();
-            }
-            populateOrderServicesDropdown(preselectedServiceTitle);
-            document.getElementById('orderFormMsg').classList.add('hidden');
-            document.getElementById('serviceOrderModal').classList.remove('hidden');
-        }
-
-        function closeOrderModal() { document.getElementById('serviceOrderModal').classList.add('hidden'); }
-
-        async function submitServiceOrder() {
-            if (!sb) return;
-            const { data: { session } } = await sb.auth.getSession();
-            if (!session?.user) return openClientPortal();
-            const serviceTitle = document.getElementById('orderServiceSelect').value;
-            const aspectRatio = document.getElementById('orderRatioSelect').value || null;
-            const brief = document.getElementById('orderBriefInput').value.trim();
-            const msgEl = document.getElementById('orderFormMsg');
-            msgEl.classList.remove('hidden');
-            if (!brief) { msgEl.className = 'text-xs text-center text-red-400'; msgEl.innerText = 'يرجى كتابة تفاصيل المشروع المطلوب'; return; }
-
-            const { data: prof } = await sb.from('client_profiles').select('full_name').eq('id', session.user.id).maybeSingle();
-            const clientName = prof?.full_name || session.user.email.split('@')[0];
-            const orderCode = 'PP-' + Math.floor(100000 + Math.random() * 900000);
-
-            const { error } = await sb.from('service_orders').insert([{
-                order_code: orderCode, client_id: session.user.id, client_name: clientName,
-                client_email: session.user.email, service_title: serviceTitle, brief, aspect_ratio: aspectRatio, status: 'Pending'
-            }]);
-            if (error) { msgEl.className = 'text-xs text-center text-red-400'; msgEl.innerText = 'تعذر إرسال الطلب: ' + error.message; return; }
-
-            document.getElementById('orderBriefInput').value = '';
-            msgEl.className = 'text-xs text-center text-emerald-400 font-bold';
-            msgEl.innerText = `تم إرسال طلبك بنجاح! رقم الطلب: ${orderCode}`;
-            setTimeout(() => { closeOrderModal(); openClientPortal(); }, 1200);
-        }
-
-        async function loadClientOrders(userId) {
-            const container = document.getElementById('clientOrdersList');
-            const { data: orders, error } = await sb.from('service_orders').select('*').eq('client_id', userId).order('created_at', { ascending: false });
-            if (error) { container.innerHTML = `<p class="text-red-400">${error.message}</p>`; return; }
-            if (!orders || !orders.length) { container.innerHTML = `<p class="text-neutral-400">لا توجد طلبات مسجلة لحسابك حتى الآن.</p>`; return; }
-            container.innerHTML = orders.map(o => `
-                <div class="p-4 rounded-2xl bg-neutral-900/90 border border-neutral-800 space-y-1">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <span class="font-en font-black text-amber-300 text-xs">${o.order_code}</span>
-                        <span class="font-bold text-white text-sm">${o.service_title}</span>
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">${o.status}</span>
-                    </div>
-                    <p class="text-xs text-neutral-400">${o.brief}</p>
-                    ${o.deliverable_url ? `<a href="${o.deliverable_url}" target="_blank" class="inline-block mt-2 px-3 py-1.5 rounded-lg gold-btn text-black text-xs font-black">تحميل الملف النهائي</a>` : ''}
-                </div>
-            `).join('');
-        }
-
-        async function openAdminModal() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            if (!sb) return;
-            const { data: { session } } = await sb.auth.getSession();
-            document.getElementById('loginView').classList.toggle('hidden', !!session);
-            document.getElementById('dashboardView').classList.toggle('hidden', !session);
-        }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        async function handleSupabaseLogin() {
-            if (!sb) return;
-            const email = document.getElementById('adminEmailInput').value.trim();
-            const password = document.getElementById('adminPassInput').value.trim();
-            const errEl = document.getElementById('loginErrorMsg');
-            errEl.classList.add('hidden');
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            if (error) { errEl.innerText = 'بيانات الدخول غير صحيحة'; errEl.classList.remove('hidden'); } else { openAdminModal(); }
-        }
-
-        async function handleSupabaseLogout() { if (sb) await sb.auth.signOut(); location.reload(); }
-
-        async function uploadAsset(type, inputId) {
-            if (!sb) return;
-            const file = document.getElementById(inputId).files[0];
-            if (!file) return alert("اختر الصورة أولاً");
-            const safeName = `${type}_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert(error.message);
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            const updateField = type === 'logo' ? { logo_url: data.publicUrl } : { portrait_url: data.publicUrl };
-            await sb.from('portfolio_settings').upsert({ id: 1, ...updateField });
-            alert("تم الحفظ بنجاح!");
-            location.reload();
-        }
-
-        async function publishProjectToSupabase() {
-            if (!sb) return;
-            const title = document.getElementById('newWorkTitle').value.trim();
-            const category = document.getElementById('newWorkCategory').value.trim() || "تصميم خاص";
-            const description = document.getElementById('newWorkDesc').value.trim();
-            const file = document.getElementById('newWorkImgInput').files[0];
-            if (!title || !file) return alert("اكتب العنوان واختر الصورة");
-            const safeName = `work_${Date.now()}.${file.name.split('.').pop()}`;
-            const { error } = await sb.storage.from('portfolio_assets').upload(safeName, file);
-            if (error) return alert(error.message);
-            const { data } = sb.storage.from('portfolio_assets').getPublicUrl(safeName);
-            await sb.from('portfolio_projects').insert([{ title, category, description, image_url: data.publicUrl }]);
-            alert("تم النشر بنجاح!");
-            location.reload();
-        }
-
-        const studioPresets = {
-            ad: { name: 'إعلان تجاري', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'EXCLUSIVE COMMERCIAL', title: 'ROYAL COLLECTION', sub: 'ارتقِ بهوية علامتك التجارية إلى مستوى عالمي', bg: '#09090b', accent: '#D4AF37', text: '#FFFFFF' },
-            logo: { name: 'هوية وشعار', ratio: '1000 × 1000 PX', w: 900, h: 900, badge: 'EST. 2026', title: 'PIXELPERFECT', sub: 'LUXURY VISUAL IDENTITY', bg: '#050505', accent: '#E5C158', text: '#FCF6BA' },
-            banner: { name: 'بانر احترافي', ratio: '1920 × 820 PX', w: 1000, h: 450, badge: 'PREMIUM STUDIO', title: 'CREATIVE EXCELLENCE', sub: 'تصميمات احترافية متكاملة للشركات والبراندات', bg: '#0c0a09', accent: '#D4AF37', text: '#FFFFFF' },
-            social: { name: 'سوشيال ميديا', ratio: '1080 × 1350 PX', w: 800, h: 1000, badge: 'SPECIAL OFFER', title: 'STAND OUT NOW', sub: 'محتوى بصري يجذب انتباه جمهورك من اللحظة الأولى', bg: '#0a0a0c', accent: '#BF953F', text: '#F5F5F5' },
-            product: { name: 'إعلان منتج فاخر', ratio: '1080 × 1080 PX', w: 900, h: 900, badge: 'LIMITED EDITION', title: 'SIGNATURE SERIES', sub: 'جودة استثنائية وتفاصيل مصممة بإتقان', bg: '#080705', accent: '#F3D06B', text: '#FFFFFF' }
-        };
-        let currentStudioTpl = 'ad', studioUploadedImg = null;
-
-        function selectStudioTemplate(tplKey) {
-            currentStudioTpl = tplKey;
-            const p = studioPresets[tplKey];
-            document.getElementById('studioBadgeInput').value = p.badge;
-            document.getElementById('studioTitleInput').value = p.title;
-            document.getElementById('studioSubInput').value = p.sub;
-            document.getElementById('studioBgColor').value = p.bg;
-            document.getElementById('studioAccentColor').value = p.accent;
-            document.getElementById('studioTextColor').value = p.text;
-            document.getElementById('studioFormatLabel').innerText = p.ratio;
-            renderStudioCanvas();
-        }
-
-        function handleStudioImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => { const img = new Image(); img.onload = () => { studioUploadedImg = img; renderStudioCanvas(); }; img.src = e.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        function resetStudioDesign() { studioUploadedImg = null; selectStudioTemplate(currentStudioTpl); }
-
-        function renderStudioCanvas() {
-            const c = document.getElementById('studioPreviewCanvas');
-            if (!c) return;
-            const ctx = c.getContext('2d');
-            const p = studioPresets[currentStudioTpl];
-            c.width = p.w; c.height = p.h;
-            const bg = document.getElementById('studioBgColor').value || '#09090b';
-            const accent = document.getElementById('studioAccentColor').value || '#D4AF37';
-            const textColor = document.getElementById('studioTextColor').value || '#FFFFFF';
-            ctx.fillStyle = bg; ctx.fillRect(0, 0, c.width, c.height);
-            ctx.strokeStyle = accent; ctx.lineWidth = 4; ctx.strokeRect(35, 35, c.width - 70, c.height - 70);
-            ctx.fillStyle = accent; ctx.font = 'bold 24px Montserrat, sans-serif'; ctx.textAlign = 'center';
-            ctx.fillText(document.getElementById('studioBadgeInput').value || '', c.width / 2, 160);
-            ctx.fillStyle = textColor; ctx.font = 'bold 52px Cairo, sans-serif';
-            ctx.fillText(document.getElementById('studioTitleInput').value || '', c.width / 2, c.height / 2 - 10);
-            ctx.font = '26px Cairo, sans-serif';
-            ctx.fillText(document.getElementById('studioSubInput').value || '', c.width / 2, c.height / 2 + 55);
-        }
-
-        function downloadStudioDesign() {
-            const link = document.createElement('a');
-            link.download = `PixelPerfect-${Date.now()}.png`;
-            link.href = document.getElementById('studioPreviewCanvas').toDataURL('image/png');
-            link.click();
-        }
-
-        function orderStudioDesign() {
-            const msg = `مرحباً محمد عماد، أرغب في تنفيذ هذا التصميم: ${document.getElementById('studioTitleInput').value}`;
-            window.open(`https://wa.me/201006102339?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        renderServicesCards(FALLBACK_SERVICES);
-        selectStudioTemplate('ad');
-
-        (async function loadCloudAssets() {
-            if (!sb) return;
-            try {
-                const { data: settings } = await sb.from('portfolio_settings').select('*').eq('id', 1).maybeSingle();
-                if (settings?.logo_url) {
-                    const lImg = document.getElementById('customLogoImg');
-                    lImg.onload = () => { document.getElementById('defaultLogoLetter').classList.add('hidden'); lImg.classList.remove('hidden'); };
-                    lImg.src = settings.logo_url;
-                }
-                if (settings?.portrait_url) {
-                    document.getElementById('heroPortraitImg').src = settings.portrait_url;
-                }
-            } catch (e) {}
-        })();
-    </script>
-</body>
-</html>
+  </section>
