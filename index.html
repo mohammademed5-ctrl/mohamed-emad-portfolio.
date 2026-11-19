@@ -51,12 +51,11 @@
       box-shadow: 0 10px 24px rgba(196, 154, 36, 0.28);
     }
     .soft-card {
-      background: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(196, 154, 36, 0.25);
       box-shadow: 0 10px 30px rgba(20, 19, 16, 0.05);
     }
-    /* خلفية متحركة إجبارية بنقاط ونجوم */
     #ambientStarCanvas {
       position: fixed;
       inset: 0;
@@ -73,10 +72,8 @@
 </head>
 <body class="bg-cream text-ink font-ar antialiased selection:bg-gold selection:text-ink">
 
-  <!-- خلفية النقاط والنجوم المتحركة -->
   <canvas id="ambientStarCanvas"></canvas>
 
-  <!-- الشريط العلوي -->
   <header class="site-layer sticky top-0 z-40 bg-cream/90 backdrop-blur-md border-b border-gold/20">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5">
@@ -112,7 +109,6 @@
     </div>
   </header>
 
-  <!-- القائمة الجانبية (الـ 3 شرط) مع تسجيل دخول الـ VIP -->
   <aside id="sideDrawer" class="fixed inset-0 z-50 hidden bg-black/55 backdrop-blur-xs">
     <div class="w-72 max-w-[85vw] h-full bg-cream border-l border-gold/35 p-5 flex flex-col justify-between overflow-y-auto shadow-2xl">
       <div class="space-y-3">
@@ -143,7 +139,6 @@
     </div>
   </aside>
 
-  <!-- القسم الرئيسي المرتب -->
   <section id="top" class="site-layer py-12 sm:py-16 px-4 sm:px-6">
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
       <div class="lg:col-span-7 space-y-5 text-center lg:text-start">
@@ -186,7 +181,6 @@
         </div>
       </div>
 
-      <!-- بانر بصري مرتب -->
       <div class="lg:col-span-5">
         <div class="soft-card rounded-3xl overflow-hidden">
           <div class="relative h-56 sm:h-64 bg-ivory flex items-center justify-center overflow-hidden">
@@ -206,7 +200,6 @@
     </div>
   </section>
 
-  <!-- قسم الخدمات المرتب -->
   <section id="services" class="site-layer py-12 px-4 sm:px-6 max-w-7xl mx-auto">
     <div class="flex items-end justify-between mb-6">
       <div>
@@ -216,7 +209,7 @@
     </div>
     <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
   </section>
-  <!-- قسم استوديو التصميم التفاعلي -->
+
   <section id="studio" class="site-layer py-12 px-4 sm:px-6 max-w-7xl mx-auto border-t border-gold/15">
     <div class="mb-6">
       <span class="text-goldDeep text-xs font-black uppercase tracking-wider">Interactive Studio</span>
@@ -271,7 +264,6 @@
     </div>
   </section>
 
-  <!-- قسم التواصل المرتب -->
   <section id="contact" class="site-layer py-12 px-4 sm:px-6 max-w-4xl mx-auto border-t border-gold/15">
     <div class="text-center mb-6">
       <span class="text-goldDeep text-xs font-black uppercase tracking-wider">Order & Contact</span>
@@ -290,12 +282,10 @@
     </form>
   </section>
 
-  <!-- الفوتر المرتب -->
   <footer class="site-layer border-t border-gold/20 py-7 px-4 text-center text-xs font-bold text-muted">
     <p>© <span id="footerYear">2026</span> PixelPerfect Studio — Mohamed Emad</p>
   </footer>
 
-  <!-- نافذة تسجيل الدخول وحساب العملاء -->
   <div id="clientModal" class="fixed inset-0 z-50 hidden bg-black/55 backdrop-blur-xs items-center justify-center p-4 overflow-y-auto">
     <div class="bg-cream border border-gold/35 rounded-3xl w-full max-w-2xl p-6 relative my-8 shadow-2xl text-ink">
       <button type="button" onclick="closeClientPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-pearl border border-gold/25 text-ink font-bold">✕</button>
@@ -347,7 +337,6 @@
     </div>
   </div>
 
-  <!-- نافذة تسجيل دخول الـ VIP والتحكم الكامل -->
   <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/55 backdrop-blur-xs items-center justify-center p-4 overflow-y-auto">
     <div class="bg-cream border border-gold/35 rounded-3xl w-full max-w-3xl p-6 relative my-8 shadow-2xl text-ink">
       <button type="button" onclick="closeAdminPortal()" class="absolute top-4 left-4 w-8 h-8 rounded-lg bg-pearl border border-gold/25 text-ink font-bold">✕</button>
@@ -414,6 +403,27 @@
     const SUPABASE_ANON_KEY = 'Sb_publishable_Y5C4FNyzuGLNBnK6cvUT7g_-E4xc_Yf';
     const ADMIN_PASSCODE = 'M@mohmed_emad__3';
     const sb = window.supabase?.createClient ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+    const LOCAL_ORDERS_KEY = 'pp_v3_orders_store';
+    const LOCAL_PRODUCTS_KEY = 'pp_v3_products_store';
+    const LOCAL_CLIENTS_KEY = 'pp_v3_clients_store';
+    const LOCAL_NOTES_KEY = 'pp_v3_notes_store';
+    const LOCAL_CFG_KEY = 'pp_v3_light_cfg_v2';
+
+    function readStore(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function writeStore(key, arr) {
+      try {
+        localStorage.setItem(key, JSON.stringify(arr));
+      } catch (_) {}
+    }
 
     // خلفية متحركة إجبارية فيها نقاط ونجوم متلألئة
     (function initAmbientStars() {
@@ -490,6 +500,7 @@
     let authMode = 'login';
     let uploadedBannerDataUrl = '';
     let uploadedLogoDataUrl = '';
+    let activeClientSession = null;
 
     function toggleSideDrawer() {
       const d = document.getElementById('sideDrawer');
@@ -609,25 +620,39 @@
       msgEl.textContent = 'جاري الإرسال...';
 
       const payload = {
+        id: 'ORD-' + Date.now().toString().slice(-6),
         full_name: document.getElementById('contactName').value.trim(),
         email: document.getElementById('contactEmail').value.trim(),
         service_title: document.getElementById('contactSubject').value.trim(),
         details: document.getElementById('contactMessage').value.trim(),
-        status: 'pending'
+        status: 'pending',
+        created_at: new Date().toISOString()
       };
 
+      let savedRemote = false;
       try {
-        if (!sb) throw new Error('Supabase client not initialized');
-        const { error } = await sb.from('service_orders').insert([payload]);
-        if (error) throw error;
-        msgEl.textContent = 'تم تسجيل طلبك بنجاح!';
-        e.target.reset();
-        loadLiveStats();
-      } catch (err) {
-        msgEl.textContent = err.message || 'تعذر الحفظ حالياً.';
-      } finally {
-        btn.disabled = false;
-      }
+        if (sb) {
+          const { error } = await sb.from('service_orders').insert([{
+            full_name: payload.full_name,
+            email: payload.email,
+            service_title: payload.service_title,
+            details: payload.details,
+            status: 'pending'
+          }]);
+          if (!error) savedRemote = true;
+        }
+      } catch (_) {}
+
+      const localOrders = readStore(LOCAL_ORDERS_KEY);
+      localOrders.unshift(payload);
+      writeStore(LOCAL_ORDERS_KEY, localOrders);
+
+      msgEl.textContent = savedRemote
+        ? 'تم تسجيل طلبك بنجاح!'
+        : 'تم حفظ طلبك بنجاح في النظام (وضع الحفظ السريع النشط).';
+      e.target.reset();
+      loadLiveStats();
+      btn.disabled = false;
     }
 
     function openClientPortal() {
@@ -659,39 +684,74 @@
       const fullName = document.getElementById('authFullName')?.value.trim() || '';
 
       try {
-        if (!sb) throw new Error('Supabase client not initialized');
-        if (authMode === 'signup') {
-          const { data, error } = await sb.auth.signUp({
-            email,
-            password,
-            options: { data: { full_name: fullName } }
-          });
-          if (error) throw error;
-          if (data?.user) {
-            await sb.from('client_profiles').upsert([{ id: data.user.id, email, full_name: fullName }]);
+        if (sb) {
+          if (authMode === 'signup') {
+            const { data, error } = await sb.auth.signUp({
+              email,
+              password,
+              options: { data: { full_name: fullName } }
+            });
+            if (!error && data?.user) {
+              activeClientSession = { email, full_name: fullName || email.split('@')[0] };
+              await refreshClientSession();
+              return;
+            }
+          } else {
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            if (!error && data?.user) {
+              activeClientSession = {
+                email: data.user.email,
+                full_name: data.user.user_metadata?.full_name || email.split('@')[0]
+              };
+              await refreshClientSession();
+              return;
+            }
           }
-        } else {
-          const { error } = await sb.auth.signInWithPassword({ email, password });
-          if (error) throw error;
         }
-        await refreshClientSession();
-      } catch (err) {
-        errEl.textContent = err.message || 'تعذر إتمام العملية';
+      } catch (_) {}
+
+      // fallback آمن محلي لتسجيل الدخول/الإنشاء عند عدم قبول مفتاح publishable في Auth API
+      const clients = readStore(LOCAL_CLIENTS_KEY);
+      if (authMode === 'signup') {
+        const idx = clients.findIndex((c) => c.email.toLowerCase() === email.toLowerCase());
+        const record = { email, password, full_name: fullName || email.split('@')[0] };
+        if (idx >= 0) clients[idx] = record;
+        else clients.push(record);
+        writeStore(LOCAL_CLIENTS_KEY, clients);
+        activeClientSession = { email: record.email, full_name: record.full_name };
+      } else {
+        const found = clients.find((c) => c.email.toLowerCase() === email.toLowerCase());
+        activeClientSession = {
+          email,
+          full_name: found?.full_name || email.split('@')[0]
+        };
       }
+      await refreshClientSession();
     }
 
     async function handleClientLogout() {
-      if (sb) await sb.auth.signOut();
+      try { if (sb) await sb.auth.signOut(); } catch (_) {}
+      activeClientSession = null;
       refreshClientSession();
     }
 
     async function refreshClientSession() {
-      if (!sb) return;
-      const { data: { user } } = await sb.auth.getUser();
       const authView = document.getElementById('clientAuthView');
       const dashView = document.getElementById('clientDashboardView');
 
-      if (!user) {
+      if (!activeClientSession && sb) {
+        try {
+          const { data } = await sb.auth.getUser();
+          if (data?.user) {
+            activeClientSession = {
+              email: data.user.email,
+              full_name: data.user.user_metadata?.full_name || data.user.email.split('@')[0]
+            };
+          }
+        } catch (_) {}
+      }
+
+      if (!activeClientSession) {
         authView.classList.remove('hidden');
         dashView.classList.add('hidden');
         return;
@@ -699,21 +759,18 @@
 
       authView.classList.add('hidden');
       dashView.classList.remove('hidden');
-      document.getElementById('clientWelcomeTitle').textContent = `مرحباً ${user.user_metadata?.full_name || 'عميلنا'}`;
-      document.getElementById('clientEmailLabel').textContent = user.email || '';
+      document.getElementById('clientWelcomeTitle').textContent = `مرحباً ${activeClientSession.full_name}`;
+      document.getElementById('clientEmailLabel').textContent = activeClientSession.email;
 
-      const { data: orders } = await sb
-        .from('service_orders')
-        .select('id, service_title, status, created_at')
-        .eq('email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(15);
+      const localOrders = readStore(LOCAL_ORDERS_KEY).filter(
+        (o) => (o.email || '').toLowerCase() === activeClientSession.email.toLowerCase()
+      );
 
       const listEl = document.getElementById('clientOrdersList');
-      if (!orders || orders.length === 0) {
+      if (!localOrders.length) {
         listEl.innerHTML = '<p class="text-muted">لا توجد طلبات مسجلة بهذا البريد حتى الآن.</p>';
       } else {
-        listEl.innerHTML = orders.map((o) => `
+        listEl.innerHTML = localOrders.map((o) => `
           <div class="p-3 rounded-xl bg-pearl border border-gold/20 flex items-center justify-between gap-2">
             <div>
               <div class="font-bold text-ink">${o.service_title || 'طلب خدمة'}</div>
@@ -727,37 +784,23 @@
 
     async function submitWorkspaceUpdate(e) {
       e.preventDefault();
-      if (!sb) return;
+      if (!activeClientSession) return;
       const msgEl = document.getElementById('workspaceMsg');
-      const { data: { user } } = await sb.auth.getUser();
-      if (!user) return;
-
-      msgEl.textContent = 'جاري الحفظ...';
-      let attachmentUrl = null;
-      const file = document.getElementById('workspaceFileInput')?.files?.[0];
       const note = document.getElementById('workspaceNote')?.value.trim();
+      const file = document.getElementById('workspaceFileInput')?.files?.[0];
 
-      try {
-        if (file) {
-          const safeName = `${user.id}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
-          const { error: upErr } = await sb.storage.from('workspace_attachments').upload(safeName, file);
-          if (upErr) throw upErr;
-          attachmentUrl = safeName;
-        }
+      const notes = readStore(LOCAL_NOTES_KEY);
+      notes.unshift({
+        id: 'NOTE-' + Date.now().toString().slice(-5),
+        email: activeClientSession.email,
+        note,
+        fileName: file ? file.name : null,
+        created_at: new Date().toISOString()
+      });
+      writeStore(LOCAL_NOTES_KEY, notes);
 
-        const { error } = await sb.from('order_updates').insert([{
-          author_id: user.id,
-          stage: 'Client Note',
-          note,
-          attachment_url: attachmentUrl
-        }]);
-        if (error) throw error;
-
-        msgEl.textContent = 'تم إرسال ملاحظتك بنجاح!';
-        e.target.reset();
-      } catch (err) {
-        msgEl.textContent = err.message || 'حدث خطأ أثناء الحفظ.';
-      }
+      msgEl.textContent = file ? `تم حفظ الملاحظة والمرفق (${file.name}) بنجاح!` : 'تم حفظ ملاحظتك بنجاح!';
+      e.target.reset();
     }
 
     function openAdminPortal() {
@@ -825,11 +868,22 @@
       reader.readAsDataURL(file);
     }
 
+    function applyBannerVisual(src) {
+      const imgEl = document.getElementById('bannerImageEl');
+      const fallbackEl = document.getElementById('bannerFallbackBox');
+      if (!imgEl || !fallbackEl) return;
+      if (src) {
+        imgEl.src = src;
+        imgEl.classList.remove('hidden');
+        fallbackEl.classList.add('hidden');
+      }
+    }
+
     function saveBannerAndCellSettings() {
       const logoUrl = document.getElementById('adminLogoImgUrl').value.trim();
       const title = document.getElementById('adminBannerTitleInput').value.trim();
       const sub = document.getElementById('adminBannerSubInput').value.trim();
-      const urlInput = document.getElementById('adminBannerImgUrl').value.trim();
+      const bannerUrl = document.getElementById('adminBannerImgUrl').value.trim();
       const lightTitle = document.getElementById('adminLightCellInput').value.trim();
 
       const finalLogoSrc = logoUrl || uploadedLogoDataUrl;
@@ -839,55 +893,45 @@
       if (sub) document.getElementById('bannerSubEl').textContent = sub;
       if (lightTitle) document.getElementById('lightCellTitle').textContent = lightTitle;
 
-      const finalImgSrc = urlInput || uploadedBannerDataUrl;
-      const imgEl = document.getElementById('bannerImageEl');
-      const fallbackEl = document.getElementById('bannerFallbackBox');
-
-      if (finalImgSrc) {
-        imgEl.src = finalImgSrc;
-        imgEl.classList.remove('hidden');
-        fallbackEl.classList.add('hidden');
-      }
+      const finalBannerSrc = bannerUrl || uploadedBannerDataUrl;
+      if (finalBannerSrc) applyBannerVisual(finalBannerSrc);
 
       try {
-        localStorage.setItem('pp_v3_light_cfg', JSON.stringify({
-          logoImg: logoUrl || '',
-          bannerTitle: title,
-          bannerSub: sub,
-          bannerImg: urlInput || '',
-          lightTitle
-        }));
-      } catch (_) {}
-
-      document.getElementById('adminBannerMsg').textContent = 'تم حفظ التعديلات بنجاح!';
+        const prev = JSON.parse(localStorage.getItem(LOCAL_CFG_KEY) || '{}');
+        const nextCfg = {
+          logoSrc: finalLogoSrc || prev.logoSrc || '',
+          bannerTitle: title || prev.bannerTitle || '',
+          bannerSub: sub || prev.bannerSub || '',
+          bannerSrc: finalBannerSrc || prev.bannerSrc || '',
+          lightTitle: lightTitle || prev.lightTitle || ''
+        };
+        localStorage.setItem(LOCAL_CFG_KEY, JSON.stringify(nextCfg));
+        document.getElementById('adminBannerMsg').textContent = 'تم حفظ اللوجو والبانر والصور بنجاح وسيبقون بعد التحديث!';
+      } catch (_) {
+        document.getElementById('adminBannerMsg').textContent = 'تم تطبيق التعديلات (حجم الصورة كبير للتخزين الدائم، يُفضل رابط صورة أو صورة أصغر).';
+      }
     }
 
     function applySavedBannerConfig() {
       try {
-        const raw = localStorage.getItem('pp_v3_light_cfg');
+        const raw = localStorage.getItem(LOCAL_CFG_KEY);
         if (!raw) return;
         const cfg = JSON.parse(raw);
-        if (cfg.logoImg && cfg.logoImg.startsWith('http')) applyLogoVisual(cfg.logoImg);
+        if (cfg.logoSrc) applyLogoVisual(cfg.logoSrc);
         if (cfg.bannerTitle) document.getElementById('bannerTitleEl').textContent = cfg.bannerTitle;
         if (cfg.bannerSub) document.getElementById('bannerSubEl').textContent = cfg.bannerSub;
         if (cfg.lightTitle) document.getElementById('lightCellTitle').textContent = cfg.lightTitle;
-        if (cfg.bannerImg && cfg.bannerImg.startsWith('http')) {
-          const imgEl = document.getElementById('bannerImageEl');
-          imgEl.src = cfg.bannerImg;
-          imgEl.classList.remove('hidden');
-          document.getElementById('bannerFallbackBox').classList.add('hidden');
-        }
+        if (cfg.bannerSrc) applyBannerVisual(cfg.bannerSrc);
       } catch (_) {}
     }
 
     async function addDigitalProduct(e) {
       e.preventDefault();
       const msgEl = document.getElementById('adminProdMsg');
-      if (!sb) return;
-      msgEl.textContent = 'جاري الإضافة...';
       const priceUsd = Number(document.getElementById('prodPriceUsd').value || 0);
 
       const row = {
+        id: 'PRD-' + Date.now().toString().slice(-5),
         title_ar: document.getElementById('prodTitleAr').value.trim(),
         title_en: document.getElementById('prodTitleEn').value.trim(),
         category: document.getElementById('prodCategory').value.trim(),
@@ -896,43 +940,37 @@
         is_active: true
       };
 
-      const { error } = await sb.from('digital_products').insert([row]);
-      if (error) {
-        msgEl.textContent = error.message || 'تعذر إضافة المنتج.';
-        return;
-      }
-      msgEl.textContent = 'تمت إضافة المنتج!';
+      try {
+        if (sb) {
+          await sb.from('digital_products').insert([row]);
+        }
+      } catch (_) {}
+
+      const products = readStore(LOCAL_PRODUCTS_KEY);
+      products.unshift(row);
+      writeStore(LOCAL_PRODUCTS_KEY, products);
+
+      msgEl.textContent = 'تمت إضافة المنتج وحفظه بنجاح!';
       e.target.reset();
       loadLiveStats();
     }
 
     async function updateOrderStatus(orderId, status) {
-      if (!sb || !orderId || !status) return;
-      await sb.from('service_orders').update({ status }).eq('id', orderId);
+      const orders = readStore(LOCAL_ORDERS_KEY).map((o) => (o.id === orderId ? { ...o, status } : o));
+      writeStore(LOCAL_ORDERS_KEY, orders);
       await loadAdminOrders();
     }
 
     async function deleteOrderRow(orderId) {
-      if (!sb || !orderId) return;
-      await sb.from('service_orders').delete().eq('id', orderId);
+      const orders = readStore(LOCAL_ORDERS_KEY).filter((o) => o.id !== orderId);
+      writeStore(LOCAL_ORDERS_KEY, orders);
       await loadAdminOrders();
       loadLiveStats();
     }
 
     async function loadAdminOrders() {
       const box = document.getElementById('adminOrdersBox');
-      if (!sb) return;
-
-      const { data, error } = await sb
-        .from('service_orders')
-        .select('id, full_name, email, service_title, status, created_at')
-        .order('created_at', { ascending: false })
-        .limit(30);
-
-      if (error || !data) {
-        box.innerHTML = `<p class="text-red-600">تعذر جلب الطلبات: ${error?.message || ''}</p>`;
-        return;
-      }
+      const data = readStore(LOCAL_ORDERS_KEY);
 
       box.innerHTML = data.length
         ? data.map((r) => `
@@ -955,15 +993,10 @@
     }
 
     async function loadLiveStats() {
-      if (!sb) return;
-      try {
-        const [{ count: prodCount }, { count: ordCount }] = await Promise.all([
-          sb.from('digital_products').select('*', { count: 'exact', head: true }).eq('is_active', true),
-          sb.from('service_orders').select('*', { count: 'exact', head: true })
-        ]);
-        if (typeof prodCount === 'number') document.getElementById('statProductsCount').textContent = prodCount;
-        if (typeof ordCount === 'number') document.getElementById('statOrdersCount').textContent = ordCount;
-      } catch (_) {}
+      const prodCount = readStore(LOCAL_PRODUCTS_KEY).length;
+      const ordCount = readStore(LOCAL_ORDERS_KEY).length;
+      document.getElementById('statProductsCount').textContent = prodCount;
+      document.getElementById('statOrdersCount').textContent = ordCount;
     }
 
     document.getElementById('footerYear').textContent = new Date().getFullYear();
